@@ -8,3 +8,7 @@ data <- read.csv(file="batorino_july.csv", header=T, sep=";", nrows=38,
                  colClasses = c("Date", "numeric"), stringsAsFactors=F);
 
 print(data);
+
+# Plotting received data
+plot(data, pch=21,  col='blue', bg='lightblue')
+lines(data, lwd=1, col="darkgrey")

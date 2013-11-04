@@ -1,4 +1,4 @@
-MSA
+Data Analysis
 ===
 
-Multidimensional Statistical Analysis
+Data analysis R project for course work

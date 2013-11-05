@@ -3,21 +3,19 @@
 ## First column is Date in YYYY/MM/DD format.
 ## Second column is observed temperature value.
 
-# For antialiasing
-library(Cairo);
-CairoWin();
+rm(list=ls(all=TRUE)) #start with empty workspace
+
+source("R/plotting-fun.R");
+source("R/print-fun.R")
 
 # Reading input data from csv file
-data <- read.csv(file="batorino_july.csv", header=T, sep=";", nrows=38,
+data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
                  colClasses = c("Date", "numeric"), stringsAsFactors=F);
 
 print(data);
 
 # Plotting received data
-CairoPNG(file="~/out/time-series.pdf")
-plot(data, pch=21,  col='darkgrey', bg='grey', main="Temperature Time Series");
-lines(data, lwd=1, col="darkred");
-dev.off();
+to.pdf(figure.ts(data), "figures/temperature-ts-first-overview.pdf", width=6, height=4);
 
 
 library(psych)

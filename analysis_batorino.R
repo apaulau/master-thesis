@@ -5,19 +5,24 @@
 
 rm(list=ls(all=TRUE)) #start with empty workspace
 
-source("R/plotting-fun.R");
+library(psych)
+
+source("R/plotting-fun.R")
 source("R/print-fun.R")
 
 # Reading input data from csv file
 data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
-                 colClasses = c("Date", "numeric"), stringsAsFactors=F);
+                 colClasses = c("Date", "numeric"), stringsAsFactors=F)
 
-print(data);
+print(data)
 
 # Plotting received data
-to.pdf(figure.ts(data), "figures/temperature-ts-first-overview.pdf", width=6, height=4);
+to.pdf(figure.ts(data), "figures/temperature-ts-first-overview.pdf",
+       width=6, height=4)
 
+# Plotting histogram for temperature variable
+to.pdf(figure.hist(data), "figures/temperature-histogram-1.pdf",
+       width=6, height=4);
 
-library(psych)
-dstats <- describe(data$Temperature);
-print(dstats);
+dstats <- describe(data$Temperature)
+

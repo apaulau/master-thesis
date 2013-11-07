@@ -18,11 +18,16 @@ print(data)
 
 # Plotting received data
 to.pdf(figure.ts(data), "figures/temperature-ts-first-overview.pdf",
-       width=6, height=4)
+       width=6, height=4);
+
 
 # Plotting histogram for temperature variable
-to.pdf(figure.hist(data), "figures/temperature-histogram-1.pdf",
+to.pdf(figure.hist(data$Temperature, "Histogram of Temperature"), "figures/temperature-histogram.pdf",
+       width=6, height=4);
+
+# Plotting histogram with fitted normal density curve for temperature variable
+to.pdf(figure.hist(data$Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), "figures/temperature-histogram-dnorm.pdf",
        width=6, height=4);
 
 dstats <- describe(data$Temperature)
-
+df2latex(dstats)

@@ -3,11 +3,15 @@ figure.ts <- function (data) {
   lines(data, lwd = 1, col = "darkred");
 }
 
-figure.hist <- function (data) {
-  hist(data$Temperature, col="lightgrey", xlim= c(14,27),
-       freq=F, xlab="Temperature", main="Histogram of Temperature");
-  curve(dnorm(x, mean=mean(data$Temperature), sd=sd(data$Temperature)),
-        add=TRUE, col="darkgrey", lwd=2) 
+figure.hist <- function (data, title="Histogram", freq=T, dfun=dnorm, offset = 2) {
+  min_x = min(data);
+  max_x = max(data);
+  hist(data, col="lightgrey", border="darkgrey", xlim= c(min_x - offset, max_x + offset),
+       freq=freq, xlab="Temperature", main=title);
+  if (!freq) {
+    curve(dfun(x, mean=mean(data), sd=sd(data)),
+          add=TRUE, col="darkred", lwd=2) 
+  }
 }
 
 figure.ggts <- function (data) {

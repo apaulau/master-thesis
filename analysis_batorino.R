@@ -9,6 +9,7 @@ library(psych)
 
 source("R/plotting-fun.R")
 source("R/print-fun.R")
+source("R/dstats.R")
 
 # Reading input data from csv file
 data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,

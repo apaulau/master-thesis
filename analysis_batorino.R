@@ -5,8 +5,6 @@
 
 rm(list=ls(all=TRUE)) #start with empty workspace
 
-library(psych)
-
 source("R/plotting-fun.R")
 source("R/print-fun.R")
 source("R/dstats.R")
@@ -30,5 +28,4 @@ to.pdf(figure.hist(data$Temperature, "Histogram of Temperature"), "figures/tempe
 to.pdf(figure.hist(data$Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), "figures/temperature-histogram-dnorm.pdf",
        width=6, height=4);
 
-dstats <- describe(data$Temperature)
-df2latex(dstats)
+dstats <- dstats.describe(data$Temperature)

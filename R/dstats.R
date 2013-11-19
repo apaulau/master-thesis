@@ -1,5 +1,27 @@
 # Descriptive statistics
 
+# Function for getting all descriptive statistics
+dstats.describe <- function(data, locale=F) {
+  stats <- c(dstats.mean(data), dstats.median(data), dstats.range(data), dstats.variance(data),
+             dstats.std.dev(data), dstats.coef.var(data), dstats.std.error(data), dstats.skew(data),
+             dstats.std.error.skew(data), dstats.kurtosis(data), dstats.std.error.kurtosis(data))
+  if (locale) {
+    descr.row <- c("Среднее", "Медиана", "Размах", "Дисперсия", "Стандартное отклонение", 
+                   "Коэффициент вариации", "Стандартная ошибка", "Асимметрия", 
+                   "Ошибка асимметрии", "Куртосис", "Ошибка куртосиса")
+    descr.col <- c("Значение")
+  } else {
+    descr.row <- c("Mean", "Median", "Range", "Variance", "Standard Deviation", 
+                   "Coefficient of Variance", "Standard Error", "Skewness", 
+                   "Std. Error Skewness", "Kurtosis", "Std. Error Kurtosis")
+    descr.col <- c("Value")
+  }
+  df <- data.frame(stats, row.names=descr.row) 
+  colnames(df) <- descr.col
+  
+  df
+}
+
 dstats.mean <- function(data, ...) {
   mean(data, ...)
 }
@@ -21,11 +43,11 @@ dstats.std.dev <- function(data) {
 }
 
 dstats.coef.var <- function(data) {
-  (var(data) / mean(data)) * 100%
+  (var(data) / mean(data)) * 100
 }
 
 dstats.std.error <- function(data) {
-  sqrt(var(data) / n)
+  sqrt(var(data) / length(data))
 }
 
 dstats.skew <- function(data) {
@@ -53,9 +75,9 @@ dstats.kurtosis <- function(data) {
 
 dstats.std.error.kurtosis <- function(data) {
   n <- length(data)
-  2 * dstats.std.error.skew * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+  2 * dstats.std.error.skew(data) * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
 }
 
 dstats.test.kurtosis <- function(data) {
-  dstats.kurtosis(data) / dstats.std.error.kurtosis
+  dstats.kurtosis(data) / dstats.std.error.kurtosis(data)
 }

@@ -28,4 +28,5 @@ to.pdf(figure.hist(data$Temperature, "Histogram of Temperature"), "figures/tempe
 to.pdf(figure.hist(data$Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), "figures/temperature-histogram-dnorm.pdf",
        width=6, height=4);
 
+# Getting descriptive statistics for temperature
 dstats <- dstats.describe(data$Temperature)

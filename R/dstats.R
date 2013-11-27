@@ -2,16 +2,22 @@
 
 # Function for getting all descriptive statistics
 dstats.describe <- function(data, locale=F) {
-  stats <- c(dstats.mean(data), dstats.median(data), dstats.range(data), dstats.variance(data),
-             dstats.std.dev(data), dstats.coef.var(data), dstats.std.error(data), dstats.skew(data),
-             dstats.std.error.skew(data), dstats.kurtosis(data), dstats.std.error.kurtosis(data))
+  stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
+             dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
+             dstats.range(data), dstats.quartile.range(data), dstats.variance(data),
+             dstats.std.dev(data), dstats.coef.var(data), dstats.std.error(data),
+             dstats.skew(data), dstats.std.error.skew(data), dstats.kurtosis(data),
+             dstats.std.error.kurtosis(data))
   if (locale) {
-    descr.row <- c("Среднее", "Медиана", "Размах", "Дисперсия", "Стандартное отклонение", 
-                   "Коэффициент вариации", "Стандартная ошибка", "Асимметрия", 
-                   "Ошибка асимметрии", "Куртосис", "Ошибка куртосиса")
+    descr.row <- c("Среднее", "Медиана", "Нижний квартиль", "Верхний квартиль", 
+                   "Минимум", "Максимум", "Размах", "Квартильный размах",
+                   "Дисперсия", "Стандартное отклонение", "Коэффициент вариации",
+                   "Стандартная ошибка", "Асимметрия", "Ошибка асимметрии",
+                   "Куртосис", "Ошибка куртосиса")
     descr.col <- c("Значение")
   } else {
-    descr.row <- c("Mean", "Median", "Range", "Variance", "Standard Deviation", 
+    descr.row <- c("Mean", "Median", "Lower Quartile", "Upper Quartile", "Range",
+                   "Minimum", "Maximum", "Quartile Range", "Variance", "Standard Deviation", 
                    "Coefficient of Variance", "Standard Error", "Skewness", 
                    "Std. Error Skewness", "Kurtosis", "Std. Error Kurtosis")
     descr.col <- c("Value")
@@ -28,6 +34,26 @@ dstats.mean <- function(data, ...) {
 
 dstats.median <- function(data, ...) {
   median(data, ...)
+}
+
+dstats.quartile.lower <- function(data, ...) {
+  quantile(data, ...)[[2]]
+}
+
+dstats.quartile.upper <- function(data, ...) {
+  quantile(data, ...)[[4]]
+}
+
+dstats.quartile.range <- function(data) {
+  dstats.quartile.upper(data) - dstats.quartile.lower(data)
+}
+
+dstats.min <- function(data, ...) {
+  min(data, ...)
+}
+
+dstats.max <- function(data, ...) {
+  max(data, ...)
 }
 
 dstats.range <- function(data) {

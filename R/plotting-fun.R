@@ -17,6 +17,7 @@ figure.hist <- function (data, title="Histogram", freq=T, dfun=dnorm, offset = 2
 
 figure.qqnorm <- function(data, title="Normal Q-Q Plot of Temperature", ...) {
   qqnorm(data, main=title, pch = 21, col = 'darkgrey', bg = 'grey', ...)
+  qqline(data, col="darkred")
 }
 
 figure.ggts <- function (data) {
@@ -24,9 +25,9 @@ figure.ggts <- function (data) {
     geom_point(pch=21, col="darkgrey", bg="grey") + 
     geom_line(col="darkred") + 
     ggtitle("Temperature Time Series") + 
-    theme_bw();
+    theme_bw()
 }
 
 figure.gghist <- function (data) {
-  ggplot(data, aes(x=Temperature)) + geom_histogram() + theme_bw();
+  ggplot(data, aes(x=Temperature)) + geom_histogram() + theme_bw()
 }

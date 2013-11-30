@@ -6,10 +6,10 @@
 rm(list=ls(all=TRUE)) #start with empty workspace
 
 library(xtable)
+library(nortest)
 source("R/plotting-fun.R")
 source("R/print-fun.R")
 source("R/dstats.R")
-source("R/tests-fun.R")
 
 # Reading input data from csv file
 data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
@@ -32,14 +32,19 @@ to.pdf(figure.hist(data$Temperature, "Histogram with fitted normal density curve
        "figures/temperature-histogram-dnorm.pdf", width=6, height=4);
 
 # Getting descriptive statistics for temperature
-dstats <- dstats.describe(data$Temperature, T)
+dstats <- dstats.describe(data$Temperature, locale=T)
 
+# Output descriptive statistics to TeX
 sink(file="out/dstats.tex")
 xtable(dstats, caption="Описательные статистики для наблюдаемых температур", label="table:dstats")
-sink()
+sink()   
 
 # Normal Quantile-Quantile plot
 to.pdf(figure.qqnorm(data$Temperature),
        "figures/temperature-qqnorm.pdf")
 
-shapiro.test(data$Temperature)
+# Output results of Shapiro-Wilk test to TeX
+to.verbatim(shapiro.test(data$Temperature), "out/shapiro.tex")
+
+# Output results of Pearson chi-square test to TeX
+to.verbatim(pearson.test(data$Temperature), "out/pearson.tex")

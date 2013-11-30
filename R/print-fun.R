@@ -2,15 +2,23 @@ to.dev <- function(expr, dev, filename, ..., verbose=TRUE) {
   if (verbose) {
     cat(sprintf("Creating %s\n", filename));
   }
-  dev(filename, ...);
-  on.exit(dev.off());
-  eval.parent(substitute(expr));
+  dev(filename, ...)
+  on.exit(dev.off())
+  eval.parent(substitute(expr))
 }
 
 to.pdf <- function(expr, filename, ...) {
-  to.dev(expr, pdf, filename, useDingbats=FALSE, ...);
+  to.dev(expr, pdf, filename, useDingbats=FALSE, ...)
 }
 
 to.png <- function(expr, filename, ...) {
-  to.dev(expr, png, filename, ...);
+  to.dev(expr, png, filename, ...)
+}
+
+to.verbatim <- function(expr, filename, ...) {
+  sink(file=filename, type="output")
+  cat("\\begin{verbatim}", "\n")
+  print(expr)
+  cat("\\end{verbatim}")
+  sink()
 }

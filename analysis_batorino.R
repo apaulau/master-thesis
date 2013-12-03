@@ -20,6 +20,7 @@ data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
 print(data)
 
 Temperature <- data$Temperature
+Date <- data$Date
 
 # Plotting received data
 to.pdf(figure.ts(Temperature, title="", ylab="Temperature"),
@@ -62,8 +63,9 @@ ks <- ks.test(x=Temperature, y=test.nsample, exact=NULL)
 # Output results to TeX
 to.file(ks, "out/ks.tex")
 
+# Bagplot
 to.pdf(figure.bagplot(data),
-       "figures/bagplot.pdf", width=6, height=4)
+       "figures/bagplot.pdf", width=5, height=5)
 
 # Grubbs test for outliers
 grubbs <- grubbs.test(Temperature)
@@ -74,3 +76,12 @@ to.file(grubbs, "out/grubbs.tex")
 cmatrix <- cor(cbind(Temperature, "Date"=1:length(Temperature)), method="pearson")
 to.file(xtable(cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
         "out/cmatrix.tex")
+
+# Pearson's product-moment correlation test
+Date <- 1:length(Temperature) # for y as numerical
+to.file(cor.test(Temperature, Date, method="pearson"),
+        "out/ctest.tex")
+
+# Data scatterplot
+to.pdf(figure.scatterplot(data),
+       "figures/scatterplot.pdf", width=6, height=4)

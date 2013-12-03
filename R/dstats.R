@@ -65,7 +65,7 @@ dstats.variance <- function(data, ...) {
 }
 
 dstats.std.dev <- function(data) {
-  sqrt(var(data))
+  sd(data)
 }
 
 dstats.coef.var <- function(data) {
@@ -73,7 +73,7 @@ dstats.coef.var <- function(data) {
 }
 
 dstats.std.error <- function(data) {
-  sqrt(var(data) / length(data))
+  sd(data) / sqrt(length(data))
 }
 
 dstats.skew <- function(data) {

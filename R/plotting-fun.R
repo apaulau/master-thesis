@@ -1,5 +1,7 @@
+source("R/misc-fun.R")
+
 figure.ts <- function (data, title="Temperature Time Series", ...) {
-  plot(data, pch = 21, col = 'darkgrey', bg = 'grey', main = title, xaxt="n", ...);
+  plot(data, pch = 21, col = 'darkgrey', bg = 'grey', main = title, xlab="Observation", xaxt="n", ...);
   lines(data, lwd = 1, col = "darkred");
   axis(side=1, at=0:length(data), labels=0:length(data), cex.axis=1, tck=-.05, las=1)
 }
@@ -20,16 +22,34 @@ figure.bagplot <- function(data, title="Bagplot", offset = 2) {
   Temperature <- data$Temperature
   min_y <- min(Temperature)
   max_y <- max(Temperature)
-  min_date <- min(Date)
-  max_date <- max(Date)
-  YEAR=365
+  min_date <- date.year.subtract(min(Date), 5)
+  max_date <- date.year.add(max(Date), 2)
   
   bagplot(x=Date, y=Temperature, xaxt="n", main=title, xlab="Date", ylab="Temperature",
           show.whiskers=F, ylim=c(min_y - offset, max_y + offset), 
-          xlim=c(as.Date(min_date - 5*YEAR, "%Y"), as.Date(max_date + 2*YEAR, "%Y")))
+          xlim=c(as.Date(min_date, "%Y"), as.Date(max_date, "%Y")),
+          cex=.5, transparency=T)
   
-  Date <- append(seq.Date(min_date-5*YEAR, min_date, "years"), Date)
-  Date <- append(Date, seq.Date(max_date, max_date, "years"))
+  Date <- date.wrap(min_date, Date, max_date)
+  axis(1, Date, format(Date, "%Y"), cex.axis = .7)
+}
+
+figure.scatterplot <- function(data, title="Scatterplot", offset = 2, ...) {
+  Date <- data$Date
+  Temperature <- data$Temperature
+  min_y <- min(Temperature)
+  max_y <- max(Temperature)
+  min_date <- date.year.subtract(min(Date), 5)
+  max_date <- date.year.add(max(Date), 2)
+    
+  plot(x=Date, y=Temperature, pch = 21, col = 'darkgrey', bg = 'grey', main = title, xaxt="n",
+       ylim=c(min_y - offset, max_y + offset), 
+       xlim=c(as.Date(min_date, "%Y"), as.Date(max_date, "%Y"), ...))
+  
+  abline(lm(Temperature ~ Date), col="red") # regression line (y~x)
+  lines(lowess(Date, Temperature), col="blue") # lowess line (x,y) 
+  
+  Date <- date.wrap(min_date, Date, max_date)
   axis(1, Date, format(Date, "%Y"), cex.axis = .7)
 }
 

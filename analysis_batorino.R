@@ -7,6 +7,8 @@ rm(list=ls(all=TRUE)) #start with empty workspace
 
 library(xtable)
 library(nortest)
+library(aplpack)
+library(outliers)
 source("R/plotting-fun.R")
 source("R/print-fun.R")
 source("R/dstats.R")
@@ -17,34 +19,58 @@ data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
 
 print(data)
 
+Temperature <- data$Temperature
+
 # Plotting received data
-to.pdf(figure.ts(data$Temperature, title="", ylab="Temperature"),
+to.pdf(figure.ts(Temperature, title="", ylab="Temperature"),
        "figures/temperature-ts-first-overview.pdf",
        width=6, height=4);
 
 
 # Plotting histogram for temperature variable
-to.pdf(figure.hist(data$Temperature, "Histogram of Temperature"), 
+to.pdf(figure.hist(Temperature, "Histogram of Temperature"), 
        "figures/temperature-histogram.pdf", width=6, height=4);
 
 # Plotting histogram with fitted normal density curve for temperature variable
-to.pdf(figure.hist(data$Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), 
+to.pdf(figure.hist(Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), 
        "figures/temperature-histogram-dnorm.pdf", width=6, height=4);
 
 # Getting descriptive statistics for temperature
-dstats <- dstats.describe(data$Temperature, locale=T)
+dstats <- dstats.describe(Temperature, locale=T)
 
 # Output descriptive statistics to TeX
-sink(file="out/dstats.tex")
-xtable(dstats, caption="Описательные статистики для наблюдаемых температур", label="table:dstats")
-sink()   
+to.file(xtable(dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
+     "out/dstats.tex")
 
 # Normal Quantile-Quantile plot
-to.pdf(figure.qqnorm(data$Temperature),
-       "figures/temperature-qqnorm.pdf")
+to.pdf(figure.qqnorm(Temperature),
+       "figures/temperature-qqnorm.pdf", width=6, height=4)
 
-# Output results of Shapiro-Wilk test to TeX
-to.verbatim(shapiro.test(data$Temperature), "out/shapiro.tex")
+# Shapiro-Wilk test for normality
+shapiro <- shapiro.test(Temperature)
+# Output results to TeX
+to.file(shapiro, "out/shapiro.tex")
 
-# Output results of Pearson chi-square test to TeX
-to.verbatim(pearson.test(data$Temperature), "out/pearson.tex")
+# Pearson chi-square test for normality
+pearson <- pearson.test(Temperature)
+# Output results to TeX
+to.file(pearson, "out/pearson.tex")
+
+# Kolmogorov-Smirnov test for normality
+test.nsample <- rnorm(10000, mean=mean(Temperature), sd=sd(Temperature))
+ks <- ks.test(x=Temperature, y=test.nsample, exact=NULL)
+# Output results to TeX
+to.file(ks, "out/ks.tex")
+
+to.pdf(figure.bagplot(data),
+       "figures/bagplot.pdf", width=6, height=4)
+
+# Grubbs test for outliers
+grubbs <- grubbs.test(Temperature)
+# Output results to TeX
+to.file(grubbs, "out/grubbs.tex")
+
+# Correlation matrix
+cmatrix <- cor(cbind(Temperature, "Date"=1:length(Temperature)), method="pearson")
+to.file(xtable(cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
+        "out/cmatrix.tex")

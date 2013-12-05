@@ -206,10 +206,10 @@ Me = \left\{
 
 Приведём некоторые критерии, которые понадобятся в нашем исследовании. Для этого воспользуемся литературой\todo{Ссылки на литературу}.
 
-\section*{Критерий Шапиро-Уилка} % (fold)
+\section*{Критерий Шапиро--Уилка} % (fold)
 \label{sec:shapiro_wilk}
 
-Критерий Шапиро-Уилка используется для проверки гипотезы $H_0$: <<генеральная совокупность распределена нормально>> и является одним наиболее эффективных критериев проверки нормальности. \todo[size=\tiny]{+cite: Shapiro S.S., Francia R.S. An appriximate analysis of variance test fo nor­mality // J. Amer. Statist. Assoc., 337, 1972. – P.215-216.}
+Критерий Шапиро--Уилка используется для проверки гипотезы $H_0$: <<генеральная совокупность распределена нормально>> и является одним наиболее эффективных критериев проверки нормальности. \todo[size=\tiny]{+cite: Shapiro S.S., Francia R.S. An appriximate analysis of variance test fo nor­mality // J. Amer. Statist. Assoc., 337, 1972. – P.215-216.}
 
 Пусть имеется вариационный ряд $x_{(1)} \le x_{(2)} \le \ldots \le x_{(n)}$, построенный по извлечённой из генеральной совокупности выборки $x_1, x_2, \ldots, x_n$.
 
@@ -221,9 +221,8 @@ Me = \left\{
 \begin{equation*}
 k = \left\{
  \begin{array}{l l}
-   \frac{n-1}{2} &, \quad n = 2l + 1, \\
-   \\
-   \frac{n}{2} &, \quad n = 2l.
+   (n-1) / 2 &, \quad n = 2l + 1, \\
+   n / 2 &, \quad n = 2l.
  \end{array} \right.
 \end{equation*} 
 И по заданному уровню значимости $\alpha$ из таблицы критических значений статистики $W(\alpha)$ [\todo[size=\tiny]{Shapiro S. S., Wilk M. B. An analysis of variance test for normality. — Biometrika, 1965, 52, №3 — p. 591-611.}] найти критическую точку $W_{\textrm{кр}}(\alpha)$.
@@ -317,7 +316,7 @@ k = \left\{
 \begin{equation*}
 	\sigma_{\varepsilon}^2 = s_x^2(1 - r_{xt}^2),
 \end{equation*}
-где $r_{xx^{*}}$ --- коэффициент корреляции рядов $x$ и $x_{*}$
+где $r_{xt}$ --- выборочный коэффициент корреляции.
 
 \textit{Стандартные случайные погрешности} параметров $a$ и $b$:
 \begin{equation*}

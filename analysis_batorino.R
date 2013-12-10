@@ -9,6 +9,8 @@ library(xtable)
 library(nortest)
 library(aplpack)
 library(outliers)
+
+source("R/misc-fun.R")
 source("R/plotting-fun.R")
 source("R/print-fun.R")
 source("R/dstats.R")
@@ -17,7 +19,11 @@ source("R/dstats.R")
 data <- read.csv(file="data/batorino_july.csv", header=T, sep=";", nrows=38,
                  colClasses = c("Date", "numeric"), stringsAsFactors=F)
 
-print(data)
+# Outputtind data to TeX table
+outdata <- data
+outdata$Date <- c(1975:2012)
+print(xtable(outdata, caption="Исходные данные.", label="table:source"),  table.placement="H",
+      file="out/source_data.tex")
 
 Temperature <- data$Temperature
 Date <- data$Date
@@ -37,11 +43,11 @@ to.pdf(figure.hist(Temperature, "Histogram with fitted normal density curve", fr
        "figures/temperature-histogram-dnorm.pdf", width=6, height=4);
 
 # Getting descriptive statistics for temperature
-dstats <- dstats.describe(Temperature, locale=T)
+data.dstats <- dstats.describe(Temperature, locale=T)
 
 # Output descriptive statistics to TeX
-to.file(xtable(dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
-     "out/dstats.tex")
+print(xtable(data.dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
+      file="out/data_dstats.tex")
 
 # Normal Quantile-Quantile plot
 to.pdf(figure.qqnorm(Temperature),
@@ -74,14 +80,68 @@ to.file(grubbs, "out/grubbs.tex")
 
 # Correlation matrix
 cmatrix <- cor(cbind(Temperature, "Date"=1:length(Temperature)), method="pearson")
-to.file(xtable(cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
-        "out/cmatrix.tex")
+print(xtable(cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
+      file="out/cmatrix.tex")
 
 # Pearson's product-moment correlation test
-Date <- 1:length(Temperature) # for y as numerical
-to.file(cor.test(Temperature, Date, method="pearson"),
+time <- 1:length(Temperature) # for y as numerical
+to.file(cor.test(Temperature, time, method="pearson"),
         "out/ctest.tex")
 
 # Data scatterplot
 to.pdf(figure.scatterplot(data),
        "figures/scatterplot.pdf", width=6, height=4)
+
+# Time series with regression line
+to.pdf(figure.ts2(data),
+       "figures/temperature-ts-regression.pdf", width=6, height=4)
+
+# Getting time series for Temperature. Hack: 1969=1975
+data.ts <- ts(Temperature, start=c(1969, 7), frequency=1)
+
+# Fitting linear model for data time series
+fit <- lm(data.ts ~ time)
+
+data.residuals <- fit$residuals
+
+# Plot detrended time series
+to.pdf(figure.residuals(Date, data.residuals),
+       "figures/temperature-ts-detrended.pdf", width=6, height=4)
+
+resdata <- data.frame("Year"=outdata$Date, "Residual"=residuals.get(data.residuals))
+
+print(xtable(resdata, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
+      file="out/resdata.tex")
+
+# Getting descriptive statistics for temperature residuals
+resdata.dstats <- dstats.describe(resdata$Residual, locale=T)
+
+# Output descriptive statistics for residuals to TeX
+print(xtable(resdata.dstats, caption="Описательные статистики для остатков.", label="table:resid_dstats"),
+      file="out/residuals_dstats.tex")
+
+# Plotting histogram with fitted normal density curve for residuals
+to.pdf(figure.hist(resdata$Residual, "Histogram with fitted normal density curve for residuals", freq=F, dnorm), 
+       "figures/residuals-histogram-dnorm.pdf", width=6, height=4);
+
+# Normal Quantile-Quantile plot for residuals
+to.pdf(figure.qqnorm(resdata$Residual, "Normal Q-Q Plot for residuals"),
+       "figures/residuals-qqnorm.pdf", width=6, height=4)
+
+Residual <- resdata$Residual
+
+# Shapiro-Wilk test for normality
+resdata.shapiro <- shapiro.test(Residual)
+# Output results to TeX
+to.file(resdata.shapiro, "out/residuals_shapiro.tex")
+
+# Pearson chi-square test for normality
+resdata.pearson <- pearson.test(Residual)
+# Output results to TeX
+to.file(resdata.pearson, "out/residuals_pearson.tex")
+
+# Kolmogorov-Smirnov test for normality
+test.nsample <- rnorm(10000, mean=mean(Residual), sd=sd(Residual))
+resdata.ks <- ks.test(x=Residual, y=test.nsample, exact=NULL)
+# Output results to TeX
+to.file(ks, "out/residuals_ks.tex")

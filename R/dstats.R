@@ -69,7 +69,11 @@ dstats.std.dev <- function(data) {
 }
 
 dstats.coef.var <- function(data) {
-  (var(data) / mean(data)) * 100
+  mn <- mean(data)
+  if (abs(mn) > 1.987171e-15) {
+    (var(data) / mean(data)) * 100
+  } else
+    0
 }
 
 dstats.std.error <- function(data) {

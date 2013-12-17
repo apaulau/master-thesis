@@ -35,11 +35,11 @@ to.pdf(figure.ts(Temperature, title="", ylab="Temperature"),
 
 
 # Plotting histogram for temperature variable
-to.pdf(figure.hist(Temperature, "Histogram of Temperature"), 
+to.pdf(figure.hist(Temperature, title=""), 
        "figures/temperature-histogram.pdf", width=6, height=4);
 
 # Plotting histogram with fitted normal density curve for temperature variable
-to.pdf(figure.hist(Temperature, "Histogram with fitted normal density curve", freq=F, dnorm), 
+to.pdf(figure.hist(Temperature, title="", freq=F, dnorm), 
        "figures/temperature-histogram-dnorm.pdf", width=6, height=4);
 
 # Getting descriptive statistics for temperature
@@ -50,7 +50,7 @@ print(xtable(data.dstats, caption="Описательные статистики
       file="out/data_dstats.tex")
 
 # Normal Quantile-Quantile plot
-to.pdf(figure.qqnorm(Temperature),
+to.pdf(figure.qqnorm(Temperature, title=""),
        "figures/temperature-qqnorm.pdf", width=6, height=4)
 
 # Shapiro-Wilk test for normality
@@ -70,7 +70,7 @@ ks <- ks.test(x=Temperature, y=test.nsample, exact=NULL)
 to.file(ks, "out/ks.tex")
 
 # Bagplot
-to.pdf(figure.bagplot(data),
+to.pdf(figure.bagplot(data, title=""),
        "figures/bagplot.pdf", width=5, height=5)
 
 # Grubbs test for outliers
@@ -89,11 +89,11 @@ to.file(cor.test(Temperature, time, method="pearson"),
         "out/ctest.tex")
 
 # Data scatterplot
-to.pdf(figure.scatterplot(data),
+to.pdf(figure.scatterplot(data, title=""),
        "figures/scatterplot.pdf", width=6, height=4)
 
 # Time series with regression line
-to.pdf(figure.ts2(data),
+to.pdf(figure.ts2(data, title=""),
        "figures/temperature-ts-regression.pdf", width=6, height=4)
 
 # Getting time series for Temperature. Hack: 1969=1975
@@ -105,13 +105,13 @@ fit <- lm(data.ts ~ time)
 data.residuals <- fit$residuals
 
 # Plot detrended time series
-to.pdf(figure.residuals(Date, data.residuals),
+to.pdf(figure.residuals(Date, data.residuals, title=""),
        "figures/temperature-ts-detrended.pdf", width=6, height=4)
 
 resdata <- data.frame("Year"=outdata$Date, "Residual"=residuals.get(data.residuals))
 
 print(xtable(resdata, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
-      file="out/resdata.tex")
+      file="out/residuals_data.tex")
 
 # Getting descriptive statistics for temperature residuals
 resdata.dstats <- dstats.describe(resdata$Residual, locale=T)
@@ -121,11 +121,11 @@ print(xtable(resdata.dstats, caption="Описательные статисти�
       file="out/residuals_dstats.tex")
 
 # Plotting histogram with fitted normal density curve for residuals
-to.pdf(figure.hist(resdata$Residual, "Histogram with fitted normal density curve for residuals", freq=F, dnorm), 
+to.pdf(figure.hist(resdata$Residual, title="", freq=F, dnorm), 
        "figures/residuals-histogram-dnorm.pdf", width=6, height=4);
 
 # Normal Quantile-Quantile plot for residuals
-to.pdf(figure.qqnorm(resdata$Residual, "Normal Q-Q Plot for residuals"),
+to.pdf(figure.qqnorm(resdata$Residual, title=""),
        "figures/residuals-qqnorm.pdf", width=6, height=4)
 
 Residual <- resdata$Residual

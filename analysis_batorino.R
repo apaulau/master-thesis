@@ -9,6 +9,7 @@ library(xtable)
 library(nortest)
 library(aplpack)
 library(outliers)
+library(tseries)
 
 source("R/misc-fun.R")
 source("R/plotting-fun.R")
@@ -29,17 +30,17 @@ Temperature <- data$Temperature
 Date <- data$Date
 
 # Plotting received data
-to.pdf(figure.ts(Temperature, title="", ylab="Temperature"),
+to.pdf(figure.ts(Temperature, title="", xlab="Температура", ylab="Частота"),
        "figures/temperature-ts-first-overview.pdf",
        width=6, height=4);
 
 
 # Plotting histogram for temperature variable
-to.pdf(figure.hist(Temperature, title=""), 
+to.pdf(figure.hist(Temperature, title="", xlab="Температура", ylab="Частота"), 
        "figures/temperature-histogram.pdf", width=6, height=4);
 
 # Plotting histogram with fitted normal density curve for temperature variable
-to.pdf(figure.hist(Temperature, title="", freq=F, dnorm), 
+to.pdf(figure.hist(Temperature, title="", freq=F, dnorm, xlab="Температура", ylab="Плотность"), 
        "figures/temperature-histogram-dnorm.pdf", width=6, height=4);
 
 # Getting descriptive statistics for temperature
@@ -50,7 +51,7 @@ print(xtable(data.dstats, caption="Описательные статистики
       file="out/data_dstats.tex")
 
 # Normal Quantile-Quantile plot
-to.pdf(figure.qqnorm(Temperature, title=""),
+to.pdf(figure.qqnorm(Temperature, title="", xlab="Теоретические квантили", ylab="Выборочные квантили"),
        "figures/temperature-qqnorm.pdf", width=6, height=4)
 
 # Shapiro-Wilk test for normality
@@ -70,8 +71,8 @@ ks <- ks.test(x=Temperature, y=test.nsample, exact=NULL)
 to.file(ks, "out/ks.tex")
 
 # Bagplot
-to.pdf(figure.bagplot(data, title=""),
-       "figures/bagplot.pdf", width=5, height=5)
+to.pdf(figure.bagplot(data, title="", xlab="Дата", ylab="Температура"),
+       "figures/bagplot.pdf", width=4, height=3)
 
 # Grubbs test for outliers
 grubbs <- grubbs.test(Temperature)
@@ -89,11 +90,11 @@ to.file(cor.test(Temperature, time, method="pearson"),
         "out/ctest.tex")
 
 # Data scatterplot
-to.pdf(figure.scatterplot(data, title=""),
+to.pdf(figure.scatterplot(data, title="", xlab="Дата", ylab="Температура"),
        "figures/scatterplot.pdf", width=6, height=4)
 
 # Time series with regression line
-to.pdf(figure.ts2(data, title=""),
+to.pdf(figure.ts2(data, title="", xlab="Дата", ylab="Температура"),
        "figures/temperature-ts-regression.pdf", width=6, height=4)
 
 # Getting time series for Temperature. Hack: 1969=1975
@@ -105,7 +106,7 @@ fit <- lm(data.ts ~ time)
 data.residuals <- fit$residuals
 
 # Plot detrended time series
-to.pdf(figure.residuals(Date, data.residuals, title=""),
+to.pdf(figure.residuals(Date, data.residuals, title="", xlab="Дата", ylab="Остатки"),
        "figures/temperature-ts-detrended.pdf", width=6, height=4)
 
 resdata <- data.frame("Year"=outdata$Date, "Residual"=residuals.get(data.residuals))
@@ -121,11 +122,11 @@ print(xtable(resdata.dstats, caption="Описательные статисти�
       file="out/residuals_dstats.tex")
 
 # Plotting histogram with fitted normal density curve for residuals
-to.pdf(figure.hist(resdata$Residual, title="", freq=F, dnorm), 
+to.pdf(figure.hist(resdata$Residual, title="", freq=F, dnorm, xlab="Температура", ylab="Дата"), 
        "figures/residuals-histogram-dnorm.pdf", width=6, height=4);
 
 # Normal Quantile-Quantile plot for residuals
-to.pdf(figure.qqnorm(resdata$Residual, title=""),
+to.pdf(figure.qqnorm(resdata$Residual, title="", xlab="Теоретические квантили", ylab="Выборочные квантили"),
        "figures/residuals-qqnorm.pdf", width=6, height=4)
 
 Residual <- resdata$Residual
@@ -145,3 +146,8 @@ test.nsample <- rnorm(10000, mean=mean(Residual), sd=sd(Residual))
 resdata.ks <- ks.test(x=Residual, y=test.nsample, exact=NULL)
 # Output results to TeX
 to.file(ks, "out/residuals_ks.tex")
+
+# ACF
+to.pdf(figure.acf(Residual), "figures/residuals-acf.pdf", width=6, height=4)
+to.file(Box.test(Residual, type="Ljung-Box"), "out/residuals_ljung.tex")
+to.file(adf.test(Residual), "out/residuals_stationarity.tex")

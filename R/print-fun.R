@@ -8,7 +8,10 @@ to.dev <- function(expr, dev, filename, ..., verbose=TRUE) {
 }
 
 to.pdf <- function(expr, filename, ...) {
-  to.dev(expr, pdf, filename, useDingbats=FALSE, ...)
+  #to.dev(expr, pdf, filename, useDingbats=FALSE, encoding="UTF-8", ...)
+  cairo_pdf(filename, ...)
+  expr
+  dev.off()
 }
 
 to.png <- function(expr, filename, ...) {

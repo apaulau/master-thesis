@@ -4,8 +4,47 @@
 \usepackage{bsustyle/style/bsutitle}
 \usepackage{bsustyle/style/lstcustom}
 \usepackage[colorinlistoftodos]{todonotes}
+% \usepackage{xcolor}
 \usepackage{listings}
-\usepackage{appendix}
+% \usepackage{appendix}
+
+% КОСТЫЛЬ
+% \makeatletter
+% \newcounter{sect}
+% \renewcommand{\thesect}{\Asbuk{sect}.\,}
+% \newcommand{\sect}[1]{\refstepcounter{sect}\par\vspace{1.5cm plus 1cm minus .5cm}
+% 	{\large\bfПРИЛОЖЕНИЕ~\thesect #1}%
+% 	\addcontentsline{toc}{section}{ПРИЛОЖЕНИЕ~\thesect #1}\markboth{\thesect #1}{\thesect #1}%
+% 	\nopagebreak\bigskip\par}
+% \makeatother
+
+
+
+% \makeatletter
+% \renewcommand{\appendix}{\par%
+%   \setcounter{section}{0}%
+%   \setcounter{subsection}{0}% 
+%   \renewcommand{\appendixname}{ПРИЛОЖЕНИЕ}%
+%   \def\sectionname{\appendixname}%
+%   \addtocontents{toc}{section}%
+%   \renewcommand{\thesection}{\appendixname\hspace{0.2cm}\Asbuk\c@section}%
+% }
+% \makeatother
+
+% \newcommand\myappendix[1]{
+
+% \refstepcounter{section}
+
+% \chapter*{Приложение~\thesection{}~#1}
+
+% \addcontentsline{toc}{chapter}{Приложение~\thesection{}~#1}}
+
+% \makeatletter 
+% \renewcommand\appendix{\par 
+% \setcounter{section}{0}% 
+% \setcounter{subsection}{0}% 
+% \gdef\thesection{ \@Asbuk\c@section}} 
+% \makeatother 
 
 \definecolor{mauve}{rgb}{224, 176, 255}
 
@@ -38,5 +77,5 @@
 }
 
 % todonotes settings.
-\setlength{\marginparwidth}{2.7cm}
-\reversemarginpar
+%\setlength{\marginparwidth}{2.7cm}
+%\reversemarginpar

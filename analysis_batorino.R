@@ -151,3 +151,12 @@ to.file(ks, "out/residuals_ks.tex")
 to.pdf(figure.acf(Residual), "figures/residuals-acf.pdf", width=6, height=4)
 to.file(Box.test(Residual, type="Ljung-Box"), "out/residuals_ljung.tex")
 to.file(adf.test(Residual), "out/residuals_stationarity.tex")
+
+
+data  <- urgig(1000, 1, 1, 1)
+model=ugarchspec(
+variance.model = list(model = "sGARCH", garchOrder = c(1, 1)),
+mean.model = list(armaOrder = c(1, 1), include.mean = TRUE),
+distribution.model = "ghyp"
+)
+modelfit=ugarchfit(spec=model,data=data)

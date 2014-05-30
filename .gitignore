@@ -12,3 +12,5 @@
 .RData/
 .RData
 
+# Mac
+.DS_Store

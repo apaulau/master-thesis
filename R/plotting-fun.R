@@ -56,17 +56,17 @@ figure.bagplot <- function(data, title="Bagplot", offset = 2, xlab, ylab) {
   Temperature <- data$Temperature
   min_y <- min(Temperature)
   max_y <- max(Temperature)
-  min_date <- date.year.subtract(min(Date), 5)
-  max_date <- date.year.add(max(Date), 2)
+  min_date <- min(Date) - 5
+  max_date <- max(Date) + 2
   
   par(mar=c(4.1,4.1,.1,.1))
   bagplot(x=Date, y=Temperature, xaxt="n", main=title, xlab=xlab, ylab=ylab,
           show.whiskers=F, ylim=c(min_y - offset, max_y + offset), 
-          xlim=c(as.Date(min_date, "%Y"), as.Date(max_date, "%Y")),
+          xlim=c(min_date, max_date),
           cex=.5, transparency=T)
   
-  Date <- date.wrap(min_date, Date, max_date)
-  axis(1, Date, format(Date, "%Y"), cex.axis = .7)
+  Date <- c(min_date:min(Date), Date, max(Date):max_date)
+  axis(1, Date, cex.axis = .7)
 }
 
 figure.scatterplot <- function(data, title="Scatterplot", offset = 2, ...) {

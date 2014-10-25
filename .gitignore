@@ -19,4 +19,4 @@
 .aux
 .toc
 .log
-.synctex.gz
+*.synctex.gz

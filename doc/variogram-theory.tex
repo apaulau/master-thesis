@@ -1,0 +1,66 @@
+% (PARTIAL)
+\documentclass[a4paper]{article}
+
+\usepackage[russian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amssymb,amsthm,amsmath,amscd}
+\usepackage{graphicx}
+
+%Определение полей
+\setlength{\oddsidemargin}{0cm}% 1in=2.54см
+\setlength{\hoffset}{0.46cm}% 1in+\hoffset=3cm = левое поле;
+
+\setlength{\textwidth}{17cm}% 21cm-3cm(левое поле)-1cm(правое поле)=17cm;
+
+\setlength{\headheight}{0cm}%
+\setlength{\topmargin}{0cm}%
+\setlength{\headsep}{0cm}%
+\setlength{\voffset}{-0.54cm}% 1in+\voffset=2cm = верхнее поле;
+
+\setlength{\textheight}{25.7cm}% 29.7cm-2cm(верхнее поле)-2cm(нижнее поле)=25.7cm;
+
+\title{Многомерный статистический анализ}
+\author{Хаткевич Людмила Анатольевна}
+\begin{document}
+
+
+\section*{Оценка вариограммы гауссовского случайного процесса} % (fold)
+\label{sec:_variogram}
+
+Случайный процесс $ X(s), s \in \mathbb{Z} = \{0, \pm 1, \pm 2, \dots \} $, называется внутренне стационарным, если справедливы следующие равенства:
+\begin{equation}
+	E \{ X(s_1) - X(s_2) \} = 0, \quad V \{ X(s_1) - X(s_2) \} = 2 \gamma(s_1 - s_2),
+\end{equation}
+где $2 \gamma(s_1 - s_2)$ --- вариограмма рассматриваемого процесса, $s_1,s_2 \in \mathbb{Z}$.
+
+Пусть $ X(s), s \in \mathbb{Z} $ --- внутренне стационарный гауссовский случайный процесс с нулевым математическим ожиданием, дисперсией $ \sigma^2 $ и неизвестной вариограммой.
+\begin{equation}
+	2 \gamma(h) = V \{ X(s+h) - X(s) \}, s,h \in \mathbb{Z}.
+\end{equation}
+
+В качестве оценки вариограммы рассмотрим статистику вида:
+\begin{equation}
+	2 \tilde{\gamma}(h) = \frac{1}{n-h} \sum_{s=1}^{n-h}(X(s+h) - X(s))^2, \quad h = \overline{0, n-1}.
+\end{equation}
+
+Вычислим математическое ожидание введённой оценки %TODO: WRITE THIS LATER%
+
+Таким образом оценка является несмещённой.
+
+Далее, найдём второй момент:
+
+
+\begin{eqnarray}
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = E((2 \tilde{\gamma}(h_1) - E(2 \tilde{\gamma}(h_1))) (2 \tilde{\gamma}(h_2) - E(2 \tilde{\gamma}(h_2)))) = \\
+	& = E(\frac{1}{n-h_1} \sum_{s=1}^{n-h_1}((x(s+h_1) - x(s))^2 - E((x(s+h_1) - x(s))^2)) \times \\
+	& \times \frac{1}{n-h_2} \sum_{t=1}^{n-h_2}((x(t+h_2) - x(t))^2 - E((x(t+h_2) - x(t))^2))) = \\
+	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
+	& = [\text{по определению} cov(a,b) = corr(a,b)\sqrt{V(a)V(b)}] = \\
+	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
+	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
+\end{eqnarray}
+
+\end{document}
+
+% section _ (end)

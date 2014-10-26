@@ -35,7 +35,7 @@
 
 Пусть $ X(s), s \in \mathbb{Z} $ --- внутренне стационарный гауссовский случайный процесс с нулевым математическим ожиданием, дисперсией $ \sigma^2 $ и неизвестной вариограммой.
 \begin{equation}
-	2 \gamma(h) = V \{ X(s+h) - X(s) \}, s,h \in \mathbb{Z}.
+	2 \gamma(h) = V \{ X(s+h) - X(s) \}, ~ s,h \in \mathbb{Z}.
 \end{equation}
 
 В качестве оценки вариограммы рассмотрим статистику вида:
@@ -55,9 +55,10 @@
 	& = E(\frac{1}{n-h_1} \sum_{s=1}^{n-h_1}((x(s+h_1) - x(s))^2 - E((x(s+h_1) - x(s))^2)) \times \\
 	& \times \frac{1}{n-h_2} \sum_{t=1}^{n-h_2}((x(t+h_2) - x(t))^2 - E((x(t+h_2) - x(t))^2))) = \\
 	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
-	& = [\text{по определению} cov(a,b) = corr(a,b)\sqrt{V(a)V(b)}] = \\
+	& = [\text{по определению} ~ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)}] = \\
 	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
 	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
+	& = [\text{используем равенство (a) со страницы 2, TODO: добавить ссылку на источник}] = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
 \end{eqnarray}
 

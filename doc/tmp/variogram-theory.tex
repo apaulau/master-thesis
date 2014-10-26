@@ -27,6 +27,30 @@
 \section*{Оценка вариограммы гауссовского случайного процесса} % (fold)
 \label{sec:_variogram}
 
+Пусть $ (\Omega, \mathcal{F}, P) $ --- вероятностное пространство.
+
+\textit{Случайным процессом} $ x(t) = x(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in T $, $ T $ --- некоторое параметрическое множество.
+
+\textit{Математическим ожиданием} случайного процесса $ x(t), t \in T $ называется функция вида
+\begin{equation}
+	m(t) = Ex(t) = \int \limits_{\mathbb{R}} x \, dF(x;t), t \in T.
+\end{equation}
+
+\textit{Дисперсией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\begin{equation}
+	V(t) = V( x(t) ) = E(x(t) - m(t))^2 = \int \limits_{\mathbb{R}} (x - m(t))^2 \, dF(x; t).
+\end{equation}
+
+\textit{Корреляционной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\begin{equation}
+	r(t_1, t_2) = E(x(t_1)x(t_2)) = \iint \limits_{\mathbb{R}^2} x(t_1)x(t_2) \, dF(x(t_1), x(t_2); t_1, t_2)
+\end{equation}
+
+\textit{Ковариационной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\begin{equation}
+	R(t_1, t_2) = E \{ (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \} = \iint \limits_{\mathbb{R}^2} (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \, dF(x(t_1), x(t_2); t_1, t_2)
+\end{equation}
+
 Случайный процесс $ X(s), s \in \mathbb{Z} = \{0, \pm 1, \pm 2, \dots \} $, называется внутренне стационарным, если справедливы следующие равенства:
 \begin{equation}
 	E \{ X(s_1) - X(s_2) \} = 0, \quad V \{ X(s_1) - X(s_2) \} = 2 \gamma(s_1 - s_2),

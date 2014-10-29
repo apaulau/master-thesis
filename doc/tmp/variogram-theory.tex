@@ -19,8 +19,8 @@
 
 \setlength{\textheight}{25.7cm}% 29.7cm-2cm(верхнее поле)-2cm(нижнее поле)=25.7cm;
 
-\title{Многомерный статистический анализ}
-\author{Хаткевич Людмила Анатольевна}
+\title{}
+\author{}
 \begin{document}
 
 
@@ -63,13 +63,14 @@
 \end{equation*}
 
 В качестве оценки вариограммы рассмотрим статистику вида:
-\begin{equation*}
+\begin{equation}
+	\label{eq:var_est}
 	2 \tilde{\gamma}(h) = \frac{1}{n-h} \sum_{s=1}^{n-h}(X(s+h) - X(s))^2, \quad h = \overline{0, n-1}.
-\end{equation*}
+\end{equation}
 
 Вычислим математическое ожидание введённой оценки %TODO: WRITE THIS LATER%
 \begin{eqnarray*}
-	& E (2 \tilde{\gamma}(h)) = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
+	& E \{2 \tilde{\gamma}(h) \} = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
 	& = [\text{так как процесс является внутренне стационарным}] = \\
 	& = \frac{1}{n-h} \sum_{s=1}^{n-h} 2 \gamma(h) = 2 \gamma(h). 
 \end{eqnarray*}
@@ -87,9 +88,28 @@
 	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
 	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
 	& = [\text{используем равенство (a) со страницы 2, TODO: добавить ссылку на источник}] = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
+	& = [\text{по лемме 1 [\#Брест2005]}] = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{corr((x(s+h_1) - x(s)), (x(t+h_2) - x(t))) \}^2 = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{cov((x(s+h_1) - x(s)), (x(t+h_2) - x(t)))}{\sqrt{(V((x(s+h_1) - x(s))) V((x(t+h_2) - x(t))))}} \}^2 = \\
+	& = [\text{по лемме 3 [\#Брест2005]}] = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
 \end{eqnarray*}
 
+Таким образом получены соотношения математического ожидания и ковариации для статистики (\ref{eq:var_est}) $ 2 \tilde{\gamma}(h) $:
+\begin{equation}
+\label{eq:est_ex}
+	E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h),
+\end{equation}
+\begin{equation}
+\label{eq:est_cov}
+	cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2.
+\end{equation}
+
+Тогда, из (\ref{eq:est_cov}) нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+\begin{eqnarray*}
+	V\{ $ 2 \tilde{\gamma}(h) $ = \frac{2 (2 \gamma(h) )^2}{(n-h)^2} \sum_{s=1}^{n-h}\sum_{t=1}^{n-h} ( \frac{ \gamma(s-t+h) + \gamma(s-t-h) - 2\gamma(s-t)}{\sqrt{2 \gamma(h_1) }{2 \gamma(h)} )^2 \}
+\end{eqnarray*}
 \end{document}
 
 % section _ (end)

@@ -29,24 +29,30 @@
 
 Пусть $ (\Omega, \mathcal{F}, P) $ --- вероятностное пространство.
 
-\textit{Случайным процессом} $ x(t) = x(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in T $, $ T $ --- некоторое параметрическое множество.
+\textit{Случайным процессом} $ x(t) = x(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in \mathbb{T} $, $ \mathbb{T} $ --- некоторое параметрическое множество.
 
-\textit{Математическим ожиданием} случайного процесса $ x(t), t \in T $ называется функция вида
+\textit{Функцией распределения} случайного процесса $ x(t), t \in \mathbb{T} $, называется функция вида
 \begin{equation*}
-	m(t) = Ex(t) = \int \limits_{\mathbb{R}} x \, dF(x;t), t \in T.
+	F_n(x_1, \dots, x_n; t_1, \dots, t_n) = P \{ x(t_1) < x_1, \dots, x(t_n) < x_n \},
+\end{equation*}
+где $ x_j \in \mathbb{R}, t_j \in \mathbb{T}, j = \overline{1,n} $.
+
+\textit{Математическим ожиданием} случайного процесса $ x(t), t \in \mathbb{T} $ называется функция вида
+\begin{equation*}
+	m(t) = Ex(t) = \int \limits_{\mathbb{R}} x \, dF(x;t), t \in \mathbb{T}.
 \end{equation*}
 
-\textit{Дисперсией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\textit{Дисперсией} случайного процесса $ x(t), t \in \mathbb{T} $ называется функция вида:
 \begin{equation*}
 	V(t) = V( x(t) ) = E(x(t) - m(t))^2 = \int \limits_{\mathbb{R}} (x - m(t))^2 \, dF(x; t).
 \end{equation*}
 
-\textit{Корреляционной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\textit{Корреляционной функцией} случайного процесса $ x(t), t \in \mathbb{T} $ называется функция вида:
 \begin{equation*}
 	r(t_1, t_2) = E(x(t_1)x(t_2)) = \iint \limits_{\mathbb{R}^2} x(t_1)x(t_2) \, dF(x(t_1), x(t_2); t_1, t_2)
 \end{equation*}
 
-\textit{Ковариационной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
+\textit{Ковариационной функцией} случайного процесса $ x(t), t \in \mathbb{T} $ называется функция вида:
 \begin{equation*}
 	R(t_1, t_2) = E \{ (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \} = \iint \limits_{\mathbb{R}^2} (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \, dF(x(t_1), x(t_2); t_1, t_2)
 \end{equation*}
@@ -87,7 +93,7 @@
 	& = [\text{по определению} ~ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)}] = \\
 	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
 	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
-	& = [\text{используем равенство (a) со страницы 2, TODO: добавить ссылку на источник}] = \\
+	& = [V \{ X(s+h) - X(s) \}^2 = 2 \{ 2 \gamma(h) \}^2, \text{TODO: добавить ссылку на источник}] = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
 	& = [\text{по лемме 1 [\#Брест2005]}] = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{corr((x(s+h_1) - x(s)), (x(t+h_2) - x(t))) \}^2 = \\

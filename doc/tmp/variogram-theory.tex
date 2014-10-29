@@ -32,49 +32,53 @@
 \textit{Случайным процессом} $ x(t) = x(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in T $, $ T $ --- некоторое параметрическое множество.
 
 \textit{Математическим ожиданием} случайного процесса $ x(t), t \in T $ называется функция вида
-\begin{equation}
+\begin{equation*}
 	m(t) = Ex(t) = \int \limits_{\mathbb{R}} x \, dF(x;t), t \in T.
-\end{equation}
+\end{equation*}
 
 \textit{Дисперсией} случайного процесса $ x(t), t \in T $ называется функция вида:
-\begin{equation}
+\begin{equation*}
 	V(t) = V( x(t) ) = E(x(t) - m(t))^2 = \int \limits_{\mathbb{R}} (x - m(t))^2 \, dF(x; t).
-\end{equation}
+\end{equation*}
 
 \textit{Корреляционной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
-\begin{equation}
+\begin{equation*}
 	r(t_1, t_2) = E(x(t_1)x(t_2)) = \iint \limits_{\mathbb{R}^2} x(t_1)x(t_2) \, dF(x(t_1), x(t_2); t_1, t_2)
-\end{equation}
+\end{equation*}
 
 \textit{Ковариационной функцией} случайного процесса $ x(t), t \in T $ называется функция вида:
-\begin{equation}
+\begin{equation*}
 	R(t_1, t_2) = E \{ (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \} = \iint \limits_{\mathbb{R}^2} (x(t_1) - m(t_1)) (x(t_2) - m(t_2)) \, dF(x(t_1), x(t_2); t_1, t_2)
-\end{equation}
+\end{equation*}
 
 Случайный процесс $ X(s), s \in \mathbb{Z} = \{0, \pm 1, \pm 2, \dots \} $, называется внутренне стационарным, если справедливы следующие равенства:
-\begin{equation}
+\begin{equation*}
 	E \{ X(s_1) - X(s_2) \} = 0, \quad V \{ X(s_1) - X(s_2) \} = 2 \gamma(s_1 - s_2),
-\end{equation}
+\end{equation*}
 где $2 \gamma(s_1 - s_2)$ --- вариограмма рассматриваемого процесса, $s_1,s_2 \in \mathbb{Z}$.
 
 Пусть $ X(s), s \in \mathbb{Z} $ --- внутренне стационарный гауссовский случайный процесс с нулевым математическим ожиданием, дисперсией $ \sigma^2 $ и неизвестной вариограммой.
-\begin{equation}
+\begin{equation*}
 	2 \gamma(h) = V \{ X(s+h) - X(s) \}, ~ s,h \in \mathbb{Z}.
-\end{equation}
+\end{equation*}
 
 В качестве оценки вариограммы рассмотрим статистику вида:
-\begin{equation}
+\begin{equation*}
 	2 \tilde{\gamma}(h) = \frac{1}{n-h} \sum_{s=1}^{n-h}(X(s+h) - X(s))^2, \quad h = \overline{0, n-1}.
-\end{equation}
+\end{equation*}
 
 Вычислим математическое ожидание введённой оценки %TODO: WRITE THIS LATER%
+\begin{eqnarray*}
+	& E (2 \tilde{\gamma}(h)) = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
+	& = [\text{так как процесс является внутренне стационарным}] = \\
+	& = \frac{1}{n-h} \sum_{s=1}^{n-h} 2 \gamma(h) = 2 \gamma(h). 
+\end{eqnarray*}
 
 Таким образом оценка является несмещённой.
 
 Далее, найдём второй момент:
 
-
-\begin{eqnarray}
+\begin{eqnarray*}
 	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = E((2 \tilde{\gamma}(h_1) - E(2 \tilde{\gamma}(h_1))) (2 \tilde{\gamma}(h_2) - E(2 \tilde{\gamma}(h_2)))) = \\
 	& = E(\frac{1}{n-h_1} \sum_{s=1}^{n-h_1}((x(s+h_1) - x(s))^2 - E((x(s+h_1) - x(s))^2)) \times \\
 	& \times \frac{1}{n-h_2} \sum_{t=1}^{n-h_2}((x(t+h_2) - x(t))^2 - E((x(t+h_2) - x(t))^2))) = \\
@@ -84,7 +88,7 @@
 	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
 	& = [\text{используем равенство (a) со страницы 2, TODO: добавить ссылку на источник}] = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
-\end{eqnarray}
+\end{eqnarray*}
 
 \end{document}
 

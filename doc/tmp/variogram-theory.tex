@@ -70,9 +70,9 @@
 
 Вычислим математическое ожидание введённой оценки %TODO: WRITE THIS LATER%
 \begin{eqnarray*}
-	& E \{2 \tilde{\gamma}(h) \} = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
+	& E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
 	& = [\text{так как процесс является внутренне стационарным}] = \\
-	& = \frac{1}{n-h} \sum_{s=1}^{n-h} 2 \gamma(h) = 2 \gamma(h). 
+	& = \frac{1}{n-h} \sum_{s=1}^{n-h} 2 \gamma(h) = 2 \gamma(h).
 \end{eqnarray*}
 
 Таким образом оценка является несмещённой.
@@ -107,9 +107,28 @@
 \end{equation}
 
 Тогда, из (\ref{eq:est_cov}) нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+
 \begin{eqnarray*}
-	V\{ $ 2 \tilde{\gamma}(h) $ = \frac{2 (2 \gamma(h) )^2}{(n-h)^2} \sum_{s=1}^{n-h}\sum_{t=1}^{n-h} ( \frac{ \gamma(s-t+h) + \gamma(s-t-h) - 2\gamma(s-t)}{\sqrt{2 \gamma(h_1) }{2 \gamma(h)} )^2 \}
+	& V \{ 2 \tilde{\gamma}(h) \} = \frac{2 (2\gamma(h))^2}{(n-h)^2}\sum_{s=1}^{n-h}\sum_{t=1}^{n-h} \{ \frac{\gamma(s+h-t) + \gamma(s-t-h) - \gamma(s+h-t-h) - \gamma(s-t)}{\sqrt{2 \gamma(h)} \sqrt{2 \gamma(h)}} \}^2 = \\
+	& = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2.
 \end{eqnarray*}
+
+Тем самым доказана следующая теорема.
+\newtheorem{Theorem}{Теорема}
+\begin{Theorem}
+	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством (\ref{eq:var_est}), имеют место следующие соотношения:
+	\begin{equation*}
+		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h),
+	\end{equation*}
+	\begin{equation*}
+		cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2,
+	\end{equation*}
+	\begin{equation*}
+		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2,
+	\end{equation*}
+	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(s), s \in \mathbb{R}$, $h,h_1,h_2=\overline{0,n-1} $.
+\end{Theorem}
+
 \end{document}
 
 % section _ (end)

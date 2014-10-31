@@ -74,7 +74,7 @@
 	2 \tilde{\gamma}(h) = \frac{1}{n-h} \sum_{s=1}^{n-h}(X(s+h) - X(s))^2, \quad h = \overline{0, n-1}.
 \end{equation}
 
-Вычислим математическое ожидание введённой оценки %TODO: WRITE THIS LATER%
+Вычислим математическое ожидание введённой оценки
 \begin{eqnarray*}
 	& E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
 	& = [\text{так как процесс является внутренне стационарным}] = \\
@@ -83,24 +83,35 @@
 
 Таким образом оценка является несмещённой.
 
-Далее, найдём второй момент:
-
+Далее, найдём ковариацию:
 \begin{eqnarray*}
 	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = E((2 \tilde{\gamma}(h_1) - E(2 \tilde{\gamma}(h_1))) (2 \tilde{\gamma}(h_2) - E(2 \tilde{\gamma}(h_2)))) = \\
 	& = E(\frac{1}{n-h_1} \sum_{s=1}^{n-h_1}((x(s+h_1) - x(s))^2 - E((x(s+h_1) - x(s))^2)) \times \\
 	& \times \frac{1}{n-h_2} \sum_{t=1}^{n-h_2}((x(t+h_2) - x(t))^2 - E((x(t+h_2) - x(t))^2))) = \\
-	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
-	& = [\text{по определению} ~ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)}] = \\
-	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
-	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))} = \\
-	& = [V \{ X(s+h) - X(s) \}^2 = 2 \{ 2 \gamma(h) \}^2, \text{TODO: добавить ссылку на источник}] = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
-	& = [\text{по лемме 1 [\#Брест2005]}] = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{corr((x(s+h_1) - x(s)), (x(t+h_2) - x(t))) \}^2 = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{cov((x(s+h_1) - x(s)), (x(t+h_2) - x(t)))}{\sqrt{(V((x(s+h_1) - x(s))) V((x(t+h_2) - x(t))))}} \}^2 = \\
-	& = [\text{по лемме 3 [\#Брест2005]}] = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
+	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) 
 \end{eqnarray*}
+
+По определению, $ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)} $, тогда
+\begin{equation*}
+	cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))}
+\end{equation*}
+
+Из [ссылка на источник, либо упоминание раньше] $ V \{ X(s+h) - X(s) \}^2 = 2 \{ 2 \gamma(h) \}^2 $ и предыдущего соотношения:
+\begin{equation*}
+	cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
+\end{equation*}
+
+Далее воспользуемся леммой 1 [\#Брест2005]:
+\begin{eqnarray*}
+	& \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{corr((x(s+h_1) - x(s)), (x(t+h_2) - x(t))) \}^2 = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{cov((x(s+h_1) - x(s)), (x(t+h_2) - x(t)))}{\sqrt{(V((x(s+h_1) - x(s))) V((x(t+h_2) - x(t))))}} \}^2
+\end{eqnarray*}
+
+Принимая во внимание лемму 3 [\#Брест2005], получаем соотношение
+\begin{equation*}
+	cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
+\end{equation*}
 
 Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
 

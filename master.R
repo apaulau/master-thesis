@@ -2,6 +2,7 @@
 # This file will be the master file of all diploma project's files (slaves). 
 # Content will be the same as for previous works (batorino analysis).
 # Some thoughts for this investigation see in TODO.Rmd.
+# Ideas for organizing further research see in ideas.Rmd
 
 ## First of all we need to clean up the workspace
 rm(list=ls(all=TRUE))
@@ -9,13 +10,9 @@ rm(list=ls(all=TRUE))
 ## Dependencies
 library(ggplot2)  # eye-candy graphs
 library(xtable)   # convert data to latex tables
-library(nortest)  # tests for normality
+library(nortest)  # tests for normality // WANT TO STEAL
 library(outliers) # tests for outliers
-
-## 8< --- check do I need this packages
-library(tseries)  # introduces time series
-library(aplpack)  # don't remember what is it
-## --- >8
+library(aplpack)  # there is bagplot functionality // WANT TO REMOVE
 
 ## Import local modules
 source("R/misc-fun.R")     # some useful functions // TODO: check usages and usefulness

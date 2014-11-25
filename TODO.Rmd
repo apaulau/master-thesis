@@ -1,0 +1,18 @@
+---
+title: "TODO"
+author: "Aliaksandr Pualau"
+date: "November 24, 2014"
+output: html_document
+---
+
+### What to do next? Enjoy:
+
+* Find out how to use shiny. I think it will be useful and with it's help I can show a great product.
+
+* Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))
+
+* Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on. (__Main goal for the first time__)
+
+* ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
+
+* Reformat and refactor code. Clean up useless files.

@@ -16,4 +16,3 @@
 .toc
 .log
 *.synctex.gz
-packrat/lib*/

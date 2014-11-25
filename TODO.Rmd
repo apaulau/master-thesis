@@ -17,8 +17,12 @@ output: html_document
 
 * Reformat and refactor code. Clean up useless files.
 
-* Add computation block (for some non-visual analysis)
+* ~~Add computation block (for some non-visual analysis)~~
 
-* Add descriptive statistics to computation block. Or somewhere else.
+* ~~Add descriptive statistics to computation block. Or somewhere else.~~
 
-* Add normality tests to computation block.
+* ~~Add normality tests to computation block.~~
+
+* Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module
+
+* Fix references in TeX

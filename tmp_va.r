@@ -1,5 +1,5 @@
 library(sp)
-library(gstat)
+#library(gstat)
 library(ggplot2)
 library(reshape2)
 

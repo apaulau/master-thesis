@@ -1,6 +1,6 @@
 # Variogram with help of gstat, sp, nlme; https://beckmw.wordpress.com/tag/variogram/
 
-library(gstat)
+#library(gstat)
 library(sp)
 library(nlme)  
 

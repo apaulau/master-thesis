@@ -1,4 +1,4 @@
-library(gstat)
+#library(gstat)
 library(ggplot2)
 library(reshape2)
 OBS_NUM <- 30

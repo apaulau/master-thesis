@@ -1,7 +1,7 @@
 # Variogram with help of gstat and Saveliev; http://gis-lab.info/docs/saveliev2012-geostat.pdf
 
 library(sp)
-library(gstat)
+#library(gstat)
 
 p <- data.frame("X"=c(1:35), "Y"=rep(1,35))
 p.dist<-as.matrix(dist(p[,c("X", "Y")]))

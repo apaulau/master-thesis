@@ -1,6 +1,6 @@
 # Automap, autofitVariogram, autoKrige
 
-library(automap)
+#library(automap)
 
 OBS_NUM <- 35
 

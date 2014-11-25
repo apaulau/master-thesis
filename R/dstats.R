@@ -1,7 +1,7 @@
 # Descriptive statistics
 
 # Function for getting all descriptive statistics
-dstats.describe <- function(data, locale=F) {
+dstats.describe <- function(data, locale=FALSE) {
   stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
              dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
              dstats.range(data), dstats.quartile.range(data), dstats.variance(data),
@@ -84,12 +84,12 @@ dstats.skew <- function(data) {
   n <- length(data)
   mean <- mean(data)
   (n * sum(sapply(data, FUN=function(x){(x - mean)^3}))) /
-    ((n - 1)*(n - 2)*dstats.std.dev(data)^3)  
+    ((n - 1) * (n - 2) * dstats.std.dev(data)^3)  
 }
 
 dstats.std.error.skew <- function(data) {
   n <- length(data)
-  sqrt((6*n*(n - 1)) / ((n - 2)*(n + 1)*(n + 3)))
+  sqrt((6 * n * (n - 1)) / ((n - 2) * (n + 1) * (n + 3)))
 }
 
 dstats.test.skew <- function(data) {
@@ -99,13 +99,13 @@ dstats.test.skew <- function(data) {
 dstats.kurtosis <- function(data) {
   n <- length(data)
   mean <- mean(data)
-  (n*(n + 1)*sum(sapply(data, FUN=function(x){(x - mean)^4})) - 3*(sum(sapply(data, FUN=function(x){(x - mean)^2})))^2*(n - 1)) / 
-    ((n - 1)*(n - 2)*(n - 3)*dstats.variance(data)^2)
+  (n * (n + 1) * sum(sapply(data, FUN=function(x){(x - mean)^4})) - 3 * (sum(sapply(data, FUN=function(x){(x - mean)^2})))^2 * (n - 1)) / 
+    ((n - 1) * (n - 2) * (n - 3) * dstats.variance(data)^2)
 }
 
 dstats.std.error.kurtosis <- function(data) {
   n <- length(data)
-  2 * dstats.std.error.skew(data) * sqrt((n^2 - 1) / ((n - 3)*(n + 5)))
+  2 * dstats.std.error.skew(data) * sqrt((n^2 - 1) / ((n - 3) * (n + 5)))
 }
 
 dstats.test.kurtosis <- function(data) {

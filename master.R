@@ -171,28 +171,14 @@ plot.data.hist.norm <- plot.hist +
                 arg = list(mean=mean(src.data$temperature), sd=sd(src.data$temperature)))
 
 # 8< --- move this to the separate module
-## Q-Q plot
-ggqqp <- function (vec) {
-  # following four lines from base R's qqline()
-  y <- quantile(vec[!is.na(vec)], c(0.25, 0.75))
-  x <- qnorm(c(0.25, 0.75))
-  slope <- diff(y)/diff(x)
-  int <- y[1L] - slope * x[1L]
-  
-  d <- data.frame(resids = vec)
-  
-  ggplot(d, aes(sample = resids)) + stat_qq() + geom_abline(slope = slope, intercept = int) +
-    xlab("Теоретические квантили") + ylab("Выборочные квантили")
-}
+
 # >8 ---
 
 ## Normal Quantile-Quantile plot
 plot.data.qq <- ggqqp(data$temperature)
 
-
 ## Bagplot. // TODO: Investigate how to replace this with new style: ggplot
-to.pdf(figure.bagplot(data.frame("Date"=research.data$year, "Temperature"=research.data$temperature), title="", xlab="Год", ylab="Температура"),
-       "figures/05_bagplot.pdf", width=4, height=3)
+plot.data.bag <- figure.bagplot(data.frame("Date"=research.data$year, "Temperature"=research.data$temperature), title="", xlab="Год", ylab="Температура")
 
 ## Scatter plot with regression line based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
 plot.data.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
@@ -241,6 +227,8 @@ ggsave(plot=plot.data.hist, file="figures/02_hist.png", width=7, height=4)
 ggsave(plot=plot.data.hist.norm, file="figures/03_hist-dnorm.png", width=7, height=4)
 
 ggsave(plot=plot.data.qq, file="figures/04_qq.png", width=7, height=4)
+
+to.pdf(plot.data.bag, "figures/05_bagplot.pdf", width=4, height=3)
 
 ggsave(plot=plot.data.scatter, file="figures/06_scatterplot.png", width=7, height=4)
 

@@ -12,6 +12,7 @@ library(ggplot2)  # eye-candy graphs
 library(xtable)   # convert data to latex tables
 library(nortest)  # tests for normality // WANT TO STEAL
 library(outliers) # tests for outliers
+library(tseries)  # adf test used
 library(aplpack)  # there is bagplot functionality // WANT TO REMOVE
 
 ## Import local modules
@@ -24,7 +25,7 @@ source("R/dstats.R")       # descriptive statistics module
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choose multiple data sources
-src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=38, colClasses = c("numeric", "numeric"), stringsAsFactors=FALSE)
+src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=38, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
 ## Global use constants // TODO: try to use more narrow scope
 kStartYear  <- min(src.data$year)
@@ -156,23 +157,19 @@ to.file(research.residuals.adf, "out/residuals_stationarity.tex")
 plot.source <- ggplot(src.data, aes(x=year, y=temperature)) + 
   geom_point() + geom_line() + 
   scale_x_continuous(breaks=kDateBreaks) + 
-  theme(axis.text.x = element_text(angle=45, hjust=1)) +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) +
   xlab("Год наблюдения") + ylab("Температура, ºС")
 
 ## Basic histogram based on Sturges rule (by default) with pretty output (also by default)
-plot.data.hist <- ggplot(research.data, aes(x=temperature), geom = 'blank') +   
-  geom_histogram(aes(y = ..density..), colour="darkgrey", fill="white", 
-                 binwidth = diff(range(src.data$temperature)) / nclass.Sturges(src.data$temperature), alpha=.6) +
+plot.data.hist <- ggplot(research.data, aes(x=temperature), geom='blank') +   
+  geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", 
+                 binwidth=diff(range(src.data$temperature)) / nclass.Sturges(src.data$temperature), alpha=.6) +
   labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
 
 ## The same as previous histogram but with fitted normal distribution density curve
 plot.data.hist.norm <- plot.hist +
-  stat_function(fun = dnorm, colour='red', geom = 'line', 
-                arg = list(mean=mean(src.data$temperature), sd=sd(src.data$temperature)))
-
-# 8< --- move this to the separate module
-
-# >8 ---
+  stat_function(fun=dnorm, colour='red', geom='line', 
+                arg=list(mean=mean(src.data$temperature), sd=sd(src.data$temperature)))
 
 ## Normal Quantile-Quantile plot
 plot.data.qq <- ggqqp(data$temperature)
@@ -185,19 +182,19 @@ plot.data.scatter <- ggplot(data, aes(x=year, y=temperature)) +
   geom_point() + geom_abline(intercept=-194.632277, slope=0.107706, color="blue") +
   scale_x_continuous(limits=c(min(research.data$year) - 5, max(research.data$year) + 5), breaks=kDateBreaks) + 
   scale_y_continuous(breaks=seq(10, 30, 1), limits=c(14, 26)) +
-  theme(axis.text.x = element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
+  theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)
 plot.data.ts <- ggplot(research.data, aes(x=year, y=temperature)) + 
   geom_point() + geom_line() + stat_smooth(method=lm, se=FALSE) + 
   scale_x_continuous(breaks=kDateBreaks) + scale_y_continuous(breaks=seq(16, 28, 1)) + 
-  theme(axis.text.x = element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
+  theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
 
 ## Residuals time series (data have gotten on computing step: fitting linear model)
 plot.residuals.ts <- ggplot(research.residuals, aes(x=year, y=temperature)) + 
   geom_point() + geom_line() +
   scale_x_continuous(breaks=kDateBreaks) + 
-  theme(axis.text.x = element_text(angle=45, hjust=1)) +
+  theme(axis.text.x=element_text(angle=45, hjust=1)) +
   xlab("Год наблюдения") + ylab("Температура, ºС")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
@@ -210,9 +207,9 @@ plot.residuals.hist <- ggplot(research.residuals, aes(x=temperature), geom='blan
 plot.residuals.qq <- ggqqp(research.residuals$temperature)
 
 ## Auto Correlation Function plot // TODO: check the style
-plot.residuals.acf <- ggplot(data = research.residuals.acfdf, mapping=aes(x=lag, y=acf)) +
-  geom_hline(colour = "grey50") + geom_hline(yintercept=c(-clim, clim), linetype="dashed", col="blue") +
-  geom_segment(mapping = aes(xend = lag, yend = 0)) +
+plot.residuals.acf <- ggplot(data=research.residuals.acfdf, mapping=aes(x=lag, y=acf)) +
+  geom_hline(colour="grey50") + geom_hline(yintercept=c(-clim, clim), linetype="dashed", col="blue") +
+  geom_segment(mapping=aes(xend=lag, yend=0)) +
   labs(color="") + xlab("Лаг") + ylab("Автокорреляция")
 
 #] End plots block

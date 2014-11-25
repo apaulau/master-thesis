@@ -16,3 +16,9 @@ output: html_document
 * ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
 
 * Reformat and refactor code. Clean up useless files.
+
+* Add computation block (for some non-visual analysis)
+
+* Add descriptive statistics to computation block. Or somewhere else.
+
+* Add normality tests to computation block.

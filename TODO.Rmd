@@ -7,7 +7,7 @@ output: html_document
 
 ### What to do next? Enjoy:
 
-* Find out how to use shiny. I think it will be useful and with it's help I can show a great product.
+* Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.
 
 * Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))
 
@@ -23,6 +23,8 @@ output: html_document
 
 * ~~Add normality tests to computation block.~~
 
-* Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module
+* Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)
 
 * Fix references in TeX
+
+* Check new versions of automap.

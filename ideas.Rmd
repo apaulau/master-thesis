@@ -7,7 +7,7 @@ output: html_document
 
 ### Some ideas for you:
 
-* It will be fabuolus if within _Shiny_ will be possible to implement multiple tab application: each tab will be responsible
+* It will be fabuluos if within _Shiny_ will be possible to implement multiple tab application: each tab will be responsible
   for different functionality (e.g. different graphs or tables). It will be nice feature for presentatation.
  
 * Structure of the project in my mind: first of all computation, and after all printing

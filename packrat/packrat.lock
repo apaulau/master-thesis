@@ -16,6 +16,7 @@ Hash: 6a849b729bec970204ca88b96906adbc
 Package: RandomFields
 Source: CRAN
 Version: 3.0.44
+Hash: 0209ff8c1aa08210b9d2003f20720172
 Requires: colorspace, sp, spam, tcltk2, tkrplot
 
 Package: Rcpp
@@ -26,6 +27,12 @@ Hash: d9cc0a13885961b2d004cf73b0fb68dd
 Package: aplpack
 Source: CRAN
 Version: 1.3.0
+Hash: 7f0bce760241b70d374c98480f0e19ed
+
+Package: ash
+Source: CRAN
+Version: 1.0-14
+Hash: 1ce494f1117f72a0e80929e485f44f0e
 
 Package: bitops
 Source: CRAN
@@ -67,6 +74,7 @@ Hash: a90c211d7df7e61a72b8ab6c99c2e848
 Package: geoR
 Source: CRAN
 Version: 1.7-4.1
+Hash: b0c00ed6a60e5bbb496dbb20024f3cd5
 Requires: MASS, RandomFields, sp, splancs
 
 Package: ggplot2
@@ -79,6 +87,12 @@ Package: gtable
 Source: CRAN
 Version: 0.1.2
 Hash: 0cf4a2b54c02b35dec7e74a8ebed12a0
+
+Package: hdrcde
+Source: CRAN
+Version: 3.1
+Hash: c2485abde622049fe03ad5bbc7709730
+Requires: ash, ks, locfit, mvtnorm
 
 Package: highr
 Source: CRAN
@@ -97,6 +111,12 @@ Version: 1.8
 Hash: d00d7b314ca4c34f8a56ceacefb31b4f
 Requires: digest, evaluate, formatR, highr, markdown, stringr
 
+Package: ks
+Source: CRAN
+Version: 1.9.3
+Hash: 9967bb7d2c9df3eea5af322526b6510b
+Requires: misc3d, multicool, mvtnorm, rgl
+
 Package: labeling
 Source: CRAN
 Version: 0.3
@@ -106,6 +126,12 @@ Package: lattice
 Source: CRAN
 Version: 0.20-29
 Hash: 17e9fe582d11197544a5ec817a80b21e
+
+Package: locfit
+Source: CRAN
+Version: 1.5-9.1
+Hash: f50f72e2b1a3ae02e591bceab01bcf27
+Requires: lattice
 
 Package: markdown
 Source: CRAN
@@ -118,11 +144,26 @@ Source: CRAN
 Version: 0.2
 Hash: 9179db921fcb2e5be44e217042ed06bc
 
+Package: misc3d
+Source: CRAN
+Version: 0.8-4
+Hash: 7eb7b8c87599ffa8e2f81ef47743ecf4
+
+Package: multicool
+Source: CRAN
+Version: 0.1-2
+Hash: d2851217d7c8a23cfa33822c15ca3e60
+
 Package: munsell
 Source: CRAN
 Version: 0.4.2
 Hash: fa8af6d040041439b249351e9d16ae9a
 Requires: colorspace
+
+Package: mvtnorm
+Source: CRAN
+Version: 1.0-1
+Hash: cacf14b312adc15c6468a41d37896924
 
 Package: nlme
 Source: CRAN
@@ -133,10 +174,12 @@ Requires: lattice
 Package: nortest
 Source: CRAN
 Version: 1.0-2
+Hash: f27581f0451f97fce80bd57b42792c4c
 
 Package: outliers
 Source: CRAN
 Version: 0.14
+Hash: c8e876902d5e1b1677b833f72e735b1f
 
 Package: packrat
 Source: github
@@ -146,6 +189,12 @@ GithubRepo: packrat
 GithubUsername: rstudio
 GithubRef: v0.98.1000
 GithubSha1: ee57b7e7ba891d23079b12f1ff5106d0db0594e5
+
+Package: pcaPP
+Source: CRAN
+Version: 1.9-60
+Hash: 36cfa3a987d99f93e3752303f84ef346
+Requires: mvtnorm
 
 Package: plyr
 Source: CRAN
@@ -161,12 +210,18 @@ Hash: 668a9e87cedbdc5f56c396edf1bd2648
 Package: quadprog
 Source: CRAN
 Version: 1.5-5
+Hash: c5b36fd14dff166f26d68ccf1515c200
 
 Package: reshape2
 Source: CRAN
 Version: 1.4
 Hash: e50809918ebb73dff47de17d36d12975
 Requires: Rcpp, plyr, stringr
+
+Package: rgl
+Source: CRAN
+Version: 0.93.1098
+Hash: 3aaa8dbaf7183d1779b5b963d0e4b0ce
 
 Package: rmarkdown
 Source: github
@@ -187,15 +242,18 @@ Requires: RColorBrewer, dichromat, labeling, munsell, plyr
 Package: sp
 Source: CRAN
 Version: 1.0-16
+Hash: 1ec8e2e48ab1a6a12ba2b9754a860ed4
 Requires: lattice
 
 Package: spam
 Source: CRAN
 Version: 1.0-1
+Hash: 93c30ed45a309377f3059db3c76c94df
 
 Package: splancs
 Source: CRAN
 Version: 2.01-36
+Hash: 74336f5b061d6f32ca838a2457c5294f
 Requires: sp
 
 Package: stringr
@@ -206,19 +264,23 @@ Hash: cdde0cfa0f52cffeaca23a11a3899779
 Package: tcltk2
 Source: CRAN
 Version: 1.2-10
+Hash: 050151c44559daa47709a5962147d634
 
 Package: tkrplot
 Source: CRAN
 Version: 0.0-23
+Hash: cbb980c4feccce7e4ed3af1ccc6de256
 
 Package: tseries
 Source: CRAN
 Version: 0.10-32
+Hash: 6ae869e7d30afce2dc13517444ed06a6
 Requires: quadprog, zoo
 
 Package: xtable
 Source: CRAN
 Version: 1.7-4
+Hash: 7b30b5ca6c7ae80c4f916502e3ad0237
 
 Package: yaml
 Source: CRAN
@@ -228,4 +290,5 @@ Hash: e5d041c001f6d641fd009c1f6ef7d831
 Package: zoo
 Source: CRAN
 Version: 1.7-11
+Hash: a412b124ff249b078d9cd870de913c90
 Requires: lattice

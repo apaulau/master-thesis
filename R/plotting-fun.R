@@ -46,3 +46,8 @@ ggqqp <- function (vec) {
   ggplot(d, aes(sample = resids)) + stat_qq() + geom_abline(slope = slope, intercept = int) +
     xlab("Теоретические квантили") + ylab("Выборочные квантили")
 }
+
+## ggplot wrapper for saving plots. 
+plot.save <- function(plot, filename, path="figures", width=7, height=4, ...) {
+  ggsave(plot, file=paste(path, filename, sep="/"), width, height, ...)
+}

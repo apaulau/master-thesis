@@ -13,30 +13,27 @@ library(xtable)   # convert data to latex tables
 library(nortest)  # tests for normality // WANT TO STEAL
 library(outliers) # tests for outliers
 library(tseries)  # adf test used
-library(aplpack)  # there is bagplot functionality // WANT TO REMOVE
+library(aplpack)  # there is bagplot functionality // WANT TO REMOVE but can't without lost bagplot graph
 
 ## Import local modules
-source("R/misc-fun.R")     # some useful functions // TODO: check usages and usefulness
-source("R/plotting-fun.R") # useful functions for more comfortable plotting // TODO: check it too
+source("R/plotting-fun.R") # useful functions for more comfortable plotting
 source("R/print-fun.R")    # functions for print some data to files
 source("R/dstats.R")       # descriptive statistics module
 
 #[ Initialize block
 
 ## Read the data / pattern: year;temperature
-path.data <- "data/batorino_july.csv" # this for future shiny support and may be choose multiple data sources
+path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=38, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
-## Global use constants // TODO: try to use more narrow scope
-kStartYear  <- min(src.data$year)
-kEndYear    <- max(src.data$year)
-kDateBreaks <- seq(kStartYear - 5, kEndYear + 5, by=2) # date points for graphs // TODO: investigate how to skip this usage
+## Global use constants
+kDateBreaks <- seq(min(src.data$year) - 5, max(src.data$year) + 5, by=2) # date points for graphs
 
 ## For the reason of prediction estimation and comparison, let cut observations number by 3
 kObservationNum <- length(src.data[, 1]) - 3
 
 ## Form the data for research
-research.data <- src.data[0 : kObservationNum, ]
+research.data <- src.data[0:kObservationNum, ]
 
 #] End of initialize block
 #[ Computation and analysis block
@@ -159,23 +156,28 @@ plot.source <- ggplot(src.data, aes(x=year, y=temperature)) +
   scale_x_continuous(breaks=kDateBreaks) + 
   theme(axis.text.x=element_text(angle=45, hjust=1)) +
   xlab("Год наблюдения") + ylab("Температура, ºС")
+plot.save(plot.source, filename="01_src.png")
 
 ## Basic histogram based on Sturges rule (by default) with pretty output (also by default)
 plot.data.hist <- ggplot(research.data, aes(x=temperature), geom='blank') +   
   geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", 
                  binwidth=diff(range(src.data$temperature)) / nclass.Sturges(src.data$temperature), alpha=.6) +
   labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
+plot.save(plot.data.hist, filename="figures/02_hist.png")
 
 ## The same as previous histogram but with fitted normal distribution density curve
 plot.data.hist.norm <- plot.hist +
   stat_function(fun=dnorm, colour='red', geom='line', 
                 arg=list(mean=mean(src.data$temperature), sd=sd(src.data$temperature)))
+plot.save(plot.data.hist.norm, filename="03_hist-dnorm.png")
 
 ## Normal Quantile-Quantile plot
 plot.data.qq <- ggqqp(data$temperature)
+plot.save(plot.data.qq, filename="04_qq.png")
 
 ## Bagplot. // TODO: Investigate how to replace this with new style: ggplot
 plot.data.bag <- figure.bagplot(data.frame("Date"=research.data$year, "Temperature"=research.data$temperature), title="", xlab="Год", ylab="Температура")
+to.pdf(plot.data.bag, "figures/05_bagplot.pdf", width=4, height=3)
 
 ## Scatter plot with regression line based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
 plot.data.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
@@ -183,12 +185,14 @@ plot.data.scatter <- ggplot(data, aes(x=year, y=temperature)) +
   scale_x_continuous(limits=c(min(research.data$year) - 5, max(research.data$year) + 5), breaks=kDateBreaks) + 
   scale_y_continuous(breaks=seq(10, 30, 1), limits=c(14, 26)) +
   theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
+plot.save(plot.data.scatter, filename="06_scatterplot.png")
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)
 plot.data.ts <- ggplot(research.data, aes(x=year, y=temperature)) + 
   geom_point() + geom_line() + stat_smooth(method=lm, se=FALSE) + 
   scale_x_continuous(breaks=kDateBreaks) + scale_y_continuous(breaks=seq(16, 28, 1)) + 
   theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
+plot.save(plot.data.ts, filename="07_ts.png")
 
 ## Residuals time series (data have gotten on computing step: fitting linear model)
 plot.residuals.ts <- ggplot(research.residuals, aes(x=year, y=temperature)) + 
@@ -196,47 +200,24 @@ plot.residuals.ts <- ggplot(research.residuals, aes(x=year, y=temperature)) +
   scale_x_continuous(breaks=kDateBreaks) + 
   theme(axis.text.x=element_text(angle=45, hjust=1)) +
   xlab("Год наблюдения") + ylab("Температура, ºС")
+plot.save(plot.residuals.ts, filename="08_residuals.png")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
 plot.residuals.hist <- ggplot(research.residuals, aes(x=temperature), geom='blank') +   
   geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", binwidth=1.2, alpha=.6) +
   stat_function(fun=dnorm, colour='red', arg=list(mean=mean(research.residuals$temperature), sd=sd(research.residuals$temperature))) +    
   labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
+plot.save(plot.residuals.hist, filename="09_res-hist-dnorm.png")
 
 ## Normal Quantile-Quantile plot for residuals
 plot.residuals.qq <- ggqqp(research.residuals$temperature)
+plot.save(plot.residuals.qq, filename="10_res-qq.png")
 
 ## Auto Correlation Function plot // TODO: check the style
 plot.residuals.acf <- ggplot(data=research.residuals.acfdf, mapping=aes(x=lag, y=acf)) +
   geom_hline(colour="grey50") + geom_hline(yintercept=c(-clim, clim), linetype="dashed", col="blue") +
   geom_segment(mapping=aes(xend=lag, yend=0)) +
   labs(color="") + xlab("Лаг") + ylab("Автокорреляция")
+plot.save(plot.residuals.acf, filename="11_acf.png")
 
 #] End plots block
-#[ Save plots block
-
-# TODO: introduce generic function for saving plots. At least what catches the eye: width and height.
-
-ggsave(plot=plot.source, file="figures/01_src.png", width=7, height=4)
-
-ggsave(plot=plot.data.hist, file="figures/02_hist.png", width=7, height=4)
-
-ggsave(plot=plot.data.hist.norm, file="figures/03_hist-dnorm.png", width=7, height=4)
-
-ggsave(plot=plot.data.qq, file="figures/04_qq.png", width=7, height=4)
-
-to.pdf(plot.data.bag, "figures/05_bagplot.pdf", width=4, height=3)
-
-ggsave(plot=plot.data.scatter, file="figures/06_scatterplot.png", width=7, height=4)
-
-ggsave(plot=plot.data.ts, file="figures/07_ts.png", width=7, height=4)
-
-ggsave(plot=plot.residuals.ts, file="figures/08_residuals.png", width=7, height=4)
-
-ggsave(plot=plot.residuals.hist, file="figures/09_res-hist-dnorm.png", width=7, height=4)
-
-ggsave(plot=plot.residuals.qq, file="figures/10_res-qq.png", width=7, height=4)
-
-ggsave(plot=plot.residuals.acf, file="figures/11_acf.png", width=7, height=4)
-
-#] End save plots block

@@ -92,9 +92,10 @@
 \end{eqnarray*}
 
 По определению, $ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)} $, тогда
-\begin{equation*}
-	cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))}
-\end{equation*}
+\begin{eqnarray*}
+	& cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
+	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))}
+\end{eqnarray*}
 
 Из [ссылка на источник, либо упоминание раньше] $ V \{ X(s+h) - X(s) \}^2 = 2 \{ 2 \gamma(h) \}^2 $ и предыдущего соотношения:
 \begin{equation*}
@@ -109,35 +110,53 @@
 \end{eqnarray*}
 
 Принимая во внимание лемму 3 [\#Брест2005], получаем соотношение
+\begin{eqnarray}
+\nonumber
+\label{eq:cov_base}
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
+\end{eqnarray}
+
+В \eqref{eq:cov_base} сделаем следующую замену переменных
 \begin{equation*}
-	cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
+	s = s, \quad m = s - t.
 \end{equation*}
+Получим
+\begin{eqnarray}
+\nonumber
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2(2 \gamma(h_1))(2 \gamma(h_2))}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\frac{\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}})^2 = \\
+	& = \frac{2}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2
+\end{eqnarray}
 
-Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+% Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
 
-\begin{eqnarray*}
-	& V \{ 2 \tilde{\gamma}(h) \} = \frac{2 (2\gamma(h))^2}{(n-h)^2}\sum_{s=1}^{n-h}\sum_{t=1}^{n-h} \{ \frac{\gamma(s+h-t) + \gamma(s-t-h) - \gamma(s+h-t-h) - \gamma(s-t)}{\sqrt{2 \gamma(h)} \sqrt{2 \gamma(h)}} \}^2 = \\
-	& = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2.
-\end{eqnarray*}
+% \begin{eqnarray*}
+% \nonumber
+% 	& V \{ 2 \tilde{\gamma}(h) \} = \frac{2 (2\gamma(h))^2}{(n-h)^2}\sum_{s=1}^{n-h}\sum_{t=1}^{n-h} \{ \frac{\gamma(s+h-t) + \gamma(s-t-h) - \gamma(s+h-t-h) - \gamma(s-t)}{\sqrt{2 \gamma(h)} \sqrt{2 \gamma(h)}} \}^2 = \\
+% 	& = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2.
+% \end{eqnarray*}
+% Рассмотрим два случая: (тут привести два графика $h_1 > h_2$ и $h_1 < h_2$)
 
-Таким образом доказана следующая теорема.
-\newtheorem{Theorem}{Теорема}
-\begin{Theorem}
-	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством (\ref{eq:var_est}), имеют место следующие соотношения:
-	\begin{equation}
-	\label{eq:est_ex}
-		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h),
-	\end{equation}
-	\begin{equation}
-	\label{eq:est_cov}
-		cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2,
-	\end{equation}
-	\begin{equation}
-	\label{eq:est_var}
-		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2,
-	\end{equation}
-	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(s), s \in \mathbb{R}$, $h,h_1,h_2=\overline{0,n-1} $.
-\end{Theorem}
+% Для $h_1 > h_2$
+
+% Таким образом доказана следующая теорема.
+% \newtheorem{Theorem}{Теорема}
+% \begin{Theorem}
+% 	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством (\ref{eq:var_est}), имеют место следующие соотношения:
+% 	\begin{equation}
+% 	\label{eq:est_ex}
+% 		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h),
+% 	\end{equation}
+% 	\begin{equation}
+% 	\label{eq:est_cov}
+% 		cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2,
+% 	\end{equation}
+% 	\begin{equation}
+% 	\label{eq:est_var}
+% 		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{s,t=1}^{n-h} \{ \gamma(s+h-t) + \gamma(s-t-h) - 2 \gamma(s-t) \}^2,
+% 	\end{equation}
+% 	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(s), s \in \mathbb{R}$, $h,h_1,h_2=\overline{0,n-1} $.
+% \end{Theorem}
 
 \end{document}
 

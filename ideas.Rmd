@@ -18,3 +18,5 @@ output: html_document
 
 * Implement i18n: basic dictionary based on `data.frame`. At the beginning we choose language (russian/english), and based on it
   use one column with keycodes or another.
+  
+* Implement plots through closures: save useful variable, aka constants, in wider scope, but private.

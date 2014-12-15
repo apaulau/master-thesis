@@ -13,6 +13,7 @@ library(xtable)   # convert data to latex tables
 library(outliers) # tests for outliers
 library(tseries)  # adf test used
 library(aplpack)  # there is bagplot functionality // WANT TO REMOVE but can't without lost bagplot graph
+library(nortest)  # tests for normality
 
 ## Import local modules
 source("R/plotting-fun.R") # useful functions for more comfortable plotting

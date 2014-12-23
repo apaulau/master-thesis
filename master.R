@@ -16,15 +16,18 @@ library(aplpack)  # there is bagplot functionality // WANT TO REMOVE but can't w
 library(nortest)  # tests for normality
 
 ## Import local modules
-source("R/plotting-fun.R") # useful functions for more comfortable plotting
-source("R/print-fun.R")    # functions for print some data to files
-source("R/dstats.R")       # descriptive statistics module
+source("R/lib/plotting-fun.R") # useful functions for more comfortable plotting
+source("R/lib/print-fun.R")    # functions for print some data to files
+source("R/lib/dstats.R")       # descriptive statistics module
 
 #[ Initialize block
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=38, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
+
+print(xtable(src.data, caption="Исходные данные.", label="table:source"),  table.placement="H", 
+      file="out/source.tex")
 
 ## Global use constants
 kDateBreaks <- seq(min(src.data$year) - 5, max(src.data$year) + 5, by=2) # date points for graphs
@@ -43,111 +46,73 @@ research.data.fit <- lm(research.data$temperature ~ c(1:kObservationNum))
 
 # Getting descriptive statistics for temperature in russian locale
 research.data.dstats <- dstats.describe(research.data$temperature, locale=TRUE)
+print(xtable(research.data.dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
+      file="out/data_dstats.tex")
 
 ##[ Tests for normality
 
 ### Shapiro-Wilk
 research.data.shapiro <- shapiro.test(research.data$temperature)
+to.file(research.data.shapiro, "out/data_shapiro.tex")
 
 ### Pearson chi-square
 research.data.pearson <- pearson.test(research.data$temperature)
+to.file(research.data.pearson, "out/data_pearson.tex")
 
 ### Kolmogorov-Smirnov
 test.nsample <- rnorm(10000, mean=mean(research.data$temperature), sd=sd(research.data$temperature)) # sample for test against source 
 research.data.ks <- ks.test(x=research.data$temperature, y=test.nsample, exact=NULL)
+to.file(research.data.ks, "out/data_ks.tex")
 
 ##] End tests for normality
 
 ## Grubbs test for outliers
 research.data.grubbs <- grubbs.test(research.data$temperature)
+to.file(research.data.grubbs, "out/data_grubbs.tex")
 
 ## Correlation matrix
-research.data.cmatrix <- cor(cbind(research.data$temperature, "Date"=1:length(research.data$temperature)), method="pearson")
-
+research.data.cmatrix <- cor(cbind("Temperature"=research.data$temperature, "Date"=1:kObservationNum), method="pearson")
+print(xtable(research.data.cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
+      file="out/data_cmatrix.tex")
+                             
 ## Pearson's product-moment correlation test. Use time for y as numerical
-research.data.ctest <- cor.test(research.data$temperature, "time"=c(1:kObservationNum), method="pearson")
+research.data.ctest <- cor.test(research.data$temperature, c(1:kObservationNum), method="pearson")
+to.file(research.data.ctest, "out/ctest.tex")
 
 ## Next step is research residuals computed few lines above
-research.residuals <- data.frame("year"=research.data$year, "temperature"=research.data$residuals)
+research.residuals <- data.frame("year"=research.data$year, "temperature"=research.data.fit$residuals)
+print(xtable(research.residuals, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
+      file="out/residuals.tex")
 
 ## Descriptive statistics for residuals
-research.residuals.dstats <- dstats.describe(research.residuals, locale=TRUE)
+research.residuals.dstats <- dstats.describe(research.residuals$temperature, locale=TRUE)
+print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residuals_dstats"),
+      file="out/residuals_dstats.tex")
 
 ##[ Tests for normality // combine with previous normality tests
 
 ### Shapiro-Wilk
 research.residuals.shapiro <- shapiro.test(research.residuals$temperature)
+to.file(research.residuals.shapiro, "out/residuals_shapiro.tex")
 
 ### Pearson chi-square
 research.residuals.pearson <- pearson.test(research.residuals$temperature)
+to.file(research.residuals.pearson, "out/residuals_pearson.tex")
 
 ### Kolmogorov-Smirnov
 test.nsample <- rnorm(10000, mean=mean(research.residuals$temperature), sd=sd(research.residuals$temperature)) # sample for test against source 
 research.residuals.ks <- ks.test(x=research.residuals$temperature, y=test.nsample, exact=NULL)
+to.file(research.residuals.ks, "out/residuals_ks.tex")
 
 ##] End tests for normality
 
-## Auto Correlation Function computation and definition
-research.residuals.ci     <- .95 # confidence interval
-research.residuals.acf    <- acf(research.residuals$temperature, plot=FALSE, lag.max=30)
-research.residuals.acfdf  <- data.frame(acf=acf$acf, lag=acf$lag) # data frame for computed ACF
-research.residuals.clim   <- qnorm((1 + ci) / 2) / sqrt(acf$n.used) # limit // TODO: find out where it from / or remember what is it for
-
 ## Box-Ljung and adf tests (some kind of stationarity and independence tests) // TODO: need to know exactly in theory what it is
 research.residuals.box <- Box.test(research.residuals$temperature, type="Ljung-Box")
-research.residuals.adf <- adf.test(research.residuals$temperature)
-#] End computation block
-#[ Output block
-
-## Output source data to latex table. So we can reference to it in docs.
-print(xtable(src.data, caption="Исходные данные.", label="table:source"),  table.placement="H", 
-      file="out/source.tex")
-
-## Output residuals data to latex table.
-print(xtable(research.residuals, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
-      file="out/residuals.tex")
-
-## Descriptive statistics
-print(xtable(research.data.dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
-      file="out/data_dstats.tex")
-
-## Shapiro-Wilk test for research data
-to.file(research.data.shapiro, "out/data_shapiro.tex")
-
-## Pearson chi-square test for research data
-to.file(research.data.pearson, "out/data_pearson.tex")
-
-## Kolmogorov-Smirnov test for research data
-to.file(research.data.ks, "out/data_ks.tex")
-
-## Test for outliers
-to.file(research.data.grubbs, "out/data_grubbs.tex")
-
-## Correlation matrix to latex table
-print(xtable(research.data.cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
-      file="out/data_cmatrix.tex")
-
-## Pearson's product-moment correlation test
-to.file(research.data.ctest, "out/ctest.tex")
-
-## Descriptive statistics for residuals to latex table
-print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residuals_dstats"),
-      file="out/residuals_dstats.tex")
-
-## Shapiro-Wilk test for residuals
-to.file(research.residuals.shapiro, "out/residuals_shapiro.tex")
-
-## Pearson chi-square test for residuals
-to.file(research.residuals.pearson, "out/residuals_pearson.tex")
-
-## Kolmogorov-Smirnov test for residuals
-to.file(research.residuals.ks, "out/residuals_ks.tex")
-
-## Ljung-Box and stationarity tests for residuals
 to.file(research.residuals.box, "out/residuals_ljung.tex")
+research.residuals.adf <- adf.test(research.residuals$temperature)
 to.file(research.residuals.adf, "out/residuals_stationarity.tex")
 
-#] End output block
+#] End computation block
 #[ Plots computation block
 
 ## Source data as basic time series plot: points connected with line
@@ -163,24 +128,24 @@ plot.data.hist <- ggplot(research.data, aes(x=temperature), geom='blank') +
   geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", 
                  binwidth=diff(range(src.data$temperature)) / nclass.Sturges(src.data$temperature), alpha=.6) +
   labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
-plot.save(plot.data.hist, filename="figures/02_hist.png")
+plot.save(plot.data.hist, filename="02_hist.png")
 
 ## The same as previous histogram but with fitted normal distribution density curve
-plot.data.hist.norm <- plot.hist +
+plot.data.hist.norm <- plot.data.hist +
   stat_function(fun=dnorm, colour='red', geom='line', 
                 arg=list(mean=mean(src.data$temperature), sd=sd(src.data$temperature)))
 plot.save(plot.data.hist.norm, filename="03_hist-dnorm.png")
 
 ## Normal Quantile-Quantile plot
-plot.data.qq <- ggqqp(data$temperature)
+plot.data.qq <- ggqqp(research.data$temperature)
 plot.save(plot.data.qq, filename="04_qq.png")
 
 ## Bagplot. // TODO: Investigate how to replace this with new style: ggplot
-plot.data.bag <- figure.bagplot(data.frame("Date"=research.data$year, "Temperature"=research.data$temperature), title="", xlab="Год", ylab="Температура")
-to.pdf(plot.data.bag, "figures/05_bagplot.pdf", width=4, height=3)
+#plot.data.bag <- figure.bagplot(data.frame("Date"=research.data$year, "Temperature"=research.data$temperature), title="", xlab="Год", ylab="Температура")
+#to.pdf(plot.data.bag, "figures/05_bagplot.pdf", width=4, height=3)
 
 ## Scatter plot with regression line based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
-plot.data.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
+plot.data.scatter <- ggplot(research.data, aes(x=year, y=temperature)) + 
   geom_point() + geom_abline(intercept=-194.632277, slope=0.107706, color="blue") +
   scale_x_continuous(limits=c(min(research.data$year) - 5, max(research.data$year) + 5), breaks=kDateBreaks) + 
   scale_y_continuous(breaks=seq(10, 30, 1), limits=c(14, 26)) +
@@ -214,10 +179,8 @@ plot.residuals.qq <- ggqqp(research.residuals$temperature)
 plot.save(plot.residuals.qq, filename="10_res-qq.png")
 
 ## Auto Correlation Function plot // TODO: check the style
-plot.residuals.acf <- ggplot(data=research.residuals.acfdf, mapping=aes(x=lag, y=acf)) +
-  geom_hline(colour="grey50") + geom_hline(yintercept=c(-clim, clim), linetype="dashed", col="blue") +
-  geom_segment(mapping=aes(xend=lag, yend=0)) +
-  labs(color="") + xlab("Лаг") + ylab("Автокорреляция")
+
+plot.residuals.acf <- ggacf(research.data$temperature)
 plot.save(plot.residuals.acf, filename="11_acf.png")
 
 #] End plots block

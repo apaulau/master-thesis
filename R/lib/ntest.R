@@ -1,4 +1,4 @@
-# This module is for test for normality
+# This module is for tests for normality
 
 library(nortest)  # tests for normality // WANT TO STEAL
 

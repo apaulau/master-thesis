@@ -1,7 +1,12 @@
 PackratFormat: 1.4
-PackratVersion: 0.4.1.8
+PackratVersion: 0.4.2.1
 RVersion: 3.1.2
 Repos: CRAN=http://cran.rstudio.com
+
+Package: FNN
+Source: CRAN
+Version: 1.1
+Hash: 58ed04c8ef03f28e29f05c4d9c6cfa7a
 
 Package: MASS
 Source: CRAN
@@ -10,8 +15,8 @@ Hash: 2a7641e407ce2a484d5a587a4e30a9aa
 
 Package: RColorBrewer
 Source: CRAN
-Version: 1.0-5
-Hash: 6a849b729bec970204ca88b96906adbc
+Version: 1.1-2
+Hash: 5203278413b09be06483c5ac1920bb05
 
 Package: RandomFields
 Source: CRAN
@@ -57,8 +62,8 @@ Hash: 42be2136555fa4b6167605df56d8cd7c
 
 Package: digest
 Source: CRAN
-Version: 0.6.4
-Hash: e4bf0e79b15a352510aff0de905d31e2
+Version: 0.6.7
+Hash: deb9cb6ccd57d1514e04fe1f5b1dc8ca
 
 Package: evaluate
 Source: CRAN
@@ -83,6 +88,12 @@ Version: 1.0.0
 Hash: c8bff66238347472f08b6a35608539ff
 Requires: MASS, digest, gtable, plyr, proto, reshape2, scales
 
+Package: gstat
+Source: CRAN
+Version: 1.0-19
+Hash: b7dd668488a1b3403afa6e0d05ba319d
+Requires: FNN, lattice, sp, spacetime, zoo
+
 Package: gtable
 Source: CRAN
 Version: 0.1.2
@@ -104,6 +115,11 @@ Source: CRAN
 Version: 0.2.6
 Hash: 2c87108d130de261ac3c468d3316ae42
 Requires: digest
+
+Package: intervals
+Source: CRAN
+Version: 0.15.0
+Hash: 471a431f5920820c77896d2cc7bef2b8
 
 Package: knitr
 Source: CRAN
@@ -162,8 +178,8 @@ Requires: colorspace
 
 Package: mvtnorm
 Source: CRAN
-Version: 1.0-1
-Hash: cacf14b312adc15c6468a41d37896924
+Version: 1.0-2
+Hash: 77cba5f561791810a6946f9ebff85a0e
 
 Package: nlme
 Source: CRAN
@@ -182,13 +198,9 @@ Version: 0.14
 Hash: c8e876902d5e1b1677b833f72e735b1f
 
 Package: packrat
-Source: github
-Version: 0.4.1.8
-Hash: ee57b7e7ba891d23079b12f1ff5106d0db0594e5
-GithubRepo: packrat
-GithubUsername: rstudio
-GithubRef: v0.98.1000
-GithubSha1: ee57b7e7ba891d23079b12f1ff5106d0db0594e5
+Source: CRAN
+Version: 0.4.2-1
+Hash: 085f944cec9b56e8a280222b5174c76e
 
 Package: pcaPP
 Source: CRAN
@@ -214,9 +226,15 @@ Hash: c5b36fd14dff166f26d68ccf1515c200
 
 Package: reshape2
 Source: CRAN
-Version: 1.4
-Hash: e50809918ebb73dff47de17d36d12975
+Version: 1.4.1
+Hash: 21b63c5bb8ff2ef850ea40a4cb21d250
 Requires: Rcpp, plyr, stringr
+
+Package: rgeos
+Source: CRAN
+Version: 0.3-8
+Hash: 2b41a3b4f25e7be4c85bb376428ddc6d
+Requires: sp
 
 Package: rgl
 Source: CRAN
@@ -245,6 +263,12 @@ Version: 1.0-16
 Hash: 1ec8e2e48ab1a6a12ba2b9754a860ed4
 Requires: lattice
 
+Package: spacetime
+Source: CRAN
+Version: 1.1-1
+Hash: 8f63cd7daab946cc8272e46181d9b449
+Requires: intervals, lattice, rgeos, sp, xts, zoo
+
 Package: spam
 Source: CRAN
 Version: 1.0-1
@@ -263,8 +287,8 @@ Hash: cdde0cfa0f52cffeaca23a11a3899779
 
 Package: tcltk2
 Source: CRAN
-Version: 1.2-10
-Hash: 050151c44559daa47709a5962147d634
+Version: 1.2-11
+Hash: 6d538002f7f5521d0570b63897e1eabe
 
 Package: tkrplot
 Source: CRAN
@@ -281,6 +305,12 @@ Package: xtable
 Source: CRAN
 Version: 1.7-4
 Hash: 7b30b5ca6c7ae80c4f916502e3ad0237
+
+Package: xts
+Source: CRAN
+Version: 0.9-7
+Hash: be4b6faab98ec342c7aa497a903d7b43
+Requires: zoo
 
 Package: yaml
 Source: CRAN

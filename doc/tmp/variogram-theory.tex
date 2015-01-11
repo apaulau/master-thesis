@@ -5,6 +5,14 @@
 \usepackage[utf8x]{inputenc}
 \usepackage{amssymb,amsthm,amsmath,amscd}
 \usepackage{graphicx}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage[pdftex,dvipsnames]{xcolor}  % Coloured text etc.
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
 
 %Определение полей
 \setlength{\oddsidemargin}{0cm}% 1in=2.54см
@@ -124,9 +132,42 @@
 Получим
 \begin{eqnarray}
 \nonumber
+\label{eq:cov_split}
 	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2(2 \gamma(h_1))(2 \gamma(h_2))}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\frac{\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}})^2 = \\
 	& = \frac{2}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2
 \end{eqnarray}
+
+Таким образом, в зависимости от $h_1$ и $h_2$, возможны два случая: $h_1 > h_2$ и $h_2 > h_1$.
+\missingfigure{Здесь должна быть картинка с двумя графиками для каждого случая.}
+
+Рассмотрим первый $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
+\begin{eqnarray*}
+\nonumber
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 = \\
+	& = \sum_{m = 1 - n + h_2}^{h_2 - h_1}\sum_{s = 1}^{m + n - h_2}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + \sum_{m = h_2 - h_1 + 1}^{0}\sum_{s = 1}^{n - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + \sum_{m = 1}^{n - h_1 - 1}\sum_{s = m + 1}^{n - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2
+\end{eqnarray*}
+
+Заметим, что выражение под знаком суммы не зависит от $s$, получим:
+\begin{eqnarray*}
+\nonumber
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2}{(n - h_1) (n - h_2))} \times \\
+	& \times ((m + n - h_1)\sum_{m = 1 - n + h_2}^{h_2 - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + (n - h_1)\sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + (n - h_1 - m)\sum_{m = 1}^{n - h_1 - 1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+\end{eqnarray*}
+
+Разделим каждое слагаемое на общий член $n - h_1$:
+\begin{eqnarray*}
+\nonumber
+	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2}{(n - h_2))}((1 + \frac{m}{n - h1})\sum_{m = 1 - n + h_2}^{h_2 - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + \sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + (1 - \frac{m}{n - h1})\sum_{m = 1}^{n - h_1 - 1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+\end{eqnarray*}
+
+
+
 
 % Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
 

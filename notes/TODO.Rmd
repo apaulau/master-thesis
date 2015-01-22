@@ -28,3 +28,5 @@ output: html_document
 * Fix references in TeX
 
 * Check new versions of automap.
+
+* Variogram analysis must be converted to eye-candy view.

@@ -14,6 +14,9 @@ library(outliers) # tests for outliers
 library(tseries)  # adf test used
 library(aplpack)  # there is bagplot functionality // WANT TO REMOVE but can't without lost bagplot graph
 library(nortest)  # tests for normality
+library(sp)       # spatial data
+library(gstat)    # geostatistics
+library(reshape2) # will see
 
 ## Import local modules
 source("R/lib/plotting-fun.R") # useful functions for more comfortable plotting
@@ -184,3 +187,145 @@ plot.residuals.acf <- ggacf(research.data$temperature)
 plot.save(plot.residuals.acf, filename="11_acf.png")
 
 #] End plots block
+
+#[ Variogram analysis block
+
+## Function definition: need to be moved into isolated place -- to be a slave
+
+### Just definition of mean standard error // TODO: find out exact formula and describe each parameter
+MSE <- function (e, N=1) {
+  sum(sapply(X=e, FUN=function(x) x**2)) / N
+}
+
+### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
+### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
+comparePredictionsParameters <- function (data, x, y=rep(1, OBS_NUM), width=1) {
+  lens <- 1:OBS_NUM
+  res1 <- c()
+  res2 <- c()
+  
+  spdata <- data.frame(cbind("x"=x, "y"=y, data))
+  coordinates(spdata)=~x+y
+  
+  i <- 1
+  for(l in lens) {
+    variogram.classical = autofitVariogram(data~1, spdata, cutoff=l, cressie=F, width=width)
+    variogram.robust = autofitVariogram(data~1, spdata, cutoff=l, cressie=T, width=width)
+    
+    kriging.classical <- predictKrige(src.res[1:OBS_NUM], x=x, variogram_model=variogram.classical$var_model)
+    kriging.robust <- predictKrige(src.res[1:OBS_NUM], x=x, variogram_model=variogram.robust$var_model)
+    
+    res.classical <- crossPrediction(src$Temperature, src.trend, kriging.classical)
+    res.robust <- crossPrediction(src$Temperature, src.trend, kriging.robust)
+    res1[i] <- MSE(e=res.classical)
+    res2[i] <- MSE(e=res.robust)
+    i = i +1
+  }
+  df1 <- data.frame("X"=lens, "Y"=res1)
+  df2 <- data.frame("X"=lens, "Y"=res2)
+  ggplot() + 
+    geom_line(data=df1, aes(x=X,y=Y, color="classic")) + 
+    geom_line(data=df2, aes(x=X,y=Y,color="cressie")) + 
+    scale_x_continuous(breaks=lens) +
+    scale_y_continuous(breaks=seq(min(res1, res2), max(res1, res2), .3))
+}
+
+### This comparison is worth than above one, the estimation of it's goodness is simpler // TODO: check, maybe it should be removed. 
+### I don't see the difference and profit of this kind of comparison. Maybe it should be changed to more universal way (e.g. to pass estimation function).
+simpleComparePredictionParameters <- function (data, x, y=rep(1, OBS_NUM), width) {
+  lens <- 1:OBS_NUM
+  res1 <- c()
+  res2 <- c()
+  
+  spdata <- data.frame(cbind("x"=x, "y"=y, data))
+  coordinates(spdata)=~x+y
+  
+  i <- 1
+  for(l in lens) {
+    variogram.classical = autofitVariogram(data~1, spdata, cutoff=l, cressie=F, width=width)
+    variogram.robust = autofitVariogram(data~1, spdata, cutoff=l, cressie=T, width=width)
+    res1[i] <- variogram.classical$sserr/l
+    res2[i] <- variogram.robust$sserr/l
+    i = i + 1
+  }
+  df1 <- data.frame("X"=lens, "Y"=res1)
+  df2 <- data.frame("X"=lens, "Y"=res2)
+  ggplot() + 
+    geom_line(data=df1, aes(x=X,y=Y, color="classic")) + 
+    geom_line(data=df2, aes(x=X,y=Y,color="cressie")) + 
+    scale_x_continuous(breaks=lens) +
+    scale_y_continuous(breaks=seq(1.04*min(res1, res2), 1.04*max(res1, res2), 1))
+}
+
+## Calculates modeled variogram and creates plot of it.
+calcVariogram <- function (data, x, y=rep(1, OBS_NUM), file_empirical="", file_modeled="", cressie, cutoff, width) {
+  spdata <- data.frame(cbind("x"=x, "y"=y, data))
+  coordinates(spdata)=~x+y
+  
+  variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie, width=width)
+  if (nchar(file_empirical)) {
+    # Arrange the data for the ggplot2 plot
+    # add the semivariance values of v2 to v1
+    Fitted <- data.frame(dist = seq(0.01, max(variogram$exp_var$dist), length = OBS_NUM))
+    Fitted$gamma <- variogramLine(variogram$var_model, dist_vector = Fitted$dist)$gamma
+    #convert the dataframes to a long format
+    Empirical <- melt(variogram$exp_var, id.vars = "dist", measure.vars = c("gamma"))
+    Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
+    
+    plot.empirical <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
+      scale_y_continuous(expand = c(0,0),breaks=seq(0,7,1), limits=c(min(0, 1.04 * min(variogram$exp_var$gamma)), 1.04 * max(variogram$exp_var$gamma))) +
+      scale_x_continuous(expand = c(0,0),breaks=seq(0,1.04 * max(variogram$exp_var$dist),2), limits=c(0,1.04 * max(variogram$exp_var$dist))) +
+      xlab("Расстояние") + ylab("Значение")
+    ggsave(plot=plot.empirical, file=file_empirical, width=7, height=4)
+  }
+  if (nchar(file_modeled)) {
+    plot.modeled <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
+      geom_line(data = Modeled, color='blue') +
+      scale_y_continuous(expand=c(0,0), 
+                         breaks=seq(0, 1.04*max(variogram$exp_var$gamma), 1),
+                         limits=c(min(0, 1.04*min(variogram$exp_var$gamma)), 1.04*max(variogram$exp_var$gamma))) +
+      scale_x_continuous(expand=c(0,0),
+                         breaks=seq(0, 1.04*max(variogram$exp_var$dist), 1),
+                         limits=c(0, 1.04*max(variogram$exp_var$dist))) +
+      xlab("Расстояние") + ylab("Значение")
+    ggsave(plot=plot.modeled, file=file_modeled, width=7, height=4)
+  }
+  #   plot(variogram)
+  variogram
+}
+
+## Calculates kriging prediction based on passed varigram model
+predictKrige <- function (data, x, y=rep(1, OBS_NUM), variogram_model) {
+  src_data <- data.frame(cbind("x"=x, "y"=y, data))
+  coordinates(src_data)=~x+y
+  
+  new_data <- data.frame("X"=c((OBS_NUM+1):38), "Y"=rep(1, 38 - OBS_NUM))
+  coordinates(new_data) = ~X+Y
+  
+  krige(data~1, src_data, new_data, model=variogram_model)
+}
+
+## Compares predictions based on trend and kriging with actual values
+crossPrediction <- function (temperature, trend, kriging, file_prediction="") {
+  prediction.trend <- data.frame("Temperature"=c(temperature[(OBS_NUM-1):OBS_NUM], trend[(OBS_NUM+1):38]),
+                                 "Year"=c((2012-38+OBS_NUM-1):2012))
+  prediction.kriging <- data.frame("Temperature"=c(temperature[(OBS_NUM-1):OBS_NUM], trend[(OBS_NUM+1):38]+kriging$var1.pred),
+                                   "Year"=c((2012-38+OBS_NUM-1):2012))
+  actual <- data.frame("Temperature"=temperature[(OBS_NUM-1):38], 
+                       "Year"=c((2012-38+OBS_NUM-1):2012))
+  if (nchar(file_prediction)) {
+    plot.crossprediction <- ggplot() +
+      geom_line(data=prediction.kriging, aes(x=Year, y=Temperature, color="Прогноз Кригинг")) + 
+      geom_line(data=prediction.trend, aes(x=Year, y=Temperature, color="Прогноз Тренд")) +
+      geom_line(data=actual, aes(x=Year, y=Temperature, colour="Актуальное")) +
+      scale_x_continuous(breaks=seq(min(actual$Year), max(actual$Year)+5, by=1)) + xlab("Год наблюдения") +
+      scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, ºС") +
+      theme(axis.text.x = element_text(angle=45, hjust=1)) +
+      labs(color="")
+    ggsave(plot=plot.crossprediction, file=file_prediction, width=7, height=4)
+  }
+  
+  prediction.kriging$Temperature[3:(38-OBS_NUM)]-actual$Temperature[3:(38-OBS_NUM)]
+}
+
+#] End of variogram analysis block

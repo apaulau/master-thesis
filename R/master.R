@@ -199,34 +199,43 @@ MSE <- function (e, N=1) {
 
 ### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
-comparePredictionParameters <- function (data, residuals, temperature, trend, observations, x, y=rep(1, observations), width=1) {
+#### todo: simpify this function, split it to several less complex functions
+comparePredictionParameters <- function (data, residuals, temperature, trend, observations, x, y=rep(1, observations), width=1) { ### todo: usage of argument in argument default
   lens <- 1:observations
+  manualResult <- c()
   classicalResult <- c()
   robustResult <- c()
   
   spdata <- data.frame(cbind("x"=x, "y"=y, data))
-  coordinates(spdata) = ~x + y # wat?
+  coordinates(spdata)=~x+y
   
   i <- 1
   for(l in lens) {
-    variogram.classical = autofitVariogram(data~1, spdata, cutoff=l, cressie=FALSE, width=width)
-    variogram.robust = autofitVariogram(data~1, spdata, cutoff=l, cressie=TRUE, width=width)
+    variogram.manual = manualVariogram(data, cutoff=l)
+    variogram.classical = autofitVariogram(data~1, spdata, cutoff=l, cressie=F, width=width)
+    variogram.robust = autofitVariogram(data~1, spdata, cutoff=l, cressie=T, width=width)
     
-    kriging.classical <- predictKrige(residuals[1:observations], x=x, variogram_model=variogram.classical$var_model)
-    kriging.robust <- predictKrige(residuals[1:observations], x=x, variogram_model=variogram.robust$var_model)
+    kriging.manual <- predictKrige(residuals, x=x, variogram_model=variogram.manual$var_model)
+    kriging.classical <- predictKrige(residuals, x=x, variogram_model=variogram.classical$var_model)
+    kriging.robust <- predictKrige(residuals, x=x, variogram_model=variogram.robust$var_model)
     
+    res.manual <- crossPrediction(temperature, trend, kriging.manual)
     res.classical <- crossPrediction(temperature, trend, kriging.classical)
     res.robust <- crossPrediction(temperature, trend, kriging.robust)
+    
+    manualResult[i] <- MSE(e=res.manual)
     classicalResult[i] <- MSE(e=res.classical)
     robustResult[i] <- MSE(e=res.robust)
-    i = i +1
+    i = i + 1 ## todo: find out how to avoid this construction
   }
 
-  ggplot() + 
-    geom_line(data=data.frame("X"=lens, "Y"=classicalResult), aes(x=X, y=Y, color="classic")) + 
-    geom_line(data=data.frame("X"=lens, "Y"=robustResult), aes(x=X, y=Y, color="cressie")) + 
+  plot.check <- ggplot() + 
+    geom_line(data=data.frame("X"=lens, "Y"=manualResult), aes(x=X,y=Y)) + 
+    geom_line(data=data.frame("X"=lens, "Y"=classicalResult), aes(x=X,y=Y), linetype="dashed") + 
+    geom_line(data=data.frame("X"=lens, "Y"=robustResult), aes(x=X,y=Y), linetype="dotdash") + 
     scale_x_continuous(breaks=lens) +
-    scale_y_continuous(breaks=seq(min(classicalResult, robustResult), max(classicalResult, robustResult), .3))
+    scale_y_continuous(breaks=seq(min(manualResult, classicalResult, robustResult), max(manualResult, classicalResult, robustResult), .3))
+  ggsave(plot=plot.check, file="figures/check-dep.png", width=7, height=4)
 }
 
 ### This comparison is worth than above one, the estimation of it's goodness is simpler // TODO: check, maybe it should be removed. 
@@ -257,13 +266,48 @@ compareVariogramParameters <- function (data, observations, x, y=rep(1, observat
     scale_y_continuous(breaks=seq(1.04*min(classicalResult, robustResult), 1.04*max(classicalResult, robustResult), 1))
 }
 
+manualVariogram <- function (data, cutoff, file=F, file_modeled="") {
+  # Make fake second coordinate
+  p <- data.frame("X"=c(1:OBS_NUM), "Y"=rep(1,OBS_NUM))
+  coordinates(p) <- ~ X + Y
+  experimental_variogram <- variogram(data~1, p, width=1, cutoff=cutoff)
+  
+  model.variog <- vgm(model="Sph", range=3.9, nugget=3.4)  
+  fit.variog <- fit.variogram(experimental_variogram, model.variog)
+  
+  if (file) {
+    # Arrange the data for the ggplot2 plot
+    # add the semivariance values of v2 to v1
+    Fitted <- data.frame(dist = seq(0.01, max(experimental_variogram$dist), length = OBS_NUM))
+    Fitted$gamma <- variogramLine(fit.variog, dist_vector = Fitted$dist)$gamma
+    #convert the dataframes to a long format
+    Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
+    Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
+    
+    plot.modeled <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
+      geom_line(data = Modeled, color='blue') +
+      scale_y_continuous(expand=c(0,0), 
+                         breaks=seq(0, 1.04*max(experimental_variogram$gamma), 1),
+                         limits=c(min(0, 1.04*min(experimental_variogram$gamma)), 1.04*max(experimental_variogram$gamma))) +
+      scale_x_continuous(expand=c(0,0),
+                         breaks=seq(0, 1.04*max(experimental_variogram$dist), 1),
+                         limits=c(0, 1.04*max(experimental_variogram$dist))) +
+      xlab("Расстояние") + ylab("Значение")
+    ggsave(plot=plot.modeled, file=file_modeled, width=7, height=4)
+  }
+  
+  print(xtable(data.frame("Модель"=fit.variog$model, "Порог"=fit.variog$psill, "Ранг"=fit.variog$range), caption="Модель вариограммы", label="table:manual_model"), table.placement="H", 
+        file="out/manual_model.tex")
+  result = list(exp_var = experimental_variogram, var_model = fit.variog)
+}
+
 ## Calculates modeled variogram and creates plot of it.
 calcVariogram <- function (data, x, y=rep(1, observations), file_empirical="", file_modeled="", cressie, cutoff, width) {
   spdata <- data.frame(cbind("x"=x, "y"=y, data))
   coordinates(spdata) = ~x+y
   
   variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie, width=width)
-  if (nchar(file_empirical)) {
+  if (nchar(file_empirical)) { ## here was another check: just <file>
     # Arrange the data for the ggplot2 plot
     # add the semivariance values of v2 to v1
     Fitted <- data.frame(dist = seq(.01, max(variogram$exp_var$dist), length = observations))
@@ -295,11 +339,11 @@ calcVariogram <- function (data, x, y=rep(1, observations), file_empirical="", f
 }
 
 ## Calculates kriging prediction based on passed varigram model
-predictKrige <- function (data, observations, x, y=rep(1, observations), variogram_model) {
+predictKrige <- function (data, observations, x, y=rep(1, observations), variogram_model, future=0) {
   src_data <- data.frame(cbind("x"=x, "y"=y, data))
   coordinates(src_data)=~x+y
   
-  new_data <- data.frame("X"=c((observations + 1):38), "Y"=rep(1, 38 - observations))
+  new_data <- data.frame("X"=c((observations + 1):(38 + future)), "Y"=rep(1, 38 - observations)) ### fix it! explicit usage of 38
   coordinates(new_data) = ~X+Y
   
   krige(data~1, src_data, new_data, model=variogram_model)
@@ -307,19 +351,20 @@ predictKrige <- function (data, observations, x, y=rep(1, observations), variogr
 
 ## Compares predictions based on trend and kriging with actual values
 crossPrediction <- function (temperature, trend, kriging, file_prediction="") {
-  prediction.trend <- data.frame("Temperature"=c(temperature[(observations-1):observations], trend[(observations+1):38]),
-                                 "Year"=c((2012-38+observations-1):2012))
-  prediction.kriging <- data.frame("Temperature"=c(temperature[(observations-1):observations], trend[(observations+1):38]+kriging$var1.pred),
-                                   "Year"=c((2012-38+observations-1):2012))
-  actual <- data.frame("Temperature"=temperature[(observations-1):38], 
-                       "Year"=c((2012-38+observations-1):2012))
+  prediction.trend <- data.frame("temperature"=c(temperature[(observations-1):observations], trend[(observations+1):38]),
+                                 "year"=c((2012-38+observations-1):(2012+future)))
+  prediction.kriging <- data.frame("temperature"=c(temperature[(observations-1):observations], trend[(observations+1):38]+kriging$var1.pred),
+                                   "year"=c((2012-38+observations-1):(2012+future)))
+  actual <- data.frame("temperature"=temperature[(observations-1):38], 
+                       "year"=c((2012-38+observations-1):2012))
   if (nchar(file_prediction)) {
     plot.crossprediction <- ggplot() +
-      geom_line(data=prediction.kriging, aes(x=Year, y=Temperature, color="Прогноз Кригинг")) + 
-      geom_line(data=prediction.trend, aes(x=Year, y=Temperature, color="Прогноз Тренд")) +
-      geom_line(data=actual, aes(x=Year, y=Temperature, colour="Актуальное")) +
-      scale_x_continuous(breaks=seq(min(actual$Year), max(actual$Year)+5, by=1)) + xlab("Год наблюдения") +
-      scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, ºС") +
+      geom_line(data=prediction.kriging, aes(x=year, y=temperature, color="Прогноз Кригинг")) + 
+      geom_line(data=prediction.trend, aes(x=year, y=temperature, color="Прогноз Тренд")) +
+      geom_line(data=actual, aes(x=year, y=temperature, colour="Актуальное")) +
+      labs(color="") +
+      scale_x_continuous(breaks=seq(min(actual$year), max(actual$year)+5+future, by=1)) + xlab("Год наблюдения") +
+      scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, С") +
       theme(axis.text.x = element_text(angle=45, hjust=1)) +
       labs(color="")
     ggsave(plot=plot.crossprediction, file=file_prediction, width=7, height=4)
@@ -343,19 +388,76 @@ src.data.trend <- src.data.fit$fitted.values
 
 cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 #cutoff <- 2
+
+# Make fake second coordinate
+p <- data.frame("X"=c(1:OBS_NUM), "Y"=rep(1,OBS_NUM))
+# Calculate distances
+p.dist<-as.matrix(dist(p[,c("X", "Y")]))
+dist.breaks<-quantile(p.dist,seq(0.1, 0.9, by=0.1))
+coordinates(p) <- ~ X + Y
+p.breaks <- (0:cutoff)*1
+hsc <- hscat(src.res[1:OBS_NUM]~1, p, breaks=0:20)
+
+to.pdf(hsc,
+       "figures/12_hscat.pdf", width=7, height=6)
+
+variogram.manual <-  manualVariogram(src.res[1:OBS_NUM], cutoff=cutoff, file=T, file_modeled="figures/14_manual-mod.png")
+
 variogram.classical <- calcVariogram(data=src.data.residuals[1:kObservationNum], x=convertYears(research.data$years), cressie=FALSE, cutoff=cutoff, width=FALSE,
-                                     file_empirical="figures/variog_classical_emp.png",
-                                     file_modeled="figures/variog_classical_mod.png")
+                                     file_empirical="figures/13_classical-emp.png",
+                                     file_modeled="figures/15_classical-mod.png")
 
 variogram.robust <- calcVariogram(data=src.data.residuals[1:kObservationNum], x=convertYears(research.data$years), cressie=TRUE, cutoff=cutoff, width=FALSE,
-                                  file_empirical="figures/variog_robust_emp.png",
-                                  file_modeled="figures/variog_robust_mod.png")
+                                  file_empirical="figures/17_robust-emp.png",
+                                  file_modeled="figures/18_robust-mod.png")
 
+# Arrange the data for the ggplot2 plot
+# add the semivariance values of v2 to v1
+Fitted1 <- data.frame(dist = seq(0.01, max(variogram.manual$exp_var$dist), length = OBS_NUM))
+Fitted1$gamma <- variogramLine(variogram.manual$var_model, dist_vector = Fitted1$dist)$gamma
+#convert the dataframes to a long format
+Empirical1 <- melt(variogram.manual$exp_var, id.vars = "dist", measure.vars = c("gamma"))
+Modeled1 <- melt(Fitted1, id.vars = "dist", measure.vars = c("gamma"))
+
+Fitted2 <- data.frame(dist = seq(0.01, max(variogram.classical$exp_var$dist), length = OBS_NUM))
+Fitted2$gamma <- variogramLine(variogram.classical$var_model, dist_vector = Fitted2$dist)$gamma
+#convert the dataframes to a long format
+Empirical2 <- melt(variogram.classical$exp_var, id.vars = "dist", measure.vars = c("gamma"))
+Modeled2 <- melt(Fitted2, id.vars = "dist", measure.vars = c("gamma"))
+
+plot.modeled <- ggplot(Empirical1, aes(x = dist, y = value)) +  geom_point() + 
+  geom_line(data = Modeled1, linetype="dashed") +
+  geom_line(data = Modeled2) +
+  labs(color="") +
+  scale_y_continuous(expand=c(0,0), 
+                     breaks=seq(0, 1.04*max(variogram.manual$exp_var$gamma), 1),
+                     limits=c(min(0, 1.04*min(variogram.manual$exp_var$gamma)), 1.04*max(variogram.manual$exp_var$gamma))) +
+  scale_x_continuous(expand=c(0,0),
+                     breaks=seq(0, 1.04*max(variogram.manual$exp_var$dist), 1),
+                     limits=c(0, 1.04*max(variogram.manual$exp_var$dist))) +
+  xlab("Расстояние") + ylab("Значение")
+ggsave(plot=plot.modeled, file="figures/14_var_models.png", width=7, height=4)
+
+kriging.manual <- predictKrige(src.data.residuals[1:kObservationNum], x=convertYears(research.data$years), variogram_model=variogram.manual$var_model)
 kriging.classical <- predictKrige(src.data.residuals[1:kObservationNum], x=convertYears(research.data$years), variogram_model=variogram.classical$var_model)
 kriging.robust <- predictKrige(src.data.residuals[1:kObservationNum], x=convertYears(research.data$years), variogram_model=variogram.robust$var_model)
 
-res.cl <- crossPrediction(src$temperature, src.data.trend, kriging.classical, "figures/cross_prediction_classical.png")
-res.ro <- crossPrediction(src$temperature, src.data.trend, kriging.robust, "figures/cross_prediction_robust.png")
+mse.manual <- MSE(crossPrediction(src$temperature, src.trend, kriging.manual))
+mse.classical <- MSE(crossPrediction(src$temperature, src.trend, kriging.classical))
+mse.robust <- MSE(crossPrediction(src$temperature, src.trend, kriging.robust))
+
+res.ma <- crossPrediction(src$temperature, src.data.trend, kriging.manual, "figures/cross_prediction_manual.png")
+res.cl <- crossPrediction(src$temperature, src.data.trend, kriging.classical, "figures/16_cross_prediction_classical.png")
+res.ro <- crossPrediction(src$temperature, src.data.trend, kriging.robust, "figures/19_cross_prediction_robust.png")
+
+# Best prediction as we investigated is for robust kriging with cutoff=6. Let's make it!
+variogram.robust.best <- calcVariogram(data=src.res[1:OBS_NUM], x=src$year[1:OBS_NUM], cressie=T, cutoff=6, width=F,
+                                       file=T,
+                                       file_empirical="figures/20_robust-best-emp.png",
+                                       file_modeled="figures/21_robust-best-mod.png")
+kriging.robust.best <- predictKrige(src.res[1:OBS_NUM], x=src$year[1:OBS_NUM], variogram_model=variogram.robust.best$var_model, future=3)
+mse.robust.best <- MSE(crossPrediction(src$temperature, src.trend, kriging.robust.best))
+res.ro.best <- crossPrediction(src$temperature, src.trend, kriging.robust.best, file=T, "figures/22_cross-prediction-robust-best.png")
 
 ## TODO: form krige matrix for analysis
 

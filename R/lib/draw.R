@@ -13,7 +13,7 @@ DrawDataRepresentation <- function (data, filename, datebreaks) {
 DrawScatterPlot <- function (data, filename, datebreaks) {
   plot.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
     geom_point() + geom_abline(intercept=-194.632277, slope=.107706, color="blue") +
-    scale_x_continuous(limits=c(min(data$year) - 5, max(data$year) + 5), breaks=datebreaks) + 
+    scale_x_continuous(breaks=datebreaks) + 
     scale_y_continuous(breaks=seq(10, 30, 1), limits=c(14, 26)) +
     theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
   plot.save(plot.scatter, filename=filename)

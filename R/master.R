@@ -12,7 +12,6 @@ library(ggplot2)  # eye-candy graphs
 library(xtable)   # convert data to latex tables
 library(outliers) # tests for outliers
 library(tseries)  # adf test used
-library(aplpack)  # there is bagplot functionality // WANT TO REMOVE but can't without lost bagplot graph
 library(nortest)  # tests for normality
 library(sp)       # spatial data
 library(gstat)    # geostatistics
@@ -25,6 +24,7 @@ source("R/lib/print-fun.R")    # functions for print some data to files
 source("R/lib/dstats.R")       # descriptive statistics module
 source("R/lib/misc-fun.R")     # some useful global-use functions
 source("R/lib/draw.R")         # helpers for drawing
+
 #[ Initialize block
 
 ## Read the data / pattern: year;temperature

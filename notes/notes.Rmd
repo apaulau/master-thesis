@@ -1,0 +1,10 @@
+---
+title: "notes"
+author: "Aliaksandr Paulau"
+date: "February 2, 2015"
+output: html_document
+---
+
+### Some notes you want to save and review after some time
+
+* removed bagplot functionality

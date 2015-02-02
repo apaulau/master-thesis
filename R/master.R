@@ -130,14 +130,14 @@ plot.data.hist <- DrawHistogram(data=research.data, filename="03_hist-dnorm.png"
 ## Normal Quantile-Quantile plot
 plot.data.qq <- DrawQuantileQunatile(data=research.data$temperature, filename="04_qq.png")
 
-## Scatter plot with regression line based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
+## Scatter plot with regression line
 plot.data.scatter <- DrawScatterPlot(research.data, filename="06_scatterplot.png", kDateBreaks);
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)
 plot.data.ts <- DrawTimeSeries(data=research.data, filename="07_ts.png", datebreaks=kDateBreaks)
 
 ## Residuals time series (data have gotten on computing step: fitting linear model)
-plot.residuals.ts <- plot.data.ts <- DrawTimeSeries(data=research.residuals, filename="08_residuals.png", datebreaks=kDateBreaks)
+plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="08_residuals.png", datebreaks=kDateBreaks)
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
 plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="09_res-hist-dnorm.png", datebreaks=kDateBreaks)

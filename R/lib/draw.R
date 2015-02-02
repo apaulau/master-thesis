@@ -9,6 +9,7 @@ DrawDataRepresentation <- function (data, filename, datebreaks) {
   plot.source
 }
 
+# plot is based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
 DrawScatterPlot <- function (data, filename, datebreaks) {
   plot.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
     geom_point() + geom_abline(intercept=-194.632277, slope=.107706, color="blue") +

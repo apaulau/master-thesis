@@ -1,6 +1,6 @@
 ---
 title: "TODO"
-author: "Aliaksandr Pualau"
+author: "Aliaksandr Paulau"
 date: "November 24, 2014"
 output: html_document
 ---

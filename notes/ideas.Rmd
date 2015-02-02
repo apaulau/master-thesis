@@ -1,6 +1,6 @@
 ---
 title: "Ideas"
-author: "Aliaksandr Pualau"
+author: "Aliaksandr Paulau"
 date: "November 25, 2014"
 output: html_document
 ---
@@ -22,3 +22,5 @@ output: html_document
 * Implement plots through closures: save useful variable, aka constants, in wider scope, but private.
 
 * Combine save with computing plots: also mb as show an save.
+
+* __Instead of output all testing (e.g. normality) information, output only useful values. And then use it to paste into tex document inline.__

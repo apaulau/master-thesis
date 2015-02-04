@@ -32,10 +32,10 @@ src.nrows <- 38
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
 ## Source data as basic time series plot: points connected with line
-plot.source <- DrawDataRepresentation(data=src.data, filename="01_src.png", datebreaks=kDateBreaks)
+plot.source <- DrawDataRepresentation(data=src.data, filename="source.png", datebreaks=kDateBreaks)
 
 print(xtable(src.data, caption="Исходные данные.", label="table:source"),  table.placement="H", 
-      file="out/source.tex")
+      file="out/original/data.tex")
 
 ## Global use constants
 kDateBreaks <- seq(min(src.data$year) - 5, max(src.data$year) + 5, by=2) # date points for graphs
@@ -49,48 +49,48 @@ research.data <- src.data[0:kObservationNum, ]
 # Getting descriptive statistics for temperature in russian locale
 research.data.dstats <- dstats.describe(research.data$temperature, locale=TRUE)
 print(xtable(research.data.dstats, caption="Описательные статистики для наблюдаемых температур.", label="table:dstats"),
-      file="out/data_dstats.tex")
+      file="out/original/dstats.tex")
 
 ## Basic histogram based on Sturges rule (by default) with pretty output (also by default)
-plot.data.hist <- DrawHistogram(data=research.data, filename="03_hist-dnorm.png", datebreaks=kDateBreaks)
+plot.data.hist <- DrawHistogram(data=research.data, filename="original/histogram.png", datebreaks=kDateBreaks)
 
 ## Tests for normality
-research.data.shapiro <- ntest.ShapiroWilk(data=research.data$temperature, filename="out/data_shapiro.tex") 
-research.data.pearson <- ntest.PearsonChi2(data=research.data$temperature, filename="out/data_pearson.tex")
-research.data.ks      <- ntest.KolmogorovSmirnov(data=research.data$temperature, filename="out/data_ks.tex")
+research.data.shapiro <- ntest.ShapiroWilk(data=research.data$temperature, filename="out/original/shapiro-test.tex") 
+research.data.pearson <- ntest.PearsonChi2(data=research.data$temperature, filename="out/original/pearson-test.tex")
+research.data.ks      <- ntest.KolmogorovSmirnov(data=research.data$temperature, filename="out/original/ks-test.tex")
 
 ## Normal Quantile-Quantile plot // TODO: check when it appears in text
-plot.data.qq <- DrawQuantileQunatile(data=research.data$temperature, filename="04_qq.png")
+plot.data.qq <- DrawQuantileQunatile(data=research.data$temperature, filename="original/quantile.png")
 
 ## Scatter plot with regression line
-plot.data.scatter <- DrawScatterPlot(research.data, filename="06_scatterplot.png", kDateBreaks);
+plot.data.scatter <- DrawScatterPlot(research.data, filename="original/scatterplot.png", kDateBreaks);
 
 ## Grubbs test for outliers
 research.data.grubbs <- grubbs.test(research.data$temperature)
-to.file(research.data.grubbs, "out/data_grubbs.tex")
+to.file(research.data.grubbs, "out/original/grubbs-test.tex")
 
 ## Correlation matrix
 research.data.cmatrix <- cor(cbind("Temperature"=research.data$temperature, "Date"=1:kObservationNum), method="pearson")
 print(xtable(research.data.cmatrix, caption="Корреляционная матрица.", label="table:cmatrix"),
-      file="out/data_cmatrix.tex")
+      file="out/original/corr-matrix.tex")
                              
 ## Pearson's product-moment correlation test. Use time for y as numerical
 research.data.ctest <- cor.test(research.data$temperature, c(1:kObservationNum), method="pearson")
-to.file(research.data.ctest, "out/ctest.tex")
+to.file(research.data.ctest, "out/original/corr-test.tex")
 
 ## Fitting linear model for researching data. It also compute residuals based on subtracted regression
 research.data.fit <- lm(research.data$temperature ~ c(1:kObservationNum))
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)
-plot.data.ts <- DrawTimeSeries(data=research.data, filename="07_ts.png", datebreaks=kDateBreaks)
+plot.data.ts <- DrawTimeSeries(data=research.data, filename="original/time-series.png", datebreaks=kDateBreaks)
 
 ## Next step is research residuals computed few lines above
 research.residuals <- data.frame("year"=research.data$year, "temperature"=research.data.fit$residuals)
 print(xtable(research.residuals, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
-      file="out/residuals.tex")
+      file="out/residual/data.tex")
 
 ## Residuals time series (data have gotten on computing step: fitting linear model)
-plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="08_residuals.png", datebreaks=kDateBreaks)
+plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="residual/time-series.png", datebreaks=kDateBreaks)
 
 ## Descriptive statistics for residuals
 research.residuals.dstats <- dstats.describe(research.residuals$temperature, locale=TRUE)
@@ -98,24 +98,24 @@ print(xtable(research.residuals.dstats, caption="Описательные ста
       file="out/residuals_dstats.tex")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
-plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="09_res-hist-dnorm.png", datebreaks=kDateBreaks)
+plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="residual/histogram.png", datebreaks=kDateBreaks)
 
 ## Tests for normality
-research.data.shapiro <- ntest.ShapiroWilk(data=research.residuals$temperature, filename="out/residuals_shapiro.tex") 
-research.data.pearson <- ntest.PearsonChi2(data=research.residuals$temperature, filename="out/residuals_pearson.tex")
-research.data.ks      <- ntest.KolmogorovSmirnov(data=research.residuals$temperature, filename="out/residuals_ks.tex")
+research.data.shapiro <- ntest.ShapiroWilk(data=research.residuals$temperature, filename="out/residual/shapiro-test.tex") 
+research.data.pearson <- ntest.PearsonChi2(data=research.residuals$temperature, filename="out/residual/pearson-test.tex")
+research.data.ks      <- ntest.KolmogorovSmirnov(data=research.residuals$temperature, filename="out/residual/ks-test.tex")
 
 ## Normal Quantile-Quantile plot for residuals
-plot.residuals.qq <- DrawQuantileQunatile(data=research.residuals$temperature, filename="10_res-qq.png")
+plot.residuals.qq <- DrawQuantileQunatile(data=research.residuals$temperature, filename="residual/qunatile.png")
 
 ## Auto Correlation Function plot // TODO: check the style
-plot.residuals.acf <- DrawAutoCorrelationFunction(data=research.data$temperature, filename="11_acf.png")
+plot.residuals.acf <- DrawAutoCorrelationFunction(data=research.data$temperature, filename="residual/acf.png")
 
 ## Box-Ljung and adf tests (some kind of stationarity and independence tests) // TODO: need to know exactly in theory what it is
 research.residuals.box <- Box.test(research.residuals$temperature, type="Ljung-Box")
-to.file(research.residuals.box, "out/residuals_ljung.tex")
+to.file(research.residuals.box, "out/residual/ljung-test.tex")
 research.residuals.adf <- adf.test(research.residuals$temperature)
-to.file(research.residuals.adf, "out/residuals_stationarity.tex")
+to.file(research.residuals.adf, "out/residual/stationarity-test.tex")
 
 
 source("R/variogram.R")

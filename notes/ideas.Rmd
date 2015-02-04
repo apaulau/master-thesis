@@ -10,10 +10,10 @@ output: html_document
 * It will be fabuluos if within _Shiny_ will be possible to implement multiple tab application: each tab will be responsible
   for different functionality (e.g. different graphs or tables). It will be nice feature for presentatation.
  
-* Structure of the project in my mind: first of all computation, and after all printing
-    + But. In this way if you need to recompute some part of all work then you should seek at least two places in code and execute each.
-    + So this point is for deep thinking.
-
+* Structure of the project in my mind: ~~first of all computation, and after all printing~~ compact and universal
+    + ~~But. In this way if you need to recompute some part of all work then you should seek at least two places in code and execute each.~~
+    + ~~So this point is for deep thinking.~~
+    
 * Use monochormatic theme for graphs. So with this trick you will see the result like as for printing.
 
 * Implement i18n: basic dictionary based on `data.frame`. At the beginning we choose language (russian/english), and based on it
@@ -21,6 +21,6 @@ output: html_document
   
 * Implement plots through closures: save useful variable, aka constants, in wider scope, but private.
 
-* Combine save with computing plots: also mb as show an save.
+* ~~Combine save with computing plots: also mb as show an save.~~
 
 * __Instead of output all testing (e.g. normality) information, output only useful values. And then use it to paste into tex document inline.__

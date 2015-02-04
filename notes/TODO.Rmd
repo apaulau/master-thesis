@@ -9,13 +9,13 @@ output: html_document
 
 * Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.
 
-* Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))
+* ~~Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))~~
 
-* Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on. (__Main goal for the first time__)
+* Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.
 
 * ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
 
-* Reformat and refactor code. Clean up useless files.
+* Reformat and refactor code. Clean up useless files. _Almost done_
 
 * ~~Add computation block (for some non-visual analysis)~~
 

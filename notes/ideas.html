@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Aliaksandr Pualau" />
+<meta name="author" content="Aliaksandr Paulau" />
 
 <meta name="date" content="2014-11-25" />
 
@@ -54,7 +54,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 
 <div id="header">
 <h1 class="title">Ideas</h1>
-<h4 class="author"><em>Aliaksandr Pualau</em></h4>
+<h4 class="author"><em>Aliaksandr Paulau</em></h4>
 <h4 class="date"><em>November 25, 2014</em></h4>
 </div>
 
@@ -63,13 +63,16 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <h3>Some ideas for you:</h3>
 <ul>
 <li><p>It will be fabuluos if within <em>Shiny</em> will be possible to implement multiple tab application: each tab will be responsible for different functionality (e.g. different graphs or tables). It will be nice feature for presentatation.</p></li>
-<li>Structure of the project in my mind: first of all computation, and after all printing
+<li>Structure of the project in my mind: <del>first of all computation, and after all printing</del> compact and universal
 <ul>
-<li>But. In this way if you need to recompute some part of all work then you should seek at least two places in code and execute each.</li>
-<li>So this point is for deep thinking.</li>
+<li><del>But. In this way if you need to recompute some part of all work then you should seek at least two places in code and execute each.</del></li>
+<li><del>So this point is for deep thinking.</del></li>
 </ul></li>
 <li><p>Use monochormatic theme for graphs. So with this trick you will see the result like as for printing.</p></li>
 <li><p>Implement i18n: basic dictionary based on <code>data.frame</code>. At the beginning we choose language (russian/english), and based on it use one column with keycodes or another.</p></li>
+<li><p>Implement plots through closures: save useful variable, aka constants, in wider scope, but private.</p></li>
+<li><p><del>Combine save with computing plots: also mb as show an save.</del></p></li>
+<li><p><strong>Instead of output all testing (e.g. normality) information, output only useful values. And then use it to paste into tex document inline.</strong></p></li>
 </ul>
 </div>
 

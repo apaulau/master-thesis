@@ -32,8 +32,8 @@ DrawHistogram <- function (data, filename, datebreaks) {
 }
 
 DrawQuantileQunatile <- function (data, filename) {
-  plot.qq <- ggqqp(data$temperature)
-  plot.save(plot.data.qq, filename=filename)
+  plot.qq <- ggqqp(data)
+  plot.save(plot.qq, filename=filename)
   
   plot.qq
 }
@@ -43,13 +43,13 @@ DrawTimeSeries  <- function (data, filename, datebreaks) {
     geom_point() + geom_line() + stat_smooth(method=lm, se=FALSE) + 
     scale_x_continuous(breaks=datebreaks) + scale_y_continuous(breaks=seq(16, 28, 1)) + 
     theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
-  plot.save(plot.data.ts, filename=filename)
+  plot.save(plot.ts, filename=filename)
   
   plot.ts
 }
 
 DrawAutoCorrelationFunction <- function (data, filename) {
-  plot.acf <- ggacf(data$temperature)
+  plot.acf <- ggacf(data)
   plot.save(plot.acf, filename=filename)
   
   plot.acf

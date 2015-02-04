@@ -21,6 +21,6 @@ ntest.PearsonChi2 <- function (data, filename="", ...) {
 }
 
 ntest.KolmogorovSmirnov <- function (data, filename="", ...) {
-  nsample <- rnorm(10000, mean=mean(data), sd=sd(data) # sample for test against source 
+  nsample <- rnorm(10000, mean=mean(data), sd=sd(data)) # sample for test against source 
   worker(ks.test, data, filename, y=nsample, ...)  
 }

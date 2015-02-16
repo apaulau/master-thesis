@@ -16,7 +16,6 @@ library(nortest)  # tests for normality
 library(sp)       # spatial data
 library(gstat)    # geostatistics
 library(reshape2) # will see
-library(spatial)
 
 ## Import local modules
 source("R/lib/plot.R")       # useful functions for more comfortable plotting
@@ -31,17 +30,17 @@ path.data <- "data/batorino_july.csv" # this for future shiny support and may be
 src.nrows <- 38
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
-## Source data as basic time series plot: points connected with line
-plot.source <- DrawDataRepresentation(data=src.data, filename="source.png", datebreaks=kDateBreaks)
-
-print(xtable(src.data, caption="Исходные данные.", label="table:source"),  table.placement="H", 
-      file="out/original/data.tex")
-
 ## Global use constants
 kDateBreaks <- seq(min(src.data$year) - 5, max(src.data$year) + 5, by=2) # date points for graphs
 
 ## For the reason of prediction estimation and comparison, let cut observations number by 3
 kObservationNum <- length(src.data[, 1]) - 3
+
+## Source data as basic time series plot: points connected with line
+plot.source <- DrawDataRepresentation(data=src.data, filename="source.png", datebreaks=kDateBreaks)
+
+print(xtable(src.data, caption="Исходные данные.", label="table:source"),  table.placement="H", 
+      file="out/original/data.tex")
 
 ## Form the data for research
 research.data <- src.data[0:kObservationNum, ]

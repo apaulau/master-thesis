@@ -1,8 +1,8 @@
 library(shiny)
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(
-  titlePanel("Shiny Server"),
+shinyUI(navbarPage("Temperature Analysis", 
+  tabPanel("Data",
   
   sidebarLayout(
     sidebarPanel(
@@ -16,5 +16,5 @@ shinyUI(fluidPage(
       h3("Plot"),
       plotOutput("series")
     )
-  )
+  ))
 ))

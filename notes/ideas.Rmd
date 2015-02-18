@@ -24,3 +24,5 @@ output: html_document
 * ~~Combine save with computing plots: also mb as show an save.~~
 
 * __Instead of output all testing (e.g. normality) information, output only useful values. And then use it to paste into tex document inline.__
+
+* Shiny: add ability to upload data; add grid with current data; in grid add ability to add new data points; after adding new data it should be possible to save changed data.

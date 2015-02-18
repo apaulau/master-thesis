@@ -8,13 +8,12 @@ shinyUI(navbarPage("Temperature Analysis",
     sidebarPanel(
       helpText("Choose the range of observations"),
       sliderInput("range", label="Range",
-                  min=1, max=38, value=c(1,35))
+                  min=1, max=38, value=c(1,35)),
+      uiOutput("ggvis_ui")
     ),
     mainPanel(
-      h2("Range"),
-      textOutput("range"),
-      h3("Plot"),
-      plotOutput("series")
+      ggvisOutput("series"),
+      tableOutput("series_table")
     )
   ))
 ))

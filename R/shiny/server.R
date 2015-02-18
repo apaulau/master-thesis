@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)  # eye-candy graphs
-
+library(ggvis)
+library(dplyr)
 
 ## Read the data / pattern: year;temperature
 path.data <- "../../data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -15,12 +16,14 @@ shinyServer(function(input, output) {
     paste("You've changed range: from", input$range[1], "to", input$range[2])
   })
   
-  output$series <- renderPlot({
-    datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
-    ggplot(data=src.data[input$range[1]:input$range[2],], aes(x=year, y=temperature)) + 
-      geom_point() + geom_line() + 
-      scale_x_continuous(breaks=datebreaks) + 
-      theme(axis.text.x=element_text(angle=45, hjust=1)) +
-      xlab("Year") + ylab("Temperature, ºС")
+  series <- reactive({src.data[input$range[1]:input$range[2],]})
+  #breaks <- reactive({input$range[1]:input$range[2],1]})
+  
+  series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_lines() %>% 
+    add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>% 
+    bind_shiny("series", "ggvis_ui")
+  
+  output$series_table <- renderTable({
+    series()
   })
 })

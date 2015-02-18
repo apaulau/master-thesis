@@ -15,9 +15,10 @@ shinyServer(function(input, output) {
   series <- reactive({src.data[input$range[1]:input$range[2],]})
   breaks <- reactive({src.data[input$range[1]:input$range[2],1]})
 
-  series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_lines() %>% 
+  series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
+    scale_numeric("x", nice = FALSE) %>%
     bind_shiny("series", "ggvis_ui")
   
   output$series_table <- renderTable({

@@ -13,7 +13,8 @@ shinyUI(navbarPage("Temperature Analysis",
     ),
     mainPanel(
       ggvisOutput("series"),
-      tableOutput("series_table")
+      tableOutput("series_table"),
+      textOutput("text")
     )
   ))
 ))

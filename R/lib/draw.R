@@ -27,7 +27,7 @@ DrawScatterPlot <- function (data, filename="", datebreaks) {
   plot.scatter
 }
 
-DrawHistogram <- function (data, filename="", datebreaks) {
+DrawHistogram <- function (data, filename="") {
   plot.hist <- ggplot(data, aes(x=temperature), geom='blank') +   
     geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", binwidth=1.2, alpha=.6) +
     stat_function(fun=dnorm, colour='red', arg=list(mean=mean(data$temperature), sd=sd(data$temperature))) +    

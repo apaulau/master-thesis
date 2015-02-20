@@ -51,7 +51,7 @@ print(xtable(research.data.dstats, caption="Описательные стати�
       file="out/original/dstats.tex")
 
 ## Basic histogram based on Sturges rule (by default) with pretty output (also by default)
-plot.data.hist <- DrawHistogram(data=research.data, filename="original/histogram.png", datebreaks=kDateBreaks)
+plot.data.hist <- DrawHistogram(data=research.data, filename="original/histogram.png")
 
 ## Tests for normality
 research.data.shapiro <- ntest.ShapiroWilk(data=research.data$temperature, filename="out/original/shapiro-test.tex") 
@@ -97,7 +97,7 @@ print(xtable(research.residuals.dstats, caption="Описательные ста
       file="out/residuals_dstats.tex")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
-plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="residual/histogram.png", datebreaks=kDateBreaks)
+plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="residual/histogram.png")
 
 ## Tests for normality
 research.data.shapiro <- ntest.ShapiroWilk(data=research.residuals$temperature, filename="out/residual/shapiro-test.tex") 

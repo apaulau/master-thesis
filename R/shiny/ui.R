@@ -1,31 +1,29 @@
 library(shiny)
+library(ggvis)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Temperature Analysis", 
-  tabPanel("Data",
+  tabPanel("Source",
     sidebarLayout(
       sidebarPanel(
         helpText("Choose the range of observations"),
         sliderInput("range", label="Range",
-                    min=1, max=38, value=c(1,35)),
-        uiOutput("ggvis_ui")
+          min=1, max=38, value=c(1,35)),
+        uiOutput("series_ui")
       ),
       mainPanel(
-        ggvisOutput("series"),
-        tableOutput("series_table"),
-        textOutput("text")
+        tabsetPanel(
+          tabPanel("Data",
+            ggvisOutput("series"),
+            tableOutput("series_table"),
+            textOutput("text")
+          ),
+          tabPanel("Histogram",
+            plotOutput("histogram"),
+            tableOutput("dstats")
+          )
+        )
       )
-  )),
-  tabPanel("Histogram",
-           sidebarLayout(
-             sidebarPanel(
-               sliderInput("range", label="Range",
-                           min=1, max=38, value=c(1,35)),
-               uiOutput("ggvis_ui")
-             ),
-             mainPanel(
-               ggvisOutput("histogram"),
-               tableOutput("dstats")
-             )
-  ))
+    )
+  )
 ))

@@ -4,6 +4,7 @@ library(ggvis)
 library(dplyr)
 
 source("../lib/dstats.R")     # descriptive statistics module
+source("../lib/draw.R")       # helpers for drawing
 
 ## Read the data / pattern: year;temperature
 path.data <- "../../data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -16,6 +17,11 @@ kMinYear <- min(src.data$year)
 shinyServer(function(input, output) {
   series <- reactive({src.data[input$range[1]:input$range[2],]})
   breaks <- reactive({src.data[input$range[1]:input$range[2],1]})
+  binwidth <- reactive({input$binwidth})
+  sturges <- reactive({
+    data <- series()$temperature
+    (max(data)-min(data)) / nclass.Sturges(data)
+  })
 
   series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
@@ -29,12 +35,18 @@ shinyServer(function(input, output) {
   })
   output$histogram <- renderPlot({
     datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
-    ggplot(series(), aes(x=temperature), geom='blank') +   
-      geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", binwidth=1.2) +
-      stat_function(fun=dnorm, colour='red', arg=list(mean=mean(series()$temperature), sd=sd(series()$temperature))) +    
-      labs(color="") + xlab("Температура, ºС") + ylab("Плотность") + theme_bw()
+    width <- binwidth()
+    if (width > 0) {
+      DrawHistogram(data=series(), binwidth=width)
+    } else {
+      DrawHistogram(data=series())
+    }
+    #ifelse(width > 0, , )
   })
   
+  output$sturges <- renderText({
+    paste("Sturges rule:", sturges())
+  })
   
   output$dstats <- renderTable({
     dstats.describe(series()$temperature)

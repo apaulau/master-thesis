@@ -1,0 +1,3 @@
+[submodule "doc/bsu"]
+	path = doc/bsu
+	url = https://github.com/bsutex/bsustyle.git

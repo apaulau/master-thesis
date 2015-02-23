@@ -9,72 +9,79 @@
 В качестве оценки вариограммы рассмотрим статистику вида:
 \begin{equation}
 	\label{eq:var_est}
-	2 \tilde{\gamma}(h) = \frac{1}{n-h} \sum_{s=1}^{n-h}(X(s+h) - X(s))^2, \quad h = \overline{0, n-1}.
+	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
 \end{equation}
+где $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}$; $ \tilde{\gamma}(h) = 0, |h| \ge n $.
 
 Вычислим математическое ожидание введённой оценки
 \begin{eqnarray*}
-	& E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n-h} \sum_{s=1}^{n-h} E(X(s+h) - X(s))^2 = \\
+	& E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \} = \\
 	& = [\text{так как процесс является внутренне стационарным}] = \\
-	& = \frac{1}{n-h} \sum_{s=1}^{n-h} 2 \gamma(h) = 2 \gamma(h).
+	& = \frac{1}{n - h} \sum_{t = 1}^{n - h} 2 \gamma(h) = 2 \gamma(h).
 \end{eqnarray*}
 
 Таким образом оценка является несмещённой.
 
 Далее, найдём ковариацию:
+\begin{eqnarray}
+\label{eq:cov_support}
+\nonumber
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = E\{ (2 \tilde{\gamma}(h_1) - E\{ 2 \tilde{\gamma}(h_1) \}) (2 \tilde{\gamma}(h_2) - E\{ 2 \tilde{\gamma}(h_2) \}) \} = \\
+\nonumber
+	& = E\{ \frac{1}{n - h_1} \sum_{t = 1}^{n - h_1}((X(t + h_1) - X(t))^2 - E\{ (X(t + h_1) - X(t))^2 \}) \times \\
+\nonumber
+	& \times \frac{1}{n - h_2} \sum_{s = 1}^{n - h_2}((X(s + h_2) - X(s))^2 - E\{ (X(s + h_2) - X(s))^2 \}) \} = \\
+	& = \frac{1}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
+\end{eqnarray}
+
+По определению, $ cov\{ a, b \} = corr\{ a, b \} \sqrt{ V\{ a \} V\{ b \} } $, тогда
 \begin{eqnarray*}
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = E((2 \tilde{\gamma}(h_1) - E(2 \tilde{\gamma}(h_1))) (2 \tilde{\gamma}(h_2) - E(2 \tilde{\gamma}(h_2)))) = \\
-	& = E(\frac{1}{n-h_1} \sum_{s=1}^{n-h_1}((x(s+h_1) - x(s))^2 - E((x(s+h_1) - x(s))^2)) \times \\
-	& \times \frac{1}{n-h_2} \sum_{t=1}^{n-h_2}((x(t+h_2) - x(t))^2 - E((x(t+h_2) - x(t))^2))) = \\
-	& = \frac{1}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) 
+	& cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \\
+	& = corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
+	& \times \sqrt{V\{ (X( t + h_1) - X(t))^2 \} V\{ (X(s + h_2) - X(s))^2 \}}
 \end{eqnarray*}
 
-По определению, $ cov(a,b) = corr(a,b)\sqrt{V(a)V(b)} $, тогда
+Принимая во внимание $ V \{ X(t + h) - X(t) \}^2 = 2 ( 2 \gamma(h) )^2 $[ссылка на источник, либо упоминание раньше] и предыдущее соотношение, из (\ref{eq:cov_support}) получаем:
 \begin{eqnarray*}
-	& cov((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) \times \\
-	& \times \sqrt{(V((x(s+h_1) - x(s))^2) V((x(t+h_2) - x(t))^2))}
+	& cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
 \end{eqnarray*}
-
-Из [ссылка на источник, либо упоминание раньше] $ V \{ X(s+h) - X(s) \}^2 = 2 \{ 2 \gamma(h) \}^2 $ и предыдущего соотношения:
-\begin{equation*}
-	cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2)
-\end{equation*}
 
 Далее воспользуемся леммой 1 [\#Брест2005]:
 \begin{eqnarray*}
-	& \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} corr((x(s+h_1) - x(s))^2, (x(t+h_2) - x(t))^2) = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{corr((x(s+h_1) - x(s)), (x(t+h_2) - x(t))) \}^2 = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{cov((x(s+h_1) - x(s)), (x(t+h_2) - x(t)))}{\sqrt{(V((x(s+h_1) - x(s))) V((x(t+h_2) - x(t))))}} \}^2
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \})^2 = \\
+	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} \{\frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} \}^2
 \end{eqnarray*}
 
-Принимая во внимание лемму 3 [\#Брест2005], получаем соотношение
+Воспользовавшись леммой 3 [\#Брест2005], получаем соотношение
 \begin{eqnarray}
 \nonumber
 \label{eq:cov_base}
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \\
-	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n-h_1)(n-h_2)}\sum_{s=1}^{n-h_1}\sum_{t=1}^{n-h_2} \{\frac{\gamma(s+h_1-t) + \gamma(s-t-h_2) - \gamma(s+h_1-t-h_2) - \gamma(s-t)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}} \}^2
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times \\
+	& \times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2
 \end{eqnarray}
 
 В \eqref{eq:cov_base} сделаем следующую замену переменных
 \begin{equation*}
-	s = s, \quad m = s - t.
+	t = t, \quad m = t - s.
 \end{equation*}
 Получим
 \begin{eqnarray}
 \nonumber
 \label{eq:cov_split}
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2(2 \gamma(h_1))(2 \gamma(h_2))}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\frac{\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m)}{\sqrt{2 \gamma(h_1)} \sqrt{2 \gamma(h_2)}})^2 = \\
-	& = \frac{2}{(n - h_1) (n - h_2))} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	& = \frac{2}{(n - h_1) (n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{t - m = 1}^{n - h_2} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
 \end{eqnarray}
 
-Таким образом, в зависимости от $h_1$ и $h_2$, возможны два случая: $h_1 > h_2$ и $h_2 > h_1$.
+Таким образом, в зависимости от $h_1$ и $h_2$, возможны два случая: $h_1 > h_2$ и $h_1 < h_2$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 	\centering
 	\begin{tikzpicture}[baseline, font=\tiny]
 		\begin{axis}[
 		    title = $h_1 > h_2$,
-		    xlabel = {$s$},
+		    xlabel = {$t$},
 		    ylabel = {$m$},
 		    xmin=-1.5, xmax=9.5,
 		    ymin=-5, ymax=3,
@@ -94,15 +101,15 @@
 			};
 			\addplot[dashed, draw=gray, domain=0:8]{-2};
 			\addplot[dashed, draw=gray, domain=0:8]{2};
-			\node at (axis cs:3.5, 1.3) [rotate=17, anchor=north east] {$m = s - 1$};
-			\node at (axis cs:4.5, -2.4) [rotate=19, anchor=north east] {$m = s - n + h_2$};
+			\node at (axis cs:3.5, 1.3) [rotate=17, anchor=north east] {$m = t - 1$};
+			\node at (axis cs:4.5, -2.4) [rotate=19, anchor=north east] {$m = t - n + h_2$};
 		\end{axis}
 		\end{tikzpicture}
 		\hspace{0.15cm}
 		\begin{tikzpicture}[baseline, font=\tiny]
 		\begin{axis}[
 		    title = $h_1 < h_2$,
-		    xlabel = {$s$},
+		    xlabel = {$t$},
 		    ylabel = {$m$},
 		    xmin=-1.5, xmax=9.5,
 		    ymin=-3, ymax=5,
@@ -120,8 +127,8 @@
 			};
 			\addplot[dashed, draw=gray, domain=0:8]{2};
 			\addplot[dashed, draw=gray, domain=0:8]{4};
-			\node at (axis cs:3.5, 2) [rotate=30, anchor=north east] {$m = s - 1$};
-			\node at (axis cs:3.7, 0.2) [rotate=32, anchor=north east] {$m = s - n + h_2$};
+			\node at (axis cs:3.5, 2) [rotate=30, anchor=north east] {$m = t - 1$};
+			\node at (axis cs:3.7, 0.2) [rotate=32, anchor=north east] {$m = t - n + h_2$};
 		\end{axis}
 	\end{tikzpicture}
 
@@ -129,32 +136,32 @@
 	\label{fig:label}
 \end{figure}
 
-Рассмотрим первый: $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
+Рассмотрим первый случай: $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
 \begin{eqnarray*}
 \nonumber
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \\
-	& = \frac{2}{(n - h_1) (n - h_2)} \sum_{s = 1}^{n - h_1}\sum_{s - m = 1}^{n - h_2} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 = \\
-	& = \sum_{m = 1 - n + h_2}^{h_2 - h_1}\sum_{s = 1}^{m + n - h_2}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + \sum_{m = h_2 - h_1 + 1}^{0}\sum_{s = 1}^{n - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + \sum_{m = 1}^{n - h_1 - 1}\sum_{s = m + 1}^{n - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	& = \frac{2}{(n - h_1) (n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{t - m = 1}^{n - h_2} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 = \\
+	& = \sum_{m = 1 - n + h_2}^{h_2 - h_1}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	& + \sum_{m = h_2 - h_1 + 1}^{0}\sum_{t = 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	& + \sum_{m = 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
 \end{eqnarray*}
 
-Заметим, что выражение под знаком суммы не зависит от $s$, получим:
+Заметим, что выражение под знаком суммы не зависит от $t$, получим:
 \begin{eqnarray*}
 \nonumber
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2}{(n - h_1) (n - h_2)} \times \\
-	& \times ((m + n - h_1)\sum_{m = 1 - n + h_2}^{h_2 - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + (n - h_1)\sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + (n - h_1 - m)\sum_{m = 1}^{n - h_1 - 1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
+	& \times (\sum_{m = 1 - n + h_2}^{h_2 - h_1}(m + n - h_1)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	& + (n - h_1)\sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	& + \sum_{m = 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
 \end{eqnarray*}
 
 Разделим каждое слагаемое на общий член $n - h_1$:
 \begin{eqnarray*}
 \nonumber
-	& cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \\ 
-	& = \frac{2}{(n - h_2)} ((1 + \frac{m}{n - h1})\sum_{m = 1 - n + h_2}^{h_2 - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	& = \frac{2}{(n - h_2)} (\sum_{m = 1 - n + h_2}^{h_2 - h_1}(1 + \frac{m}{n - h1})(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
 	& + \sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + (1 - \frac{m}{n - h1})\sum_{m = 1}^{n - h_1 - 1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+	& + \sum_{m = 1}^{n - h_1 - 1}(1 - \frac{m}{n - h1})(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
 \end{eqnarray*}
 
 % section variogram_theory (end)

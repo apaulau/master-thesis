@@ -22,6 +22,14 @@ shinyServer(function(input, output) {
     data <- series()$temperature
     (max(data)-min(data)) / nclass.Sturges(data)
   })
+  scott <- reactive({
+    data <- series()$temperature
+    (max(data)-min(data)) / nclass.FD(data)
+  })
+  fd <- reactive({
+    data <- series()$temperature
+    (max(data)-min(data)) / nclass.scott(data)
+  })
 
   series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
@@ -46,6 +54,14 @@ shinyServer(function(input, output) {
   
   output$sturges <- renderText({
     paste("Sturges rule:", sturges())
+  })
+  
+  output$scott <- renderText({
+    paste("Scott's choice for a normal distribution:", scott())
+  })
+  
+  output$fd <- renderText({
+    paste("Freedman-Diaconis choice:", fd())
   })
   
   output$dstats <- renderTable({

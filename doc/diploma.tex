@@ -1,25 +1,26 @@
 \documentclass[a4paper,12pt]{report}
 
 \usepackage{bsustyle/style/bsumain}
-\usepackage{bsustyle/style/bsudiplomatitle}
+\usepackage{bsustyle/style/bsupracticetitle}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
 
 \title{Анализ и статитистическая обработка временных рядов в пакете R}
 \author{Павлов Александр Сергеевич}
 \mentor{Цеховая Татьяна Вячеславовна \\
         доцент кафедры ТВиМС \\
         канд. физ.-мат. наук}
-\reviewer{Сергеев Сергей Сергеевич \\
-          заведующий каведры ОЙО}
 
 \begin{document}
   %\include{misc/todolist}
 
-  %\maketitle
+\maketitle
 
-  %{
-   % \renewcommand{\contentsname}{Содержание}
-   % \tableofcontents
-  %}
+{
+   \renewcommand{\contentsname}{Содержание}
+   \tableofcontents
+}
 
   % \maketitle
   % \include{title}
@@ -30,7 +31,7 @@
 
   \include{introduction}
 
-  %\include{chapter1/theory}
+  \include{chapter1/theory}
 
   % \include{chapter2/analysis}
 

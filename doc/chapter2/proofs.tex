@@ -155,13 +155,24 @@
 	& + \sum_{m = 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
 \end{eqnarray*}
 
-Разделим каждое слагаемое на общий член $n - h_1$:
+Преобразуем полученное выражение:
 \begin{eqnarray*}
 \nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
-	& = \frac{2}{(n - h_2)} (\sum_{m = 1 - n + h_2}^{h_2 - h_1}(1 + \frac{m}{n - h1})(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + \sum_{m = h_2 - h_1 + 1}^{0}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
-	& + \sum_{m = 1}^{n - h_1 - 1}(1 - \frac{m}{n - h1})(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+	& = \frac{2}{(n - h_1)(n - h_2)} ((n - h_1)\sum_{m = 1 - n + h_2}^{h_2 - h_1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + \sum_{m = 1 - n + h_2}^{h_2 - h_1} m (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 \\
+	& + (n - h_1)\sum_{m = h_2 - h_1 + 1}^{0} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + (n - h_1)\sum_{m = 1}^{n - h_1 - 1} (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 - \\
+	& - \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2)
+\end{eqnarray*}
+
+Приведем подобные:
+\begin{eqnarray*}
+\nonumber
+	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	& = \frac{2}{(n - h_2)} ( \sum_{m = 1 - n + h_2}^{n - h_1 - 1}(\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 + \\
+	& + \frac{1}{(n - h_1)} ( \sum_{m = 1 - n + h_2}^{h_2 - h_1} m (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 \\
+	& - \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 ) )
 \end{eqnarray*}
 
 % section variogram_theory (end)

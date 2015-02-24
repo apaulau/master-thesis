@@ -9,58 +9,79 @@
 
 Пусть $ (\Omega, \mathcal{F}, P) $ --- вероятностное пространство, где $\Omega$ является произвольным множеством, $\mathcal{F}$ --- сигма-алгеброй подмножеств $\Omega$, и $P$ --- вероятностной мерой.
 
-%TODO
-\begin{Definition}\label{def:stochasticProcess}
-Попробуй сделать через дефинишены, должно получаться красивее и можно будет на них ссылаться
+\begin{Definition}
+\label{def:stochastic-process}
+	\textit{Действительным случайным процессом} $ X(t) = X(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in \mathbb{T}$, где $ \mathbb{T} $ --- некоторое параметрическое множество.
 \end{Definition}
 
-\textit{Действительным случайным процессом} $ X(t) = X(\omega, t) $ называется семейство случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in \mathbb{T}$, где $ \mathbb{T} $ --- некоторое параметрическое множество.
+\begin{Definition}
+	Если $ \mathbb{T} = \mathbb{Z} = {0, \pm 1, \pm 2, \dots} $, или $ \mathbb{T} \subset \mathbb{Z} $, то говорят, что $ X(t), t \in \mathbb{T} $, --- \textit{случайный процесс с дискретным временем}.
+\end{Definition}
 
-Если $ \mathbb{T} = \mathbb{Z} = {0, \pm 1, \pm 2, \dots} $, или $ \mathbb{T} \subset \mathbb{Z} $, то говорят, что $ X(t), t \in \mathbb{T} $, --- \textit{случайный процесс с дискретным временем}.
+\begin{Definition}
+	Если $ \mathbb{T} = \mathbb{R} $, то $ X(t), t \in \mathbb{T} $ называют \textit{случайным процессом с непрерывным временем}.
+\end{Definition}
 
-Если $ \mathbb{T} = \mathbb{R} $, то $ X(t), t \in \mathbb{T} $ называют \textit{случайным процессом с непрерывным временем}.
+\begin{Definition}
+\label{def:distr_func}
+	\textit{n-мерной функцией распределения случайного процесса} $ X(t), t \in \mathbb{T} $, называется функция вида
+	\begin{equation*}
+		F_n(x_1, \dots, x_n; t_1, \dots, t_n) = P \{ X(t_1) < x_1, \dots, X(t_n) < x_n \},
+	\end{equation*}
+	где $ x_j \in \mathbb{T}, t_j \in \mathbb{T}, j = \overline{1,n} $.
+\end{Definition}
 
-\textit{n-мерной функцией распределения} случайного процесса $ X(t), t \in \mathbb{T} $, называется функция вида
-\begin{equation*}
-	F_n(x_1, \dots, x_n; t_1, \dots, t_n) = P \{ X(t_1) < x_1, \dots, X(t_n) < x_n \},
-\end{equation*}
-где $ x_j \in \mathbb{T}, t_j \in \mathbb{T}, j = \overline{1,n} $.
+\begin{Definition}
+	\textit{Математическим ожиданием} случайного процесса $ X(t), t \in \mathbb{T}, $ называется функция вида
+	\begin{equation*}
+		m(t) = E \{ X(t) \} = \int \limits_{\mathbb{T}} x \, dF_1(x;t), t \in \mathbb{T}.
+	\end{equation*}
+\end{Definition}
 
-\textit{Математическим ожиданием} случайного процесса $ X(t), t \in \mathbb{T}, $ называется функция вида
-\begin{equation*}
-	m(t) = E \{ X(t) \} = \int \limits_{\mathbb{T}} x \, dF_1(x;t), t \in \mathbb{T}.
-\end{equation*}
+\begin{Definition}
+	\textit{Дисперсией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
+	\begin{equation*}
+		V(t) = V \{ X(t) \} = E \{ X(t) - m(t) \}^2 = \int \limits_{\mathbb{T}} (x - m(t))^2 \, dF_1(x; t).
+	\end{equation*}
+\end{Definition}
 
-\textit{Дисперсией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
-\begin{equation*}
-	V(t) = V \{ X(t) \} = E \{ X(t) - m(t) \}^2 = \int \limits_{\mathbb{T}} (x - m(t))^2 \, dF_1(x; t).
-\end{equation*}
+\begin{Definition}
+	\textit{Ковариационной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
+	\begin{eqnarray*}
+		& cov\{ X(t_1), X(t_2) \} = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
+		& = \iint \limits_{\mathbb{T}^2} (x_1 - m(t_1)) (x_2 - m(t_2)) \, dF_2(x_1, x_2; t_1, t_2)
+	\end{eqnarray*}
+\end{Definition}
 
-%TODO поменяй местами определение ковариационной и корреляционной функции. и сразу же напиши про связь корр=ков/корень из произведения дисперсий
+\begin{Definition}
+	\textit{Корреляционной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
+	\begin{equation*}
+		corr\{ X(t_1), X(t_2) \} = E \{ X(t_1)X(t_2) \} = \iint \limits_{\mathbb{T}^2} x_1 x_2 \, dF_2(x_1, x_2; t_1, t_2)
+	\end{equation*}
+\end{Definition}
 
-\textit{Корреляционной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
-\begin{equation*}
-	corr(X(t_1), X(t_2)) = E \{ X(t_1)X(t_2) \} = \iint \limits_{\mathbb{T}^2} x_1 x_2 \, dF_2(x_1, x_2; t_1, t_2)
-\end{equation*}
+\begin{Remark}
+	Имеет место следующее соотношение, связывающее ковариационную и корреляционную функции:
+	\begin{equation*}
+		corr\{ X(t_1), X(t_2)\} = \frac{cov\{ X(t_1), X(t_2) \}}{\sqrt{ V\{ X(t_1) \} V\{ X(t_2) \} }},
+	\end{equation*}
+	где $ X(t), t \in \mathbb{T} $, --- случайный процесс.
+\end{Remark}
 
-\textit{Ковариационной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
-\begin{eqnarray*}
-	& cov(X(t_1), X(t_2)) = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
-	& = \iint \limits_{\mathbb{T}^2} (x_1 - m(t_1)) (x_2 - m(t_2)) \, dF_2(x_1, x_2; t_1, t_2)
-\end{eqnarray*}
+\begin{Definition}
+	Случайный процесс $ X (t), t \in \mathbb{T} $, называется стационарным в широком смысле, если $ \exists E \{ x^2(t) < \infty \}, t \in \mathbb{T} $, и
+	\begin{enumerate}
+		\item $ m(t) = E \{ x(t) \} = m = const, t \in \mathbb{T} $;
+		\item $ cov(t_1, t_2) = cov(t_1 - t_2), t_1,t_2 \in \mathbb{T} $.
+	\end{enumerate}
+\end{Definition}
 
-%TODO Сначала напиши про стационарность в гироком смысле, потом в узком, и замечание про связь этих определений (дополнительное условие на ковариационную функцию у стационарного в кзком смысле СП
-
-Случайный процесс $ X(t), t \in \mathbb{T} $, называется стационарным в узком смысле, если $ \forall n \in \mathbb{N} $, $ \forall t_1, \dots, t_n \in \mathbb{T} $, $ \forall \tau, t_1 + \tau, \dots, t_n + \tau \in \mathbb{T} $ выполняется соотношение:
-\begin{equation*}
-	F_n(x_1, \dots, x_n; t_1, \dots, t_n) = F_n(x_1, \dots, x_n; t_1 + \tau , \dots, t_n + \tau).
-\end{equation*}
-
-Случайный процесс $X (t), t \in \mathbb{T} $, называется стационарным в широком смысле, если $ \exists E \{ x^2(t) < \infty \}, t \in \mathbb{T} $, и
-\begin{enumerate}
-	\item $ m(t) = E \{ x(t) \} = m = const, t \in \mathbb{T} $;
-	\item $ cov(t_1, t_2) = cov(t_1 - t_2), t_1,t_2 \in \mathbb{T} $.
-\end{enumerate}
+\begin{Definition}
+	Случайный процесс $ X(t), t \in \mathbb{T} $, называется стационарным в узком смысле, если $ \forall n \in \mathbb{N} $, $ \forall t_1, \dots, t_n \in \mathbb{T} $, $ \forall \tau, t_1 + \tau, \dots, t_n + \tau \in \mathbb{T} $ выполняется соотношение:
+	\begin{equation*}
+		F_n(x_1, \dots, x_n; t_1, \dots, t_n) = F_n(x_1, \dots, x_n; t_1 + \tau , \dots, t_n + \tau).
+	\end{equation*}
+\end{Definition}
 
 \begin{Remark}
 	Если случайный процесс $ X(t), t \in \mathbb{T} $, является стационарным в узком смысле и $ \exists E \{ x^2(t) \} < \infty, t \in \mathbb{T} $, то он будет стационарным и в широком смысле, но не наоборот.
@@ -69,17 +90,17 @@
 \section{Вариограмма и внутренне стационарный случайный процесс}
 \label{sec:variogramAndInnerStationarity}
 
-%TODO Дай определение вариограммы и семивариограммы отдельно
+%TODO Определение вариограммы и семивариограммы отдельно
 
-%TODO определение внутренне стационарного соучайного процесса дай для процесса с непрерывным временем, можно взять из статьи брест 2005
+\begin{Definition}
+	Случайный процесс $ X(t), t \in \mathbb{R} = (-\infty, +\infty) $, называется внутренне стационарным, если справедливы следующие равенства:
+	\begin{equation*}
+		E \{ X(t_1) - X(t_2) \} = 0, \quad V \{ X(t_1) - X(t_2) \} = 2 \gamma(t_1 - t_2),
+	\end{equation*}
+	где $ 2 \gamma(t_1 - t_2) $ --- вариограмма рассматриваемого процесса, $ t_1, t_2 \in \mathbb{R} $. Заметим, что функция $ \gamma(t), t \in \mathbb{R} $, --- называется семивариограммой.
+\end{Definition}
 
-Случайный процесс $ X(t), t \in \mathbb{Z} = \{0, \pm 1, \pm 2, \dots \} $, называется внутренне стационарным, если справедливы следующие равенства:
-\begin{equation*}
-	E \{ X(t_1) - X(t_2) \} = 0, \quad V \{ X(t_1) - X(t_2) \} = 2 \gamma(t_1 - t_2),
-\end{equation*}
-где $ 2 \gamma(t_1 - t_2) $ --- вариограмма рассматриваемого процесса, $ t_1, t_2 \in \mathbb{Z} $.
-
-%TODO дай определение гацссовского случ процесса (у которого любая совсестная фр отсчетов является нормальной фр
+%TODO Определение гауссовского случайного процесса (у которого любая совместная фр отсчетов является нормальной фр)
 
 В дальнейшем рассматриваем случайные процессы с дискретным временем.
 
@@ -97,3 +118,10 @@
 \label{eq:V_diff_inc}
 	V \{ X(t + h) - X(t) \}^2 = 2 (2 \gamma(h))^2.
 \end{equation}
+
+В качестве оценки вариограммы рассмотрим статистику вида:
+\begin{equation}
+	\label{eq:var_est}
+	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
+\end{equation}
+где $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}$; $ \tilde{\gamma}(h) = 0, |h| \ge n $.

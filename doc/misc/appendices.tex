@@ -3,35 +3,37 @@
 
 \makeatletter
 \renewcommand\appendixname{ПРИЛОЖЕНИЕ}
-\gdef\appendix{\par 
-\setcounter{section}{0}% 
+\gdef\appendix{\par
+\setcounter{section}{0}%
 \setcounter{subsection}{0}%
-\def\thesection{\@Alph\c@section} 
+\def\thesection{\@Alph\c@section}
 \def\section##1{\refstepcounter{section}
 \setcounter{table}{0}
 \def\thetable{\@Alph\c@section.\arabic{table}}
 \goodbreak\noindent{\indent\Large\bf\hbox to 8.5em{\appendixname\
-\thesection\hss}\hspace{0.8ex}##1}% 
-\nobreak\vspace{1em}\nobreak\noindent% 
+\thesection\hss}\hspace{0.8ex}##1}%
+\nobreak\vspace{1em}\nobreak\noindent%
 
 \addcontentsline{toc}{chapter}{\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1}}}
-\makeatother 
+\makeatother
 
 \appendix
 
 \renewcommand{\thelstlisting}{C.1}
 \section{ Исходные данные}
 \label{c:source_data}
-\input{../out/source_data.tex}
+\input{../out/original/data.tex}
 
 \newpage
 \section{ Результаты вычислений}
 \label{c:app_results}
-\input{../out/residuals_data.tex}
+\input{../out/residual/data.tex}
 
 \newpage
 \section{ Код программ}
 \label{c:listings}
-\lstinputlisting[language=R, caption=Описательные статистики, label=lst:dstats]{../R/dstats.R}
+\lstinputlisting[language=R, caption=Описательные статистики, label=lst:dstats]{../R/lib/dstats.R}
 \renewcommand{\thelstlisting}{C.2}
-\lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../analysis_batorino.R}
+\lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../R/master.R}
+\renewcommand{\thelstlisting}{C.3}
+\lstinputlisting[language=R, caption=Вариограммный анализ, label=lst:variogram]{../R/variogram.R}

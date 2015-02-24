@@ -47,14 +47,14 @@
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
 \end{eqnarray*}
 
-Далее воспользуемся леммой 1 [\#Брест2005]:
+Далее воспользуемся леммой 1 из \cite{tsekhavaya-brest}:
 \begin{eqnarray*}
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \})^2 = \\
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} \{\frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} \}^2
 \end{eqnarray*}
 
-Воспользовавшись леммой 3 [\#Брест2005], получаем соотношение
+Воспользовавшись леммой 3 из \cite{tsekhavaya-brest}, получаем соотношение
 \begin{eqnarray}
 \nonumber
 \label{eq:cov_base}

@@ -93,7 +93,7 @@ plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="residual/
 
 ## Descriptive statistics for residuals
 research.residuals.dstats <- dstats.describe(research.residuals$temperature, locale=TRUE)
-print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residual_dstats"),
+print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residuals_dstats"),
       file="out/residual/dstats.tex")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals

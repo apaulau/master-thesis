@@ -4,7 +4,7 @@ source("R/archive/variogram_analysis/afv.R")
 
 ### Just definition of mean standard error // TODO: find out exact formula and describe each parameter
 MSE <- function (e, N=1) {
-  sum(sapply(X=e, FUN=function(x) x**2)) / N
+  sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
 }
 
 CompareClassicalModels <- function(manual, classical, filename) {
@@ -41,7 +41,7 @@ CompareClassicalModels <- function(manual, classical, filename) {
 ### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
 #### todo: simpify this function, split it to several less complex functions
-ComparePredictionParameters <- function (data, residuals, temperature, trend, x, y=rep(1, kObservationNum), width=1) { ### todo: usage of argument in argument default
+ComparePredictionParameters <- function (data, trend, x, y=rep(1, kObservationNum), width=1, filename) {
   lens <- 1:kObservationNum
   manualResult <- c()
   classicalResult <- c()
@@ -52,21 +52,21 @@ ComparePredictionParameters <- function (data, residuals, temperature, trend, x,
   
   i <- 1
   for(l in lens) {
-    variogram.manual = manualVariogram(data, cutoff=l)
+    variogram.manual    = ComputeManualVariogram(data, cutoff=l)
     variogram.classical = autofitVariogram(data~1, spdata, cutoff=l, cressie=FALSE, width=width)
-    variogram.robust = autofitVariogram(data~1, spdata, cutoff=l, cressie=TRUE, width=width)
+    variogram.robust    = autofitVariogram(data~1, spdata, cutoff=l, cressie=TRUE, width=width)
     
-    kriging.manual <- PredictWithKriging(residuals, x=x, variogram_model=variogram.manual$var_model)
-    kriging.classical <- PredictWithKriging(residuals, x=x, variogram_model=variogram.classical$var_model)
-    kriging.robust <- PredictWithKriging(residuals, x=x, variogram_model=variogram.robust$var_model)
+    kriging.manual    <- PredictWithKriging(data, x=x, variogram_model=variogram.manual$var_model)
+    kriging.classical <- PredictWithKriging(data, x=x, variogram_model=variogram.classical$var_model)
+    kriging.robust    <- PredictWithKriging(data, x=x, variogram_model=variogram.robust$var_model)
     
-    res.manual <- CrossPrediction(temperature, trend, kriging.manual)
-    res.classical <- CrossPrediction(temperature, trend, kriging.classical)
-    res.robust <- CrossPrediction(temperature, trend, kriging.robust)
+    res.manual    <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging.manual)
+    res.classical <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging.classical)
+    res.robust    <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging.robust)
     
-    manualResult[i] <- MSE(e=res.manual)
+    manualResult[i]    <- MSE(e=res.manual)
     classicalResult[i] <- MSE(e=res.classical)
-    robustResult[i] <- MSE(e=res.robust)
+    robustResult[i]    <- MSE(e=res.robust)
     i = i + 1 ## todo: find out how to avoid this construction
   }
   
@@ -74,9 +74,8 @@ ComparePredictionParameters <- function (data, residuals, temperature, trend, x,
     geom_line(data=data.frame("X"=lens, "Y"=manualResult), aes(x=X,y=Y)) + 
     geom_line(data=data.frame("X"=lens, "Y"=classicalResult), aes(x=X,y=Y), linetype="dashed") + 
     geom_line(data=data.frame("X"=lens, "Y"=robustResult), aes(x=X,y=Y), linetype="dotdash") + 
-    scale_x_continuous(breaks=lens) +
-    scale_y_continuous(breaks=seq(min(manualResult, classicalResult, robustResult), max(manualResult, classicalResult, robustResult), .3))
-  ggsave(plot=plot.check, file="figures/check-dep.png", width=7, height=4)
+    scale_x_continuous(breaks=lens) 
+  ggsave(plot=plot.check, file=filename, width=7, height=4)
 }
 
 ### This comparison is worth than above one, the estimation of it's goodness is simpler // TODO: check, maybe it should be removed. 
@@ -263,6 +262,9 @@ mse.robust    <- MSE(CrossPrediction(src.data$temperature, src.data$year, resear
 res.ma <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.manual, "figures/variogram/cross-prediction-manual.png")
 res.cl <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.classical, "figures/variogram/cross-prediction-classical.png")
 res.ro <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust, "figures/variogram/cross-prediction-robust.png")
+
+# Find best cutoff parameter
+ComparePredictionParameters(research.data.residuals, research.data.trend, ConvertYearsToNum(research.data$year), filename="figures/variogram/parameter-comparison.png")
 
 # Best prediction as we investigated is for robust kriging with cutoff=6. Let's make it!
 variogram.robust.best <- ComputeVariogram(data=research.data.residuals, x=ConvertYearsToNum(research.data$year), cressie=TRUE, cutoff=6, width=FALSE,

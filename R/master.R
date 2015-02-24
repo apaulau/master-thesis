@@ -59,7 +59,7 @@ research.data.pearson <- ntest.PearsonChi2(data=research.data$temperature, filen
 research.data.ks      <- ntest.KolmogorovSmirnov(data=research.data$temperature, filename="out/original/ks-test.tex")
 
 ## Normal Quantile-Quantile plot // TODO: check when it appears in text
-plot.data.qq <- DrawQuantileQunatile(data=research.data$temperature, filename="original/quantile.png")
+plot.data.qq <- DrawQuantileQuantile(data=research.data$temperature, filename="original/quantile.png")
 
 ## Scatter plot with regression line
 plot.data.scatter <- DrawScatterPlot(research.data, filename="original/scatterplot.png", kDateBreaks);
@@ -93,8 +93,8 @@ plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="residual/
 
 ## Descriptive statistics for residuals
 research.residuals.dstats <- dstats.describe(research.residuals$temperature, locale=TRUE)
-print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residuals_dstats"),
-      file="out/residuals_dstats.tex")
+print(xtable(research.residuals.dstats, caption="Описательные статистики для остатков.", label="table:residual_dstats"),
+      file="out/residual/dstats.tex")
 
 ## Basic histogram for residuals / seems like the same as for non-residuals
 plot.residuals.hist <- DrawHistogram(data=research.residuals, filename="residual/histogram.png")
@@ -105,7 +105,7 @@ research.data.pearson <- ntest.PearsonChi2(data=research.residuals$temperature, 
 research.data.ks      <- ntest.KolmogorovSmirnov(data=research.residuals$temperature, filename="out/residual/ks-test.tex")
 
 ## Normal Quantile-Quantile plot for residuals
-plot.residuals.qq <- DrawQuantileQunatile(data=research.residuals$temperature, filename="residual/qunatile.png")
+plot.residuals.qq <- DrawQuantileQuantile(data=research.residuals$temperature, filename="residual/quantile.png")
 
 ## Auto Correlation Function plot // TODO: check the style
 plot.residuals.acf <- DrawAutoCorrelationFunction(data=research.data$temperature, filename="residual/acf.png")

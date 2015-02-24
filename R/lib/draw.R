@@ -40,7 +40,7 @@ DrawHistogram <- function (data, filename="", binwidth=1.2) {
   plot.hist
 }
 
-DrawQuantileQunatile <- function (data, filename="") {
+DrawQuantileQuantile <- function (data, filename="") {
   plot.qq <- ggqqp(data)
   
   if (nchar(filename)) {

@@ -30,7 +30,7 @@
 % \makeatletter
 % \renewcommand{\appendix}{\par%
 %   \setcounter{section}{0}%
-%   \setcounter{subsection}{0}% 
+%   \setcounter{subsection}{0}%
 %   \renewcommand{\appendixname}{ПРИЛОЖЕНИЕ}%
 %   \def\sectionname{\appendixname}%
 %   \addtocontents{toc}{section}%
@@ -46,19 +46,19 @@
 
 % \addcontentsline{toc}{chapter}{Приложение~\thesection{}~#1}}
 
-% \makeatletter 
-% \renewcommand\appendix{\par 
-% \setcounter{section}{0}% 
-% \setcounter{subsection}{0}% 
-% \gdef\thesection{ \@Asbuk\c@section}} 
-% \makeatother 
+% \makeatletter
+% \renewcommand\appendix{\par
+% \setcounter{section}{0}%
+% \setcounter{subsection}{0}%
+% \gdef\thesection{ \@Asbuk\c@section}}
+% \makeatother
 
 \definecolor{mauve}{rgb}{224, 176, 255}
 
 \lstset{
 	language=R,										% выбор языка для подсветки (здесь это R)
 	basicstyle=\scriptsize\ttfamily,				% размер и начертание шрифта для подсветки кода
-	commentstyle=\ttfamily\color{gray},				
+	commentstyle=\ttfamily\color{gray},
 	numbers=left,									% где поставить нумерацию строк (слева\справа)
 	numberstyle=\tiny\color{gray}, % стиль шрифта для номеров строк
 	stepnumber=1,									% размер шага между двумя номерами строк
@@ -68,16 +68,16 @@
 	showstringspaces=false,							% показывать или нет пробелы в строках
 	showtabs=false,									% показывать или нет табуляцию в строках
 	frame=single,									% рисовать рамку вокруг кода
-	rulecolor=\color{black},        
+	rulecolor=\color{black},
 	tabsize=2,										% размер табуляции по умолчанию равен 2 пробелам
-	captionpos=b,									% позиция заголовка вверху [t] или внизу [b] 
+	captionpos=b,									% позиция заголовка вверху [t] или внизу [b]
 	breaklines=true,								% автоматически переносить строки (да\нет)
 	breakatwhitespace=false,						% переносить строки только если есть пробел
 	title=\lstname,
- 	keywordstyle={},      
-  	commentstyle={},   
-  	stringstyle=\ttfamily,      
-  	escapeinside={\%*}{*)},         
+ 	keywordstyle={},
+  	commentstyle={},
+  	stringstyle=\ttfamily,
+  	escapeinside={\%*}{*)},
 	morekeywords={acf,ar,arima,arima.sim,colMeans,colSums,is.na,is.null,%
     	mapply,ms,na.rm,nlmin,replicate,row.names,rowMeans,rowSums,seasonal,%
     	sys.time,system.time,ts.plot,which.max,which.min}

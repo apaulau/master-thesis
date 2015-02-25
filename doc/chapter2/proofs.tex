@@ -1,21 +1,48 @@
 \newpage
 
 \chapter{Оценка вариограммы внутренне стационарного гауссовского случайного процесса и ее свойства}
-\label{c:theory}
+\label{c:variogram_estimation}
 
-\section{Оценка вариограммы гауссовского случайного процесса} % (fold)
-\label{sec:variogram_theory}
+Рассмотрим внутренне стационарный гауссовский случайный процесс с дискретным временем $ X(t), t \in \mathbb{Z} = \{ 0, \pm 1, \pm 2, \dots \} $.
 
-Вычислим математическое ожидание введённой оценки
-\begin{eqnarray*}
-	& E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \} = \\
-	& = [\text{так как процесс является внутренне стационарным}] = \\ %TODO: change it
-	& = \frac{1}{n - h} \sum_{t = 1}^{n - h} 2 \gamma(h) = 2 \gamma(h).
-\end{eqnarray*}
+Не нарушая общности, далее считаем $ m(t) \equiv 0 $, $ V(t) \equiv \sigma^2 , t \in \mathbb{Z}$.
 
-Таким образом оценка является несмещённой.
+Вариограмма процесса $ X(t) $,
+\begin{equation*}
+	2 \gamma(h) = V \{ X(t + h) - X(t) \}, ~ t,h \in \mathbb{Z},
+\end{equation*}
+является неизвестной.
 
-Далее, найдём ковариацию:
+Наблюдается процесс $ X(t), t \in \mathbb{Z} $, и регистрируются наблюдения $ X(1), \dots, X(n) $ в последовательные моменты времени $ 1, \dots, n $.
+
+В качестве оценки вариограммы рассмотрим статистику вида:
+\begin{equation}
+\label{eq:var_estimation}
+	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
+\end{equation}
+где $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}$; $ \tilde{\gamma}(h) = 0, \vert h \vert \ge n $.
+
+\section{Математическое ожидание оценки вариограммы} % (fold)
+\label{sec:variogram_expected}
+
+Вычислим математическое ожидание введённой оценки (\ref{eq:var_estimation}):
+\begin{equation*}
+	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \}.
+\end{equation*}
+
+Из равенства (\ref{eq:E_diff_inc}) получаем, что
+\begin{equation*}
+	E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} 2 \gamma(h) = 2 \gamma(h).
+\end{equation*}
+
+Таким образом, оценка (\ref{eq:var_estimation}) для вариограммы рассматриваемой модели является \textbf{несмещённой}.
+
+% section variogram_expected (end)
+
+\section{Второй момент оценки вариограммы} % (fold)
+\label{sec:variogram_second_moment}
+
+Найдём ковариацию оценок вариограммы при различных значениях $h$:
 \begin{eqnarray}
 \label{eq:cov_support}
 \nonumber
@@ -27,7 +54,7 @@
 	& = \frac{1}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
 \end{eqnarray}
 
-По определению, $ cov\{ a, b \} = corr\{ a, b \} \sqrt{ V\{ a \} V\{ b \} } $, тогда
+Из свойства \ref{rem:corr_cov} корреляции получаем, что
 \begin{eqnarray*}
 	& cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \\
 	& = corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
@@ -47,13 +74,25 @@
 	& = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} ( \frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} )^2
 \end{eqnarray*}
 
-Воспользовавшись леммой 3 из \cite{tsekhavaya-brest}, получаем соотношение
+Воспользовавшись леммой 3 из \cite{tsekhavaya-brest} и определением корреляционной функции, получаем соотношение
 \begin{eqnarray}
 \nonumber
 \label{eq:cov_base}
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times \\
 	& \times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2
 \end{eqnarray}
+
+Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+\begin{eqnarray*}
+\nonumber
+	& V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n - h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - \gamma(t - s) - \gamma(t + h - s - h) )^2 = \\
+	& = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2.
+\end{eqnarray*}
+
+% section variogram_second_moment (end)
+
+\section{Новый раздел (без названия)} % (fold)
+\label{sec:new_section}
 
 В \eqref{eq:cov_base} сделаем следующую замену переменных
 \begin{equation*}
@@ -168,4 +207,4 @@
 	& - \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m + h_1) + \gamma(m - h_2) - \gamma(m + h_1 - h_2) - \gamma(m))^2 ) )
 \end{eqnarray*}
 
-% section variogram_theory (end)
+% section new_section (end)

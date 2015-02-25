@@ -15,7 +15,7 @@
 \end{Definition}
 
 \begin{Definition}
-	Если $ \mathbb{T} = \mathbb{Z} = {0, \pm 1, \pm 2, \dots} $, или $ \mathbb{T} \subset \mathbb{Z} $, то говорят, что $ X(t), t \in \mathbb{T} $, --- \textit{случайный процесс с дискретным временем}.
+	Если $ \mathbb{T} = \mathbb{Z} = \{ 0, \pm 1, \pm 2, \dots \} $, или $ \mathbb{T} \subset \mathbb{Z} $, то говорят, что $ X(t), t \in \mathbb{T} $, --- \textit{случайный процесс с дискретным временем}.
 \end{Definition}
 
 \begin{Definition}
@@ -61,6 +61,7 @@
 \end{Definition}
 
 \begin{Remark}
+\label{rem:corr_cov}
 	Имеет место следующее соотношение, связывающее ковариационную и корреляционную функции:
 	\begin{equation*}
 		corr\{ X(t_1), X(t_2)\} = \frac{cov\{ X(t_1), X(t_2) \}}{\sqrt{ V\{ X(t_1) \} V\{ X(t_2) \} }},
@@ -104,10 +105,13 @@
 
 В дальнейшем рассматриваем случайные процессы с дискретным временем.
 
-Пусть $ X(t), t \in \mathbb{Z} $ --- внутренне стационарный гауссовский случайный процесс с нулевым математическим ожиданием, дисперсией $ \sigma^2 $ и неизвестной вариограммой.
-\begin{equation*}
-	2 \gamma(h) = V \{ X(t + h) - X(t) \}, ~ t,h \in \mathbb{Z}.
-\end{equation*}
+\begin{Remark}
+	Если $ X(t), t \in \mathbb{Z} $, --- внутренне стационарный гауссовский случайный процесс, то
+	\begin{equation*}
+		( X(t + h) - X(t) )^2 = 2 \gamma(h)\chi_1^2,
+	\end{equation*}
+	где $\chi_1^2$ --- случайная величина, распределенная по закону \textit{хи-квадрат} с одной степенью свободы.
+\end{Remark}
 
 Заметим, что
 \begin{equation}

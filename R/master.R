@@ -107,7 +107,7 @@ research.data.ks      <- ntest.KolmogorovSmirnov(data=research.residuals$tempera
 ## Normal Quantile-Quantile plot for residuals
 plot.residuals.qq <- DrawQuantileQuantile(data=research.residuals$temperature, filename="residual/quantile.png")
 
-## Auto Correlation Function plot // TODO: check the style
+## Auto Correlation Function plot
 plot.residuals.acf <- DrawAutoCorrelationFunction(data=research.data$temperature, filename="residual/acf.png")
 
 ## Box-Ljung and adf tests (some kind of stationarity and independence tests) // TODO: need to know exactly in theory what it is

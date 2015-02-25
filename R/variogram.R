@@ -219,7 +219,7 @@ CrossPrediction <- function (temperature, years, trend, kriging, file_prediction
 
 ### src <- read.csv(file="data/batorino_july.csv", header=TRUE, sep=";", nrows=38, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
-# Completes trend values to source observation number
+# Completes trend values up to source observation number
 computeTrend <- function (fit, future=0) {
   c(sapply(c(1 : (src.nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))
 }

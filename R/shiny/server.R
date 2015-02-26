@@ -5,6 +5,7 @@ library(dplyr)
 
 source("../lib/dstats.R")     # descriptive statistics module
 source("../lib/draw.R")       # helpers for drawing
+source("../lib/ntest.R")       # helpers for drawing
 
 ## Read the data / pattern: year;temperature
 path.data <- "../../data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -37,34 +38,43 @@ shinyServer(function(input, output) {
     scale_numeric("x", nice = FALSE) %>%
     bind_shiny("series", "series_ui")
   
-  output$series_table <- renderTable({
+  output$series_table <- renderDataTable({
     #-webkit-column-count=x
     series()
   })
   output$histogram <- renderPlot({
     datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
     width <- binwidth()
+    plot <- NA
     if (width > 0) {
-      DrawHistogram(data=series(), binwidth=width)
+      plot <- DrawHistogram(data=series(), binwidth=width, fit=input$dnorm)
     } else {
-      DrawHistogram(data=series())
+      plot <- DrawHistogram(data=series(), fit=input$dnorm)
     }
+    
+    if (input$density) {
+      plot <- plot + geom_density(colour="#999999", fill="#009E73", alpha=.5)
+    } 
+    
+    plot
     #ifelse(width > 0, , )
   })
   
-  output$sturges <- renderText({
-    paste("Sturges rule:", sturges())
-  })
-  
-  output$scott <- renderText({
-    paste("Scott's choice for a normal distribution:", scott())
-  })
-  
-  output$fd <- renderText({
-    paste("Freedman-Diaconis choice:", fd())
+  output$rule <- renderText({
+    format(eval(parse(text=input$rule)), digits=3)
   })
   
   output$dstats <- renderTable({
     dstats.describe(series()$temperature)
   })
+  
+  output$normality <- renderUI({
+    test <- eval(parse(text=paste(input$ntest, "(data=series()$temperature)")))
+    statistic <- paste("<b>Statistic:</b>", format(test$statistic[[1]]))
+    p.value <- paste("<b>P-value:</b>", format(test$p.value))
+    conclusion <- paste(ifelse(p.value <= .05, "Null hypothesis is rejected.", "Failed to reject null hypothesis"))
+    HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
+  })
+  
+  
 })

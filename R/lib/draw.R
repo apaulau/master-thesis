@@ -27,11 +27,14 @@ DrawScatterPlot <- function (data, filename="", datebreaks) {
   plot.scatter
 }
 
-DrawHistogram <- function (data, filename="", binwidth=1.2) {
+DrawHistogram <- function (data, filename="", binwidth=1.2, fit=TRUE) {
   plot.hist <- ggplot(data, aes(x=temperature), geom='blank') +   
     geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", binwidth=binwidth, alpha=.6) +
-    stat_function(fun=dnorm, colour='red', arg=list(mean=mean(data$temperature), sd=sd(data$temperature))) +    
     labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
+  
+  if (fit) {
+    plot.hist <- plot.hist + stat_function(fun=dnorm, colour="#D55E00", arg=list(mean=mean(data$temperature), sd=sd(data$temperature)))
+  }
   
   if (nchar(filename)) {
     plot.save(plot.hist, filename=filename)

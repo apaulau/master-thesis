@@ -116,5 +116,4 @@ to.file(research.residuals.box, "out/residual/ljung-test.tex")
 research.residuals.adf <- adf.test(research.residuals$temperature)
 to.file(research.residuals.adf, "out/residual/stationarity-test.tex")
 
-
-source("R/variogram.R")
+source("R/predictor.R")

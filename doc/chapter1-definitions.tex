@@ -115,10 +115,16 @@
 	где $ 2 \gamma(t_1 - t_2) $ --- вариограмма рассматриваемого процесса, $ t_1, t_2 \in \mathbb{R} $.
 \end{Definition}
 
-%TODO Определение гауссовского случайного процесса (у которого любая совместная фр отсчетов является нормальной фр)
+\begin{Definition}
+    Случайный процесс $ X(t), t \in \mathbb{R} $ называется гауссовским, если любые $ n $ его отсчетов $ X(t_1), X(t_2), \ldots, X(t_n), $ где $ t_1, t_2, \ldots, t_n \in \mathbb{R} $ имеют n-мерное нормальное распределение, то есть
+	\begin{equation}
+	    F_n(\cdot) \equiv \Phi_n(\cdot) \forall n.
+	\end{equation}
+\end{Definition}
 
 В дальнейшем рассматриваем случайные процессы с дискретным временем.
 
+%TODO в замечании вставить ссылку на какую-нибудь из статей Цеховой, чтобы было понятно, откуда оно взялось
 \begin{Remark}
 	Если $ X(t), t \in \mathbb{Z} $, --- внутренне стационарный гауссовский случайный процесс, то
 	\begin{equation*}
@@ -127,7 +133,7 @@
 	где $\chi_1^2$ --- случайная величина, распределенная по закону \textit{хи-квадрат} с одной степенью свободы.
 \end{Remark}
 
-Заметим, что
+При этом
 \begin{equation}
 \label{eq:E_diff_inc}
 	E \{ X(t + h) - X(t) \}^2 = 2 \gamma(h),
@@ -136,10 +142,3 @@
 \label{eq:V_diff_inc}
 	V \{ X(t + h) - X(t) \}^2 = 2 (2 \gamma(h))^2.
 \end{equation}
-
-В качестве оценки вариограммы рассмотрим статистику вида:
-\begin{equation}
-	\label{eq:var_est}
-	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
-\end{equation}
-где $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}$; $ \tilde{\gamma}(h) = 0, |h| \ge n $.

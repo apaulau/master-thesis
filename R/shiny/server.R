@@ -31,6 +31,9 @@ shinyServer(function(input, output) {
     data <- series()$temperature
     (max(data)-min(data)) / nclass.scott(data)
   })
+  datebreaks <- reactive({
+    seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
+  })
 
   series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
@@ -47,7 +50,6 @@ shinyServer(function(input, output) {
     plot <- NA
     
     if (input$base_plot_trigger == "histogram") {
-      datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
       width <- binwidth()
       
       if (width > 0) {
@@ -89,12 +91,25 @@ shinyServer(function(input, output) {
     result <- test(data=series()$temperature)
     statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
     p.value <- paste("<b>P-value:</b>", format(result$p.value))
-    conclusion <- paste(ifelse(p.value <= .05, "Null hypothesis is rejected.", "Failed to reject null hypothesis"))
+    conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis is rejected.", "Failed to reject null hypothesis"))
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
-  output$correlation <- renderPlot({
-    
+  output$scatterplot <- renderPlot({
+    DrawScatterPlot(series(), datebreaks=datebreaks());
   })
   
+  output$correlation <- renderText({
+    format(cor(series()$temperature, c(1:(input$range[2] - input$range[1] + 1))), digits=5)
+  })
+  
+  output$ctest <- renderUI({    
+    result <- cor.test(series()$temperature, c(1:(input$range[2] - input$range[1] + 1)), method="pearson")
+    statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
+    df <- paste("<b>Degrees of freedom:</b>", format(result$parameter[["df"]]))
+    p.value <- paste("<b>P-value:</b>", format(result$p.value))
+    ci <- paste("<b>", attr(test$conf.int, "conf.level") * 100, "percent confidence interval:</b>", "[", format(test$conf.int[1], digits=4), ";", format(test$conf.int[2], digits=4), "]")
+    conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis (correlation equals 0) is rejected.", "Failed to reject null hypothesis (correlation equals 0)"))
+    HTML(paste(statistic, p.value, df, ci, conclusion, sep = '<br/>'))
+  })
 })

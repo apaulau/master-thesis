@@ -75,18 +75,17 @@ shinyUI(navbarPage("Temperature Analysis",
           ),
           
           tabPanel("Correlation",
-            plotOutput("scatter"),
+            plotOutput("scatterplot"),
             fluidRow(
-#               column(5,
-#                 h4("Suggested bin width"),
-#                 textOutput("rule"),
-#                 h4("Normality test"),
-#                 htmlOutput("normality")
-#               ),
-#               column(2),
-#               column(5,
-#                 tableOutput("dstats")
-#               )
+              column(4,
+                h4("Correlation Coefficient"),
+                textOutput("correlation")
+              ),
+              column(1),
+              column(7,
+                h4("Correlation Significanse"),
+                htmlOutput("ctest")
+              )
             )
           )
           

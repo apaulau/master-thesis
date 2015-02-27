@@ -34,17 +34,19 @@ shinyServer(function(input, output) {
   datebreaks <- reactive({
     seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
   })
+  model <- reactive({
+    lm(series()$temperature ~ c(input$range[1]:input$range[2]))
+  })
+  
+  output$datasource <- renderDataTable({
+    series()
+  })
 
   series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
-    bind_shiny("series", "series_ui")
-  
-  output$series_table <- renderDataTable({
-    #-webkit-column-count=x
-    series()
-  })
+    bind_shiny("overview", "overview_ui")
   
   output$base_plot <- renderPlot({
     plot <- NA
@@ -66,7 +68,6 @@ shinyServer(function(input, output) {
     }
     
     plot
-    #ifelse(width > 0, , )
   })
   
   output$rule <- renderText({
@@ -95,9 +96,13 @@ shinyServer(function(input, output) {
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
-  output$scatterplot <- renderPlot({
-    DrawScatterPlot(series(), datebreaks=datebreaks());
-  })
+  series %>% ggvis(~year, ~temperature) %>% 
+    layer_points() %>% # could be customizable, e.g. by size, fill
+    layer_model_predictions(model="lm", se=FALSE, stroke := "#0072B2") %>%
+    add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
+    scale_numeric("x", nice = FALSE) %>%
+    bind_shiny("scatterplot", "scatter_ui")
   
   output$correlation <- renderText({
     format(cor(series()$temperature, c(1:(input$range[2] - input$range[1] + 1))), digits=5)
@@ -111,5 +116,33 @@ shinyServer(function(input, output) {
     ci <- paste("<b>", attr(test$conf.int, "conf.level") * 100, "percent confidence interval:</b>", "[", format(test$conf.int[1], digits=4), ";", format(test$conf.int[2], digits=4), "]")
     conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis (correlation equals 0) is rejected.", "Failed to reject null hypothesis (correlation equals 0)"))
     HTML(paste(statistic, p.value, df, ci, conclusion, sep = '<br/>'))
+  })
+  
+  linear <- function(x, a, b) a * x + b
+  line <- reactive({
+    data.frame(
+      x_rng = breaks(), 
+      y_rng = sapply(c((input$range[1]):(input$range[2])), FUN=linear, a=coef(model())[2], b=coef(model())[1])
+    )
+  })
+  
+  mix <- reactive({
+    data.frame(series(), line())
+  })
+  
+  mix %>% ggvis(x=~year, y=~temperature) %>%
+    layer_paths(x = ~x_rng, y = ~y_rng, stroke := "blue") %>%
+    layer_points(x=~year, y=~temperature) %>% layer_paths() %>% 
+    add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
+    scale_numeric("x", nice = FALSE) %>%
+    bind_shiny("regression", "regression_ui")
+  
+  output$lm <- renderUI({
+    m <- model()
+    withMathJax(sprintf("$$y = %.03f x + %.03f $$", coef(model())[2], coef(model())[1]))
+#     withMathJax(
+#       helpText(paste("$$ y = ", format(coef(model())[2], digits=4), "x +", format(coef(model())[2], digits=4), "$$"))  
+#     )
   })
 })

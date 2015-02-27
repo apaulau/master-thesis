@@ -38,7 +38,8 @@ shinyUI(navbarPage("Temperature Analysis",
         conditionalPanel(
           condition = "input.source_panel = 'Correlation'"
         ),
-        uiOutput("series_ui")
+        uiOutput("overview_ui"),
+        uiOutput("scatter_ui")
       ),
       
       mainPanel(
@@ -46,12 +47,12 @@ shinyUI(navbarPage("Temperature Analysis",
           id="source_panel",
           tabPanel("Data",
             br(),
-            dataTableOutput("series_table")
+            dataTableOutput("datasource")
           ),
           
           tabPanel("Overview",
             br(),
-            ggvisOutput("series")
+            ggvisOutput("overview")
           ),
           
           tabPanel("Base",
@@ -75,7 +76,7 @@ shinyUI(navbarPage("Temperature Analysis",
           ),
           
           tabPanel("Correlation",
-            plotOutput("scatterplot"),
+            ggvisOutput("scatterplot"),
             fluidRow(
               column(4,
                 h4("Correlation Coefficient"),
@@ -87,10 +88,23 @@ shinyUI(navbarPage("Temperature Analysis",
                 htmlOutput("ctest")
               )
             )
+          ),
+          
+          tabPanel("Regression",
+            ggvisOutput("regression"),
+            fluidRow(
+              column(4,
+                h4("Linear Model"),
+                uiOutput("lm")
+              )
+            )
           )
           
         )
       )
     )
-  )
+  ),
+  
+  tabPanel("Residuals")
+  
 ))

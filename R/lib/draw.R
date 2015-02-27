@@ -15,8 +15,8 @@ DrawDataRepresentation <- function (data, filename="", datebreaks) {
 # plot is based on some magic; investigate again what is this magic is // TODO: look up can I introduce new variable with y-breaks
 DrawScatterPlot <- function (data, filename="", datebreaks) {
   plot.scatter <- ggplot(data, aes(x=year, y=temperature)) + 
-    geom_point() + geom_abline(intercept=-194.632277, slope=.107706, color="blue") +
-    scale_x_continuous(breaks=datebreaks) + 
+    geom_point() + geom_smooth(method="lm", se=FALSE, fullrange=TRUE) +
+    scale_x_continuous(breaks=datebreaks, limits=c(min(datebreaks), max(datebreaks))) + 
     scale_y_continuous(breaks=seq(10, 30, 1), limits=c(14, 26)) +
     theme(axis.text.x=element_text(angle=45, hjust=1)) + xlab("Год наблюдения") + ylab("Температура, ºС")
   

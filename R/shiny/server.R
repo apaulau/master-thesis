@@ -127,11 +127,15 @@ shinyServer(function(input, output) {
   })
   
   mix <- reactive({
-    data.frame(series(), line())
+    if (input$residuals_trigger == "src") {
+      data.frame(series(), line())
+    } else {
+      data.frame(temperature=model()$residuals, year = series()$year, x_rng=breaks(), y_rng=rep(0, input$range[2] - input$range[1] + 1))
+    }
   })
   
   mix %>% ggvis(x=~year, y=~temperature) %>%
-    layer_paths(x = ~x_rng, y = ~y_rng, stroke := "blue") %>%
+    layer_paths(x = ~x_rng, y = ~y_rng, stroke := "blue") %>% # add checkbox to show or not
     layer_points(x=~year, y=~temperature) %>% layer_paths() %>% 
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%

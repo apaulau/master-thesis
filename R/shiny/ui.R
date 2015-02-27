@@ -36,7 +36,12 @@ shinyUI(navbarPage("Temperature Analysis",
           )
         ),
         conditionalPanel(
-          condition = "input.source_panel = 'Correlation'"
+          condition = "input.source_panel = 'Regression'",
+          radioButtons("residuals_trigger", "Subtract trend:",
+            c("No" = "src",
+              "Yes" = "residuals"),
+            inline=TRUE
+          )
         ),
         uiOutput("overview_ui"),
         uiOutput("scatter_ui")

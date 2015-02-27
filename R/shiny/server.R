@@ -42,26 +42,38 @@ shinyServer(function(input, output) {
     #-webkit-column-count=x
     series()
   })
-  output$histogram <- renderPlot({
-    datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
-    width <- binwidth()
+  
+  output$base_plot <- renderPlot({
     plot <- NA
-    if (width > 0) {
-      plot <- DrawHistogram(data=series(), binwidth=width, fit=input$dnorm)
-    } else {
-      plot <- DrawHistogram(data=series(), fit=input$dnorm)
-    }
     
-    if (input$density) {
-      plot <- plot + geom_density(colour="#999999", fill="#009E73", alpha=.5)
-    } 
+    if (input$base_plot_trigger == "histogram") {
+      datebreaks <- seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
+      width <- binwidth()
+      
+      if (width > 0) {
+        plot <- DrawHistogram(data=series(), binwidth=width, fit=input$dnorm)
+      } else {
+        plot <- DrawHistogram(data=series(), fit=input$dnorm)
+      }
+      
+      if (input$density) {
+        plot <- plot + geom_density(colour="#999999", fill="#009E73", alpha=.5)
+      } 
+    } else {
+      plot <- DrawQuantileQuantile(data=series()$temperature)
+    }
     
     plot
     #ifelse(width > 0, , )
   })
   
   output$rule <- renderText({
-    format(eval(parse(text=input$rule)), digits=3)
+    rule <- switch(input$rule,
+                   sturges = sturges,
+                   scott = scott,
+                   fd = fd)
+    
+    format(rule(), digits=3)
   })
   
   output$dstats <- renderTable({
@@ -69,12 +81,20 @@ shinyServer(function(input, output) {
   })
   
   output$normality <- renderUI({
-    test <- eval(parse(text=paste(input$ntest, "(data=series()$temperature)")))
-    statistic <- paste("<b>Statistic:</b>", format(test$statistic[[1]]))
-    p.value <- paste("<b>P-value:</b>", format(test$p.value))
+    test <- switch(input$ntest,
+                   shapiro = ntest.ShapiroWilk,
+                   pearson = ntest.PearsonChi2,
+                   ks = ntest.KolmogorovSmirnov)
+    
+    result <- test(data=series()$temperature)
+    statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
+    p.value <- paste("<b>P-value:</b>", format(result$p.value))
     conclusion <- paste(ifelse(p.value <= .05, "Null hypothesis is rejected.", "Failed to reject null hypothesis"))
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
+  output$correlation <- renderPlot({
+    
+  })
   
 })

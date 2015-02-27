@@ -11,21 +11,32 @@ shinyUI(navbarPage("Temperature Analysis",
         sliderInput("range", label="Range",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
-          condition = "input.source_panel == 'Histogram'",
-          sliderInput("binwidth", label="Bin width",
-            min=0, max=5, value=1.15, step=.05),
-          checkboxInput('dnorm', 'Show density'),
-          checkboxInput('density', 'Show normal density'),
-          selectInput("rule", label="Rule type",
-            c("Sturges" = "sturges()",
-              "Scott's" = "scott()",
-              "Freedman-Diaconis" = "fd()")
+          condition = "input.source_panel == 'Base'",
+          radioButtons("base_plot_trigger", "Plot type:",
+            c("Histogram" = "histogram",
+              "Scatterplot" = "scatterplot"),
+            inline=TRUE
+          ),
+          conditionalPanel(
+            condition = "input.base_plot_trigger == 'histogram'",
+            sliderInput("binwidth", label="Bin width",
+              min=0, max=5, value=1.15, step=.05),
+            checkboxInput('dnorm', 'Show density'),
+            checkboxInput('density', 'Show normal density'),
+            selectInput("rule", label="Rule type",
+              c("Sturges" = "sturges",
+                "Scott's" = "scott",
+                "Freedman-Diaconis" = "fd")
+            )
           ),
           selectInput("ntest", label="Normality test",
-            c("Shapiro-Wilk" = "ntest.ShapiroWilk",
-              "Pearson Chi^2" = "ntest.PearsonChi2",
-              "Kolmogorov-Smirnov" = "ntest.KolmogorovSmirnov")
+            c("Shapiro-Wilk" = "shapiro",
+              "Pearson Chi^2" = "pearson",
+              "Kolmogorov-Smirnov" = "ks")
           )
+        ),
+        conditionalPanel(
+          condition = "input.source_panel = 'Correlation'"
         ),
         uiOutput("series_ui")
       ),
@@ -38,17 +49,21 @@ shinyUI(navbarPage("Temperature Analysis",
             dataTableOutput("series_table")
           ),
           
-          tabPanel("Time Series",
+          tabPanel("Overview",
             br(),
             ggvisOutput("series")
           ),
           
-          tabPanel("Histogram",
-            plotOutput("histogram"),
+          tabPanel("Base",
+            plotOutput("base_plot"),
             fluidRow(
               column(5,
-                h4("Suggested bin width"),
-                textOutput("rule"),
+                conditionalPanel(
+                  condition = "input.base_plot_trigger == 'histogram'",
+                  h4("Suggested bin width"),
+                  textOutput("rule")
+                ),
+                
                 h4("Normality test"),
                 htmlOutput("normality")
               ),
@@ -56,6 +71,22 @@ shinyUI(navbarPage("Temperature Analysis",
               column(5,
                 tableOutput("dstats")
               )
+            )
+          ),
+          
+          tabPanel("Correlation",
+            plotOutput("scatter"),
+            fluidRow(
+#               column(5,
+#                 h4("Suggested bin width"),
+#                 textOutput("rule"),
+#                 h4("Normality test"),
+#                 htmlOutput("normality")
+#               ),
+#               column(2),
+#               column(5,
+#                 tableOutput("dstats")
+#               )
             )
           )
           

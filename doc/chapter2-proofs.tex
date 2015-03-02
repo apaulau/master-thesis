@@ -21,6 +21,28 @@
 \section{Первые два момента оценки вариограммы} % (fold)
 \label{sec:variogram_moments}
 
+Найдем выражения для первых двух моментов оценки вариограммы \eqref{eq:var_estimation}.
+\begin{Theorem}
+	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством \eqref{eq:var_estimation}, имеют место следующие соотношения:
+	\begin{equation}
+	\label{eq:est_ex}
+		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h), % DIRTY HACK
+	\end{equation}
+	\begin{equation*}
+		cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) =
+	\end{equation*}
+	\begin{equation}
+	\label{eq:est_cov}
+		= \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
+	\end{equation}
+	\begin{equation}
+	\label{eq:est_var}
+		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2,
+	\end{equation}
+	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(s), s \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+\end{Theorem}
+\begin{proof}
+
 Вычислим первый момент введённой оценки \eqref{eq:var_estimation}, используя свойства математического ожидания:
 \begin{equation*}
 	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \}.
@@ -64,7 +86,7 @@
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} ( \frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} )^2
 \end{multline*}
 
-Воспользовавшись леммой 3 из \cite{tsekhavaya-brest} и определением корреляционной функции, получаем соотношение
+Воспользовавшись леммой 3 из \cite{tsekhavaya-brest} и определением корреляционной функции, получаем соотношение \eqref{eq:est_cov}:
 \begin{eqnarray}
 \nonumber
 \label{eq:cov_base}
@@ -72,13 +94,14 @@
 	= \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2
 \end{eqnarray}
 
-Отсюда нетрудно получить соотношение для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+Отсюда нетрудно получить соотношение \eqref{eq:est_var} для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
 \begin{multline*}
 \nonumber
 	V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n - h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - \gamma(t - s) - \gamma(t + h - s - h) )^2 = \\
 	= \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2.
 \end{multline*}
 
+\end{proof}
 % section variogram_moments (end)
 
 \section{Асимптотическое поведение оценки вариограммы} % (fold)

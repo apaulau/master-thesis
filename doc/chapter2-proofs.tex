@@ -39,7 +39,7 @@
 	\label{eq:est_var}
 		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2,
 	\end{equation}
-	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(s), s \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(t), t \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
 \end{Theorem}
 \begin{proof}
 
@@ -106,6 +106,30 @@
 
 \section{Асимптотическое поведение оценки вариограммы} % (fold)
 \label{sec:new_section}
+
+Проанализируем асимптотическое поведение моментов второго порядка оценки \eqref{eq:var_estimation}.
+
+\begin{Theorem}
+	Если имеет место соотношение
+	\begin{equation}
+	\label{eq:var_abs}
+		\sum_{m = -\infty}^{+\infty} \vert \gamma(h) \vert < \infty,
+	\end{equation}
+	то
+	\begin{equation*}
+		\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = % DIRTY HACK
+	\end{equation*}
+	\begin{equation}
+	\label{eq:asymptotic_cov}
+		= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2,
+	\end{equation}
+	\begin{equation}
+	\label{eq:asymptotic_var}
+		\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
+	\end{equation}
+	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(t), t \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+\end{Theorem}
+\begin{proof}
 
 В \eqref{eq:cov_base} сделаем следующую замену переменных
 \begin{equation*}
@@ -298,7 +322,7 @@
 	% \end{split}
 \end{multline*}
 
-Ряд $ \sum\limits_{m = -\infty}^{+\infty} \gamma(h) $, следовательно сходится абсолютно $ \gamma(h) $ стремится к $ 0 $, при $ n \to \infty $, быстрее, чем $ \frac{1}{n} $. Тогда
+Из предположения теоремы \eqref{eq:var_abs} ряд $ \sum\limits_{m = -\infty}^{+\infty} \gamma(h) $, сходится абсолютно $ \gamma(h) $ следовательно стремится к $ 0 $, при $ n \to \infty $, быстрее, чем $ \frac{1}{n} $. Тогда
 $$ \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) $$
 стремится к $ 0 $, при $ m \to \infty $, быстрее, чем $\frac{1}{m}$, значит
 \begin{align*}
@@ -332,8 +356,10 @@ $$ \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) $$
 	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
 \end{equation*}
 
-Нетрудно видеть, что если $ h_1 = h_2 = h $, то
+Нетрудно видеть, что если положить $ h_1 = h_2 = h $, то
 \begin{equation*}
 	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
 \end{equation*}
+
+\end{proof}
 % section new_section (end)

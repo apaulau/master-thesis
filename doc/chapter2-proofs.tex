@@ -161,7 +161,6 @@
 
 Рассмотрим первый случай: $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \sum_{m = h_2 - h_1}^{0}\sum_{t = 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -170,7 +169,6 @@
 
 Заметим, что выражение под знаком суммы не зависит от $t$, получим:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + (n - h_1)\sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -179,7 +177,6 @@
 
 Вынесем $ n - h_1 $ из каждого слагаемого:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (1 + \frac{h_1 + m - h_2}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -188,7 +185,6 @@
 
 Раскроем скобки под знаками сумм:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -199,7 +195,6 @@
 
 Приведём подобные:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
@@ -208,7 +203,6 @@
 
 Во втором слагаемом сделаем замену переменных $ m = -(m + h_1 - h_2) $, получим:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	& - \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(-m - h_1) + \gamma(-m + h_2) - \gamma(-m - h_1 + h_2) - \gamma(-m))^2 - \\
@@ -217,7 +211,6 @@
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	& - \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
@@ -225,7 +218,6 @@
 
 Аналогично для случая $h_1 < h_2$:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{0}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \sum_{m = 1}^{h_2 - h_1}\sum_{t = m + 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -234,7 +226,6 @@
 
 Выражение под знаком суммы не зависит от $t$:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{0}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + (n - h_2)\sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -243,7 +234,6 @@
 
 Вынесем $ n - h_2 $ из каждого слагаемого:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{0} (1 + \frac{m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -252,7 +242,6 @@
 
 Раскроем скобки под знаками сумм:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{0} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} (m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -263,7 +252,6 @@
 
 Приведём подобные:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	& + \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
@@ -272,7 +260,6 @@
 
 Во втором слагаемом сделаем замену переменных $ m = -m $, в третьем $ m = m - h_1 + h_2 $, получим:
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	& - \frac{1}{n - h_2} \sum_{m = 0}^{n - h_2 - 1} m (\gamma(-m - h_2) + \gamma(-m + h_1) - \gamma(-m) - \gamma(-m + h_1 - h_2))^2 - \\
@@ -281,9 +268,59 @@
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
 \begin{eqnarray*}
-\nonumber
 	& cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	& \times (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	& - \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2)
 \end{eqnarray*}
+
+Найдём предел для случая $ h_1 > h_2 $:
+\begin{multline*}
+  % \begin{split}
+		\lim_{n \to \infty} (n - h_2) \frac{2}{n - h_2}(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) =  \\
+		= \lim_{n \to \infty} 2(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) = \\
+		= 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+		- 4 \lim_{n \to \infty} \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
+	% \end{split}
+\end{multline*}
+
+Ряд $ \sum\limits_{m = -\infty}^{+\infty} \gamma(h) $, следовательно сходится абсолютно $ \gamma(h) $ стремится к $ 0 $, при $ n \to \infty $, быстрее, чем $ \frac{1}{n} $. Тогда
+$$ \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) $$
+стремится к $ 0 $, при $ m \to \infty $, быстрее, чем $\frac{1}{m}$, значит
+\begin{align*}
+	\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \sim o(\frac{1}{m}) \\
+	(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \sim o(\frac{1}{m^2})
+\end{align*}
+
+Тогда ряд $ \sum\limits_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 $ сходится при $ n \to \infty $, а значит
+\begin{equation*}
+	\lim_{n \to \infty} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 = 0 \quad \text{и}
+\end{equation*}
+\begin{align}
+\nonumber
+	\lim_{n \to \infty} (n - h_2) \frac{2}{n - h_2}(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\ \nonumber
+	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) = \\
+	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
+\label{eq:asyfirst}
+\end{align}
+
+Рассуждая аналогично, получаем предел при $ h_1 < h_2 $:
+\begin{align}
+\nonumber
+	\lim_{n \to \infty} (n - h_1) \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\ \nonumber
+	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2) = \\
+	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
+\label{eq:asysecond}
+\end{align}
+
+Тогда, объединяя вместе \eqref{eq:asyfirst} и \eqref{eq:asysecond}, получаем:
+\begin{equation*}
+	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
+\end{equation*}
+
+Нетрудно видеть, что если $ h_1 = h_2 = h $, то
+\begin{equation*}
+	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
+\end{equation*}
 % section new_section (end)

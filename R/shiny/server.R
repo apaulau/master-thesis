@@ -3,12 +3,12 @@ library(ggplot2)  # eye-candy graphs
 library(ggvis)
 library(dplyr)
 
-source("../lib/dstats.R")     # descriptive statistics module
-source("../lib/draw.R")       # helpers for drawing
-source("../lib/ntest.R")       # helpers for drawing
+source("lib/dstats.R")     # descriptive statistics module
+source("lib/draw.R")       # helpers for drawing
+source("lib/ntest.R")      # helpers for drawing
 
 ## Read the data / pattern: year;temperature
-path.data <- "../../data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
+path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
 src.nrows <- 38
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
@@ -113,7 +113,7 @@ shinyServer(function(input, output) {
     statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
     df <- paste("<b>Degrees of freedom:</b>", format(result$parameter[["df"]]))
     p.value <- paste("<b>P-value:</b>", format(result$p.value))
-    ci <- paste("<b>", attr(test$conf.int, "conf.level") * 100, "percent confidence interval:</b>", "[", format(test$conf.int[1], digits=4), ";", format(test$conf.int[2], digits=4), "]")
+    ci <- paste("<b>", attr(result$conf.int, "conf.level") * 100, "percent confidence interval:</b>", "[", format(result$conf.int[1], digits=4), ";", format(result$conf.int[2], digits=4), "]")
     conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis (correlation equals 0) is rejected.", "Failed to reject null hypothesis (correlation equals 0)"))
     HTML(paste(statistic, p.value, df, ci, conclusion, sep = '<br/>'))
   })

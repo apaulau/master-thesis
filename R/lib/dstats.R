@@ -1,7 +1,7 @@
 # Descriptive statistics
 
 # Function for getting all descriptive statistics
-dstats.describe <- function(data, type, locale=FALSE) {
+dstats.describe <- function(data, type="", locale=FALSE) {
   stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
              dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
              dstats.range(data), dstats.quartile.range(data), dstats.variance(data),
@@ -9,8 +9,9 @@ dstats.describe <- function(data, type, locale=FALSE) {
              dstats.skew(data), dstats.std.error.skew(data), dstats.kurtosis(data),
              dstats.std.error.kurtosis(data))
   
-  dstats.write(data=data, type=type) ## TODO: need to improve -- now it computes two times the same things
-  
+  if(nchar(type)) {
+    dstats.write(data=data, type=type) ## TODO: need to improve -- now it computes two times the same things
+  }
   if (locale) {
     descr.row <- c("Среднее", "Медиана", "Нижний квартиль", "Верхний квартиль", 
                    "Минимум", "Максимум", "Размах", "Квартильный размах",

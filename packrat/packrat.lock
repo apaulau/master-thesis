@@ -1,5 +1,5 @@
 PackratFormat: 1.4
-PackratVersion: 0.4.2.1
+PackratVersion: 0.4.3
 RVersion: 3.1.2
 Repos: CRAN=http://cran.rstudio.com
 
@@ -20,8 +20,8 @@ Hash: 58ed04c8ef03f28e29f05c4d9c6cfa7a
 
 Package: MASS
 Source: CRAN
-Version: 7.3-35
-Hash: 2a7641e407ce2a484d5a587a4e30a9aa
+Version: 7.3-39
+Hash: 07a460fafc264e456aa1e7ae661a7194
 
 Package: R6
 Source: CRAN
@@ -33,6 +33,12 @@ Source: CRAN
 Version: 1.1-2
 Hash: 5203278413b09be06483c5ac1920bb05
 
+Package: RCurl
+Source: CRAN
+Version: 1.95-4.5
+Hash: 1187c1ea73013abf25f362a7e6da1046
+Requires: bitops
+
 Package: RJSONIO
 Source: CRAN
 Version: 1.3-0
@@ -40,14 +46,14 @@ Hash: 8b1341dfd547c90ed4b3365d5aa46a7b
 
 Package: RandomFields
 Source: CRAN
-Version: 3.0.44
-Hash: 0209ff8c1aa08210b9d2003f20720172
-Requires: colorspace, sp, spam, tcltk2, tkrplot
+Version: 3.0.62
+Hash: 138c15f42b8564fcb9b0ec8d60b4a01a
+Requires: sp
 
 Package: Rcpp
 Source: CRAN
-Version: 0.11.3
-Hash: d9cc0a13885961b2d004cf73b0fb68dd
+Version: 0.11.4
+Hash: 1f684f6afd28079e4e609b49f353e49f
 
 Package: aplpack
 Source: CRAN
@@ -69,6 +75,11 @@ Source: CRAN
 Version: 1.0-6
 Hash: cb26464a8321628636b547518994c931
 
+Package: brew
+Source: CRAN
+Version: 1.0-6
+Hash: 9d92cc5ac60123fdb7b0daa3ae83bf99
+
 Package: caTools
 Source: CRAN
 Version: 1.17.1
@@ -80,6 +91,13 @@ Source: CRAN
 Version: 1.2-4
 Hash: b775bd08a10f968fef582304b7c3ab9c
 
+Package: devtools
+Source: CRAN
+Version: 1.7.0
+Hash: 56919e22e0d3f7131e93bda1a869730e
+Requires: RCurl, digest, evaluate, httr, jsonlite, memoise, roxygen2,
+    rstudioapi, whisker
+
 Package: dichromat
 Source: CRAN
 Version: 2.0-0
@@ -87,13 +105,13 @@ Hash: 42be2136555fa4b6167605df56d8cd7c
 
 Package: digest
 Source: CRAN
-Version: 0.6.7
-Hash: deb9cb6ccd57d1514e04fe1f5b1dc8ca
+Version: 0.6.8
+Hash: 89dc4c8734dad5322bb3c5c2af09056f
 
 Package: dplyr
 Source: CRAN
 Version: 0.4.1
-Hash: a1b687b41037f4977dcf25387f0c1602
+Hash: 4ce03ad26fb9592dda1274f72c5d3257
 Requires: BH, DBI, R6, Rcpp, assertthat, lazyeval, magrittr
 
 Package: evaluate
@@ -128,8 +146,8 @@ Requires: assertthat, dplyr, htmltools, jsonlite, lazyeval, magrittr,
 
 Package: gstat
 Source: CRAN
-Version: 1.0-19
-Hash: b7dd668488a1b3403afa6e0d05ba319d
+Version: 1.0-21
+Hash: 356bd0a1d9a835657cf6a77fe2da581b
 Requires: FNN, lattice, sp, spacetime, zoo
 
 Package: gtable
@@ -157,8 +175,14 @@ Requires: digest
 Package: httpuv
 Source: CRAN
 Version: 1.3.2
-Hash: 163f7f889c45832ff6e0841c90c51845
+Hash: ac540f0ff8ec50ae7c9ec69f1c81f1c7
 Requires: Rcpp
+
+Package: httr
+Source: CRAN
+Version: 0.6.1
+Hash: 3b082465d75a7a0c3d09ad06a0905aff
+Requires: R6, RCurl, digest, jsonlite, mime, stringr
 
 Package: intervals
 Source: CRAN
@@ -172,8 +196,8 @@ Hash: 1e949c7f0f926734e2ff498eddb2309a
 
 Package: knitr
 Source: CRAN
-Version: 1.8
-Hash: d00d7b314ca4c34f8a56ceacefb31b4f
+Version: 1.9
+Hash: 41c29594ced4d02b3b90b4c375680cd3
 Requires: digest, evaluate, formatR, highr, markdown, stringr
 
 Package: ks
@@ -189,8 +213,8 @@ Hash: 568a992912caf7eeddfb121924154047
 
 Package: lattice
 Source: CRAN
-Version: 0.20-29
-Hash: 17e9fe582d11197544a5ec817a80b21e
+Version: 0.20-30
+Hash: d635f3e4d93949f095ec8ff37e5aeb04
 
 Package: lazyeval
 Source: CRAN
@@ -214,6 +238,12 @@ Version: 0.7.4
 Hash: 01d7f71ed6e3d9b1c17ba51cff91be72
 Requires: mime
 
+Package: memoise
+Source: CRAN
+Version: 0.2.1
+Hash: fc52fa39dfd216c44d64812ff31b1c67
+Requires: digest
+
 Package: mime
 Source: CRAN
 Version: 0.2
@@ -226,8 +256,9 @@ Hash: 7eb7b8c87599ffa8e2f81ef47743ecf4
 
 Package: multicool
 Source: CRAN
-Version: 0.1-2
-Hash: d2851217d7c8a23cfa33822c15ca3e60
+Version: 0.1-5
+Hash: 067494565464757b744f93e166c881fa
+Requires: Rcpp
 
 Package: munsell
 Source: CRAN
@@ -242,14 +273,14 @@ Hash: 77cba5f561791810a6946f9ebff85a0e
 
 Package: nlme
 Source: CRAN
-Version: 3.1-118
-Hash: 3fd2094b45cfb046273da6917e16536b
+Version: 3.1-120
+Hash: 8fc6a3336f7f8c8508b4063a2af286e7
 Requires: lattice
 
 Package: nortest
 Source: CRAN
-Version: 1.0-2
-Hash: f27581f0451f97fce80bd57b42792c4c
+Version: 1.0-3
+Hash: 2d589f83d21b6e01eea0a69c292654a4
 
 Package: outliers
 Source: CRAN
@@ -258,8 +289,8 @@ Hash: c8e876902d5e1b1677b833f72e735b1f
 
 Package: packrat
 Source: CRAN
-Version: 0.4.2-1
-Hash: 085f944cec9b56e8a280222b5174c76e
+Version: 0.4.3
+Hash: 16c72d5c802629fae5a4abca901e0199
 
 Package: pcaPP
 Source: CRAN
@@ -270,7 +301,7 @@ Requires: mvtnorm
 Package: plyr
 Source: CRAN
 Version: 1.8.1
-Hash: 6a287219196e18bc6261dc11b41b1ca0
+Hash: 7dd935ee4050eaf2973108be2faf245e
 Requires: Rcpp
 
 Package: proto
@@ -286,13 +317,13 @@ Hash: c5b36fd14dff166f26d68ccf1515c200
 Package: reshape2
 Source: CRAN
 Version: 1.4.1
-Hash: 21b63c5bb8ff2ef850ea40a4cb21d250
+Hash: c401ef665db07687e1e54fbc60c683bb
 Requires: Rcpp, plyr, stringr
 
 Package: rgeos
 Source: CRAN
 Version: 0.3-8
-Hash: 2b41a3b4f25e7be4c85bb376428ddc6d
+Hash: cc7e523257dc2cea5030ca250c2ffb25
 Requires: sp
 
 Package: rgl
@@ -301,14 +332,21 @@ Version: 0.93.1098
 Hash: 3aaa8dbaf7183d1779b5b963d0e4b0ce
 
 Package: rmarkdown
-Source: github
-Version: 0.3.10
-Hash: b96214b9ac86b437067a0aa21442203f52face83
+Source: CRAN
+Version: 0.5.1
+Hash: 2d87f70c12c5558c50c4b3587fc6f499
 Requires: caTools, htmltools, knitr, yaml
-GithubRepo: rmarkdown
-GithubUsername: rstudio
-GithubRef: v0.98.1000
-GithubSha1: b96214b9ac86b437067a0aa21442203f52face83
+
+Package: roxygen2
+Source: CRAN
+Version: 4.1.0
+Hash: a11d0f31f8daf359c67e3e0c19d1e468
+Requires: Rcpp, brew, digest, stringr
+
+Package: rstudioapi
+Source: CRAN
+Version: 0.2
+Hash: aa27b6b62b335717db16cb1de6336860
 
 Package: scales
 Source: CRAN
@@ -322,17 +360,27 @@ Version: 0.11.1
 Hash: d09cdcd85e54b44e91af964cb979508f
 Requires: R6, RJSONIO, digest, htmltools, httpuv, mime, xtable
 
+Package: shinyapps
+Source: github
+Version: 0.3.63
+Hash: eab6b6997bc0a20f08d9541b307690a21cc15746
+Requires: RCurl, RJSONIO, digest
+GithubRepo: shinyapps
+GithubUsername: rstudio
+GithubRef: master
+GithubSha1: eab6b6997bc0a20f08d9541b307690a21cc15746
+
 Package: sp
 Source: CRAN
-Version: 1.0-16
-Hash: 1ec8e2e48ab1a6a12ba2b9754a860ed4
+Version: 1.0-17
+Hash: 29bd0f1fc6cba0edf00eafe2b5b8e9d0
 Requires: lattice
 
 Package: spacetime
 Source: CRAN
-Version: 1.1-1
-Hash: 8f63cd7daab946cc8272e46181d9b449
-Requires: intervals, lattice, rgeos, sp, xts, zoo
+Version: 1.1-3
+Hash: 3e68d2f6661ba8fcb57d4b3ef5cec2d2
+Requires: intervals, lattice, sp, xts, zoo
 
 Package: spam
 Source: CRAN
@@ -362,9 +410,14 @@ Hash: cbb980c4feccce7e4ed3af1ccc6de256
 
 Package: tseries
 Source: CRAN
-Version: 0.10-32
-Hash: 6ae869e7d30afce2dc13517444ed06a6
+Version: 0.10-34
+Hash: c0341b7ca61950a0fa7a13c890645783
 Requires: quadprog, zoo
+
+Package: whisker
+Source: CRAN
+Version: 0.3-2
+Hash: 186ab2937fec1694c8a63009a2389c4e
 
 Package: xtable
 Source: CRAN

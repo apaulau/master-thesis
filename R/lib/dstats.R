@@ -1,13 +1,16 @@
 # Descriptive statistics
 
 # Function for getting all descriptive statistics
-dstats.describe <- function(data, locale=FALSE) {
+dstats.describe <- function(data, type, locale=FALSE) {
   stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
              dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
              dstats.range(data), dstats.quartile.range(data), dstats.variance(data),
              dstats.std.dev(data), dstats.coef.var(data), dstats.std.error(data),
              dstats.skew(data), dstats.std.error.skew(data), dstats.kurtosis(data),
              dstats.std.error.kurtosis(data))
+  
+  dstats.write(data=data, type=type) ## TODO: need to improve -- now it computes two times the same things
+  
   if (locale) {
     descr.row <- c("Среднее", "Медиана", "Нижний квартиль", "Верхний квартиль", 
                    "Минимум", "Максимум", "Размах", "Квартильный размах",
@@ -84,7 +87,7 @@ dstats.skew <- function(data) {
   n <- length(data)
   mean <- mean(data)
   (n * sum(sapply(data, FUN=function(x){(x - mean)^3}))) /
-    ((n - 1) * (n - 2) * dstats.std.dev(data)^3)  
+    ((n - 1) * (n - 2) * dstats.std.dev(data)^3)
 }
 
 dstats.std.error.skew <- function(data) {
@@ -93,7 +96,7 @@ dstats.std.error.skew <- function(data) {
 }
 
 dstats.test.skew <- function(data) {
-  dstats.skew(data) / dstats.std.error.skew
+  dstats.skew(data) / dstats.std.error.skew(data)
 }
 
 dstats.kurtosis <- function(data) {
@@ -110,4 +113,14 @@ dstats.std.error.kurtosis <- function(data) {
 
 dstats.test.kurtosis <- function(data) {
   dstats.kurtosis(data) / dstats.std.error.kurtosis(data)
+}
+
+dstats.write <- function (data, type) {
+  WriteDescriptiveStatistic(expression=dstats.mean(data), type=type, name="mean")
+  WriteDescriptiveStatistic(expression=dstats.variance(data), type=type, name="variance")
+  WriteDescriptiveStatistic(expression=paste(format(dstats.coef.var(data), nsmall=2, digits=4), "\\%"), type=type, name="coef-var")
+  WriteDescriptiveStatistic(expression=dstats.skew(data), type=type, name="skew")
+  WriteDescriptiveStatistic(expression=dstats.kurtosis(data), type=type, name="kurtosis")
+  WriteDescriptiveStatistic(expression=dstats.test.skew(data), type=type, name="test-skew")
+  WriteDescriptiveStatistic(expression=dstats.test.kurtosis(data), type=type, name="test-kurtosis")
 }

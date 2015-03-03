@@ -88,8 +88,8 @@ DrawHScatterplot <- function (data, cutoff=trunc(2 * kObservationNum / 3)) {
   Residuals <- data
   hsc <- hscat(Residuals~1, p, breaks=0:20)
   
-  png(filename="figures/residual/hscat.png")
-  hsc
+  pdf("figures/residual/hscat.pdf", width=7, height=5)
+  print(hsc)
   dev.off()
   
   hsc

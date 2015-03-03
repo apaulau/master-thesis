@@ -26,7 +26,7 @@ cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 #cutoff <- 2
 
 # Draw H-Scatterplot
-research.data.hscat <- DrawHScatterplot(research.data.residuals[1:kObservationNum], 22)
+research.data.hscat <- DrawHScatterplot(research.data.residuals[1:kObservationNum], cutoff)
 
 # Compute variogram manually with choosed model (best what i could found)
 variogram.manual <- ComputeManualVariogram(research.data.residuals, cutoff=cutoff, file=TRUE, file_modeled="figures/variogram/manual-model.png")

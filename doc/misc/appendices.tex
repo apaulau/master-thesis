@@ -19,10 +19,19 @@
 
 \appendix
 
-\renewcommand{\thelstlisting}{C.1}
 \section{ Исходные данные}
 \label{c:source_data}
 \input{../out/original/data.tex}
+
+\newpage
+\section{ Графические материалы}
+\setcounter{figure}{0}
+\label{c:graphs}
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{../figures/residual/hscat.png}}
+\caption{Диаграмма взаимного разброса}
+\label{img:hscat}
+\end{figure}
 
 \newpage
 \section{ Результаты вычислений}
@@ -32,8 +41,9 @@
 \newpage
 \section{ Код программ}
 \label{c:listings}
+\renewcommand{\thelstlisting}{D.1}
 \lstinputlisting[language=R, caption=Описательные статистики, label=lst:dstats]{../R/lib/dstats.R}
-\renewcommand{\thelstlisting}{C.2}
+\renewcommand{\thelstlisting}{D.2}
 \lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../R/master.R}
-\renewcommand{\thelstlisting}{C.3}
+\renewcommand{\thelstlisting}{D.3}
 \lstinputlisting[language=R, caption=Вариограммный анализ, label=lst:variogram]{../R/predictor.R}

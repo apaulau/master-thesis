@@ -25,6 +25,9 @@ research.data.trend <- computeTrend(research.data.fit)
 cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 #cutoff <- 2
 
+# Draw H-Scatterplot
+research.data.hscat <- DrawHScatterplot(research.data.residuals[1:kObservationNum], cutoff)
+
 # Compute variogram manually with choosed model (best what i could found)
 variogram.manual <- ComputeManualVariogram(research.data.residuals, cutoff=cutoff, file=TRUE, file_modeled="figures/variogram/manual-model.png")
 
@@ -48,17 +51,19 @@ mse.manual    <- MSE(CrossPrediction(src.data$temperature, src.data$year, resear
 mse.classical <- MSE(CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.classical))
 mse.robust    <- MSE(CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust))
 
-res.ma <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.manual, "figures/variogram/cross-prediction-manual.png")
+res.ma <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.manual,    "figures/variogram/cross-prediction-manual.png")
 res.cl <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.classical, "figures/variogram/cross-prediction-classical.png")
-res.ro <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust, "figures/variogram/cross-prediction-robust.png")
+res.ro <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust,    "figures/variogram/cross-prediction-robust.png")
 
 # Find best cutoff parameter
 ComparePredictionParameters(research.data.residuals, research.data.trend, ConvertYearsToNum(research.data$year), filename="figures/variogram/parameter-comparison.png")
+
 
 # Best prediction as we investigated is for robust kriging with cutoff=6. Let's make it!
 variogram.robust.best <- ComputeVariogram(data=research.data.residuals, x=ConvertYearsToNum(research.data$year), cressie=TRUE, cutoff=6, width=FALSE,
                                           file_empirical="figures/variogram/robust-best-empirical.png",
                                           file_modeled="figures/variogram/robust-best-modeled.png")
+
 kriging.robust.best <- PredictWithKriging(research.data.residuals, x=ConvertYearsToNum(research.data$year), variogram_model=variogram.robust.best$var_model)
 mse.robust.best <- MSE(CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust.best))
 res.ro.best <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, kriging.robust.best, "figures/variogram/cross-prediction-robust-best.png")

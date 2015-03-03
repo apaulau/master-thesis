@@ -1,9 +1,3 @@
-# Let's start from beginning.
-# This file will be the master file of all diploma project's files (slaves). 
-# Content will be the same as for previous works (batorino analysis).
-# Some thoughts for this investigation see in TODO.Rmd.
-# Ideas for organizing further research see in ideas.Rmd
-
 ## Cleaning up the workspace
 rm(list=ls(all=TRUE))
 
@@ -19,7 +13,6 @@ library(reshape2) # will see
 
 ## Import local modules
 source("R/lib/plot.R")       # useful functions for more comfortable plotting
-source("R/lib/print.R")      # functions for print some data to files
 source("R/lib/dstats.R")     # descriptive statistics module
 source("R/lib/misc.R")       # some useful global-use functions
 source("R/lib/draw.R")       # helpers for drawing

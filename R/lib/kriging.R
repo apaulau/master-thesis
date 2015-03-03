@@ -22,10 +22,11 @@ CrossPrediction <- function (temperature, years, trend, kriging, file_prediction
   
   if (nchar(file_prediction)) {
     plot.crossprediction <- ggplot() +
-      geom_line(data=prediction.kriging, aes(x=year, y=temperature, color="Прогноз Кригинг")) + 
-      geom_line(data=prediction.trend, aes(x=year, y=temperature, color="Прогноз Тренд")) +
-      geom_line(data=actual, aes(x=year, y=temperature, colour="Актуальное")) +
+      geom_line(data=prediction.kriging, aes(x=year, y=temperature, linetype="Прогноз Кригинг")) + 
+      geom_line(data=prediction.trend, aes(x=year, y=temperature, linetype="Прогноз Тренд")) +
+      geom_line(data=actual, aes(x=year, y=temperature, linetype="Актуальное")) +
       labs(color="") +
+      scale_linetype_manual(name="Lines", values=c("Прогноз Кригинг"="dashed", "Прогноз Тренд"="dotdash", "Актуальное"="solid")) +
       scale_x_continuous(breaks=seq(min(actual$year), max(actual$year) + 5 + future, by=1)) + xlab("Год наблюдения") +
       scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, С") +
       theme(axis.text.x = element_text(angle=45, hjust=1)) +

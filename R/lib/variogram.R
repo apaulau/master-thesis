@@ -59,20 +59,26 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
     scale_y_continuous(breaks=seq(1.04 * min(classicalResult, robustResult), 1.04 * max(classicalResult, robustResult), 1))
 }
 
-ComputeManualVariogram <- function (data, cutoff, file=FALSE, file_modeled="") {
+ComputeManualVariogram <- function (data, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, file_modeled="") {
   # Make fake second coordinate
   p <- data.frame("X"=c(1:kObservationNum), "Y"=rep(1, kObservationNum))
   coordinates(p) <- ~ X + Y
   experimental_variogram <- variogram(data~1, p, width=1, cutoff=cutoff)
+  if (psill == 0) {
+    model.variog <- vgm(model=model, range=range, nugget=nugget)  
+  } else {
+    model.variog <- vgm(model=model, psill=psill, range=range, nugget=nugget)  
+  }
   
-  model.variog <- vgm(model="Sph", range=3.9, nugget=3.4)  
-  fit.variog <- fit.variogram(experimental_variogram, model.variog)
+  if (fit) {
+    model.variog <- fit.variogram(experimental_variogram, model.variog)
+  }
   
-  if (file) {
+  if (nchar(file_modeled)) {
     # Arrange the data for the ggplot2 plot
     # add the semivariance values of v2 to v1
     Fitted <- data.frame(dist = seq(0.01, max(experimental_variogram$dist), length = kObservationNum))
-    Fitted$gamma <- variogramLine(fit.variog, dist_vector = Fitted$dist)$gamma
+    Fitted$gamma <- variogramLine(model.variog, dist_vector = Fitted$dist)$gamma
     #convert the dataframes to a long format
     Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
     Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
@@ -88,9 +94,9 @@ ComputeManualVariogram <- function (data, cutoff, file=FALSE, file_modeled="") {
       xlab("Расстояние") + ylab("Значение")
     ggsave(plot=plot.modeled, file=file_modeled, width=7, height=4)
   }
-  print(xtable(data.frame("Модель"=fit.variog$model, "Порог"=fit.variog$psill, "Ранг"=fit.variog$range), caption="Модель вариограммы", label="table:manual_model"), table.placement="H", 
+  print(xtable(data.frame("Модель"=model.variog$model, "Порог"=model.variog$psill, "Ранг"=model.variog$range), caption="Модель вариограммы", label="table:manual_model"), table.placement="H", 
     file="out/variogram/manual-model.tex")
-  result = list(exp_var = experimental_variogram, var_model = fit.variog)
+  result = list(exp_var = experimental_variogram, var_model = model.variog)
 }
 
 ## Calculates modeled variogram and creates plot of it.

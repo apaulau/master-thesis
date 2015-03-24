@@ -144,7 +144,7 @@ shinyServer(function(input, output) {
   
   output$lm <- renderUI({
     m <- model()
-    withMathJax(sprintf("$$y = %.03f x + %.03f $$", coef(model())[2], coef(model())[1]))
+    withMathJax(sprintf("$$ y = %.03f x + %.03f $$", coef(model())[2], coef(model())[1]))
 #     withMathJax(
 #       helpText(paste("$$ y = ", format(coef(model())[2], digits=4), "x +", format(coef(model())[2], digits=4), "$$"))  
 #     )

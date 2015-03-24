@@ -53,7 +53,7 @@
 \begin{Definition}
 	\textit{Ковариационной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
 	\begin{eqnarray*}
-		& cov\{ X(t_1), X(t_2) \} = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
+		& cov(t_1, t_2) = cov\{ X(t_1), X(t_2) \} = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
 		& = \iint \limits_{\mathbb{R}^2} (x_1 - m(t_1)) (x_2 - m(t_2)) \, dF_2(x_1, x_2; t_1, t_2)
 	\end{eqnarray*}
 \end{Definition}
@@ -124,8 +124,9 @@
 \end{Definition}
 
 %TODO в замечании вставить ссылку на какую-нибудь из статей Цеховой, чтобы было понятно, откуда оно взялось
+%TODO removed: внутренне стационарный
 \begin{Remark}
-	Если $ X(t), t \in \mathbb{T} $, --- внутренне стационарный гауссовский случайный процесс, то
+	Если $ X(t), t \in \mathbb{T} $, --- гауссовский случайный процесс, то
 	\begin{equation*}
 		( X(t + h) - X(t) )^2 = 2 \gamma(h)\chi_1^2,
 	\end{equation*}

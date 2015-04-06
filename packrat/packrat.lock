@@ -144,6 +144,12 @@ Hash: 2ce2827306789fe66c344b423c2f1261
 Requires: assertthat, dplyr, htmltools, jsonlite, lazyeval, magrittr,
     shiny
 
+Package: googleVis
+Source: CRAN
+Version: 0.5.8
+Hash: f0d4bdfb158055cddc154f1bd34bc84d
+Requires: RJSONIO
+
 Package: gstat
 Source: CRAN
 Version: 1.0-21

@@ -39,11 +39,14 @@ shinyServer(function(input, output) {
   })
   
   output$datasource <- renderDataTable({
-    series()
+    df <- series()
+    colnames(df) <- c("Год наблюдения", "Температура")
+    df
   })
 
   series %>% ggvis(~year, ~temperature) %>% layer_points() %>% layer_paths() %>% 
-    add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("y", title="Температура, ºС") %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
     bind_shiny("overview", "overview_ui")
@@ -80,7 +83,7 @@ shinyServer(function(input, output) {
   })
   
   output$dstats <- renderTable({
-    dstats.describe(series()$temperature)
+    dstats.describe(series()$temperature, locale=TRUE)
   })
   
   output$normality <- renderUI({
@@ -90,9 +93,9 @@ shinyServer(function(input, output) {
                    ks = ntest.KolmogorovSmirnov)
     
     result <- test(data=series()$temperature)
-    statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
-    p.value <- paste("<b>P-value:</b>", format(result$p.value))
-    conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis is rejected.", "Failed to reject null hypothesis"))
+    statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
+    p.value <- paste("<b>P-значение:</b>", format(result$p.value))
+    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза отклонена.", "Нельзя отвергнуть нулевую гипотезу."))
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
@@ -110,11 +113,11 @@ shinyServer(function(input, output) {
   
   output$ctest <- renderUI({    
     result <- cor.test(series()$temperature, c(1:(input$range[2] - input$range[1] + 1)), method="pearson")
-    statistic <- paste("<b>Statistic:</b>", format(result$statistic[[1]]))
-    df <- paste("<b>Degrees of freedom:</b>", format(result$parameter[["df"]]))
-    p.value <- paste("<b>P-value:</b>", format(result$p.value))
-    ci <- paste("<b>", attr(result$conf.int, "conf.level") * 100, "percent confidence interval:</b>", "[", format(result$conf.int[1], digits=4), ";", format(result$conf.int[2], digits=4), "]")
-    conclusion <- paste(ifelse(result$p.value <= .05, "Null hypothesis (correlation equals 0) is rejected.", "Failed to reject null hypothesis (correlation equals 0)"))
+    statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
+    df <- paste("<b>Степеней свободы:</b>", format(result$parameter[["df"]]))
+    p.value <- paste("<b>P-значение:</b>", format(result$p.value))
+    ci <- paste("<b>", attr(result$conf.int, "conf.level") * 100, "% доверительный интервал:</b>", "[", format(result$conf.int[1], digits=4), ";", format(result$conf.int[2], digits=4), "]")
+    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза (коэффициент корреляции равен 0) отклонена.", "Нельзя отвергнуть нулевую гипотезу о равенстве 0 коэффициента корреляции."))
     HTML(paste(statistic, p.value, df, ci, conclusion, sep = '<br/>'))
   })
   

@@ -2,44 +2,44 @@ library(shiny)
 library(ggvis)
 
 # Define UI for application that draws a histogram
-shinyUI(navbarPage("Temperature Analysis", 
-  tabPanel("Source",
+shinyUI(navbarPage("Анализ Данных", 
+  tabPanel("Исходные данные",
     
     sidebarLayout(
       sidebarPanel(
-        helpText("Choose the range of observations"),
-        sliderInput("range", label="Range",
+        helpText("Выберите диапазон наблюдений"),
+        sliderInput("range", label="Диапазон",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
-          condition = "input.source_panel == 'Base'",
-          radioButtons("base_plot_trigger", "Plot type:",
-            c("Histogram" = "histogram",
-              "Scatterplot" = "scatterplot"),
+          condition = "input.source_panel == 'Первичный анализ'",
+          radioButtons("base_plot_trigger", "График:",
+            c("Гистограмма" = "histogram",
+              "Диаграмма рассеяния" = "scatterplot"),
             inline=TRUE
           ),
           conditionalPanel(
             condition = "input.base_plot_trigger == 'histogram'",
-            sliderInput("binwidth", label="Bin width",
+            sliderInput("binwidth", label="Ширирна столбца",
               min=0, max=5, value=1.15, step=.05),
-            checkboxInput('dnorm', 'Show density'),
-            checkboxInput('density', 'Show normal density'),
-            selectInput("rule", label="Rule type",
-              c("Sturges" = "sturges",
-                "Scott's" = "scott",
-                "Freedman-Diaconis" = "fd")
+            checkboxInput('density', 'Отображать плотность распределения'),
+            checkboxInput('dnorm', 'Отображать плотность нормального распределения'),
+            selectInput("rule", label="Правило",
+              c("Стёржеса" = "sturges",
+                "Скотта" = "scott",
+                "Фридмана-Дьякона" = "fd")
             )
           ),
-          selectInput("ntest", label="Normality test",
-            c("Shapiro-Wilk" = "shapiro",
-              "Pearson Chi^2" = "pearson",
-              "Kolmogorov-Smirnov" = "ks")
+          selectInput("ntest", label="Критерий нормальность",
+            c("Шапиро-Уилка" = "shapiro",
+              "Пирсона Хи-квадрать" = "pearson",
+              "Колмогорова Смирнова" = "ks")
           )
         ),
         conditionalPanel(
-          condition = "input.source_panel == 'Regression'",
-          radioButtons("residuals_trigger", "Subtract trend:",
-            c("No" = "src",
-              "Yes" = "residuals"),
+          condition = "input.source_panel == 'Регрессионный анализ'",
+          radioButtons("residuals_trigger", "Удалить тренд:",
+            c("Нет" = "src",
+              "Да" = "residuals"),
             inline=TRUE
           )
         ),
@@ -50,27 +50,27 @@ shinyUI(navbarPage("Temperature Analysis",
       mainPanel(
         tabsetPanel(
           id="source_panel",
-          tabPanel("Data",
+          tabPanel("Данные",
             br(),
             dataTableOutput("datasource")
           ),
           
-          tabPanel("Overview",
+          tabPanel("Обзор",
             br(),
             ggvisOutput("overview")
           ),
           
-          tabPanel("Base",
+          tabPanel("Первичный анализ",
             plotOutput("base_plot"),
             fluidRow(
               column(5,
                 conditionalPanel(
                   condition = "input.base_plot_trigger == 'histogram'",
-                  h4("Suggested bin width"),
+                  h4("Рекомендуемая ширина столбца"),
                   textOutput("rule")
                 ),
                 
-                h4("Normality test"),
+                h4("Критерий нормальности"),
                 htmlOutput("normality")
               ),
               column(2),
@@ -80,26 +80,26 @@ shinyUI(navbarPage("Temperature Analysis",
             )
           ),
           
-          tabPanel("Correlation",
+          tabPanel("Корреляционный анализ",
             ggvisOutput("scatterplot"),
             fluidRow(
               column(4,
-                h4("Correlation Coefficient"),
+                h4("Коэффициент корреляции"),
                 textOutput("correlation")
               ),
               column(1),
               column(7,
-                h4("Correlation Significanse"),
+                h4("Значимость коэффициента корреляции"),
                 htmlOutput("ctest")
               )
             )
           ),
           
-          tabPanel("Regression",
+          tabPanel("Регрессионный анализ",
             ggvisOutput("regression"),
             fluidRow(
               column(4,
-                h4("Linear Model"),
+                h4("Линейная модель"),
                 uiOutput("lm")
               )
             )
@@ -110,6 +110,6 @@ shinyUI(navbarPage("Temperature Analysis",
     )
   ),
   
-  tabPanel("Residuals")
+  tabPanel("Анализ остатков")
   
 ))

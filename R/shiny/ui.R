@@ -2,7 +2,7 @@ library(shiny)
 library(ggvis)
 
 # Define UI for application that draws a histogram
-shinyUI(navbarPage("Анализ Данных", 
+shinyUI(navbarPage("Анализ Баторино", 
   tabPanel("Исходные данные",
     
     sidebarLayout(
@@ -24,14 +24,14 @@ shinyUI(navbarPage("Анализ Данных",
             checkboxInput('density', 'Отображать плотность распределения'),
             checkboxInput('dnorm', 'Отображать плотность нормального распределения'),
             selectInput("rule", label="Правило",
-              c("Стёржеса" = "sturges",
+              c("Стёрджеса" = "sturges",
                 "Скотта" = "scott",
                 "Фридмана-Дьякона" = "fd")
             )
           ),
           selectInput("ntest", label="Критерий нормальность",
             c("Шапиро-Уилка" = "shapiro",
-              "Пирсона Хи-квадрать" = "pearson",
+              "Пирсона Хи-квадрат" = "pearson",
               "Колмогорова Смирнова" = "ks")
           )
         ),
@@ -99,8 +99,16 @@ shinyUI(navbarPage("Анализ Данных",
             ggvisOutput("regression"),
             fluidRow(
               column(4,
-                h4("Линейная модель"),
+                h4("Модель"),
                 uiOutput("lm")
+              ),
+              column(1),
+              column(7,
+                h4("Значимость модели"),
+                htmlOutput("signif"),
+                hr(),
+                h4("Адекватность модели"),
+                htmlOutput("adequacy")
               )
             )
           )

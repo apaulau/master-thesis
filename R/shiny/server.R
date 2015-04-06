@@ -5,7 +5,8 @@ library(dplyr)
 
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
-source("lib/ntest.R")      # helpers for drawing
+source("lib/ntest.R")      # normality tests
+source("lib/regr.R")       # regression tests
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -140,16 +141,40 @@ shinyServer(function(input, output) {
   mix %>% ggvis(x=~year, y=~temperature) %>%
     layer_paths(x = ~x_rng, y = ~y_rng, stroke := "blue") %>% # add checkbox to show or not
     layer_points(x=~year, y=~temperature) %>% layer_paths() %>% 
-    add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("y", title="Температура, ºС") %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
     bind_shiny("regression", "regression_ui")
   
   output$lm <- renderUI({
     m <- model()
-    withMathJax(sprintf("$$ y = %.03f x + %.03f $$", coef(model())[2], coef(model())[1]))
+    withMathJax(sprintf("$$ y = %.03f t + %.03f $$", coef(model())[2], coef(model())[1]))
 #     withMathJax(
 #       helpText(paste("$$ y = ", format(coef(model())[2], digits=4), "x +", format(coef(model())[2], digits=4), "$$"))  
 #     )
   })
+  
+  output$signif <- renderUI({    
+    result <- regr.significance(series()$temperature, math='')
+    valueA <- paste("<b>Значение:</b>", format(result$coeff[[1]]))
+    statisticA <- paste("<b>Статистика Стьюдента:</b>", format(result$statistic[[1]]))
+    conclusionA <- paste("<b>Заключение:</b>", result$conclusion[[1]])
+    valueB <- paste("<b>Значение:</b>", format(result$coeff[[2]]))
+    statisticB <- paste("<b>Статистика Стьюдента:</b>", format(result$statistic[[2]]))
+    conclusionB <- paste("<b>Заключение:</b>", result$conclusion[[2]])
+    critical <- paste("<b>Критическое значение:</b>", format(result$critical))
+    HTML(paste("<h5>Коэффициент a</h5>", paste(valueA, statisticA, critical, conclusionA, sep="<br>"), "<h5>Коэффициент b</h5>", paste(valueB, statisticB, critical, conclusionB, sep = '<br/>')))
+  })
+  
+  output$adequacy <- renderUI({    
+    result <- regr.adequacy(series()$temperature)
+    determ <- paste("<b>Коэффициент детерминации:</b>", format(result$determination))
+    linearity <- paste("<b>Линейность:</b>", ifelse(result$linearity < .1, "Присутствует незначительное отклонение от линейности", "Присутствует отклонениение от линейности"))
+    statistic <- paste("<b>Статистика:</b>", format(result$Fisher$statistic))
+    critical <- paste("<b>Критическое значение:</b>", format(result$Fisher$critical))
+    conclusion <- paste("<b>Заключение:</b>", result$Fisher$conclusion)
+    HTML(paste("<h5>Линейность</h5>", paste(determ, linearity, sep="<br>"), "<h5>Критерий Фишера</h5>", paste(statistic, critical, conclusion, sep = '<br/>')))
+  })
+  
 })

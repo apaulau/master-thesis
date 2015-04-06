@@ -1,4 +1,4 @@
-regr.significance.Student <- function (y, alpha=.05) {
+regr.significance <- function (y, alpha=.05, math='$') {
   # Makes conclusion.
   # coeff - simple letter for output
   MakeConclusion <- function(statistic, critical, coeff) {
@@ -30,7 +30,7 @@ regr.significance.Student <- function (y, alpha=.05) {
   criticalPoint <- StudentCriticalPoint(alpha, n - 2)
   
   list(vardev=vardev, errors=c(errorA, errorB), coeff=c(a, b), statistic=c(studentA, studentB), critical=criticalPoint,
-    conclusion=c(MakeConclusion(studentA, criticalPoint, "$ a $"), MakeConclusion(studentB, criticalPoint, "$ b $")))
+    conclusion=c(MakeConclusion(studentA, criticalPoint, paste(math, 'a', math)), MakeConclusion(studentB, criticalPoint, paste(math, 'b', math))))
 }
 
 regr.adequacy <- function(y, alpha=.05) {

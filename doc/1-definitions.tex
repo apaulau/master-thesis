@@ -16,7 +16,7 @@
 
 	При $ \omega = \omega_{0} $, $ t \in \mathbb{T} $ $ X(\omega_{0}, t) $ является неслучайной функцией временного аргумента и называется \textit{траекторией случайного процесса}.
 
-	При $ t = t_{0} $, $ \omega \in \Omega $, $ X(\omega, t_{0}) $ является случайной величиной и называется отсчетом случайного процесса.
+	При $ t = t_{0} $, $ \omega \in \Omega $, $ X(\omega, t_{0}) $ является случайной величиной и называется \textit{отсчетом случайного процесса}.
 \end{Definition}
 
 \begin{Definition}
@@ -99,14 +99,14 @@
 \begin{Definition}
     \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида
 	\begin{equation}
-	    2 \gamma (h) = V \{ X(t + h) - X(t) \}, t, h \in \mathbb{T}.
+	    2 \gamma (h) = V \{ X(t + h) - X(t) \},~ t, h \in \mathbb{T}.
 	\end{equation}
 
 	При этом функция $ \gamma (h), h \in \mathbb{T} $, называется \textit{семивариограммой}.
 \end{Definition}
 
 \begin{Definition}
-	Случайный процесс $ X(t), t \in \mathbb{T} $, называется \textit{внутренне стационарным}, если справедливы следующие равенства:
+	Случайный процесс $ X(t),~ t \in \mathbb{T} $, называется \textit{внутренне стационарным}, если справедливы следующие равенства:
 	\begin{equation}
 		E \{ X(t_1) - X(t_2) \} = 0,
 	\end{equation}
@@ -117,14 +117,13 @@
 \end{Definition}
 
 \begin{Definition}
-    Случайный процесс $ X(t), t \in \mathbb{T} $ называется гауссовским, если любые $ n $ его отсчетов $ X(t_1), X(t_2), \ldots, X(t_n), $ где $ t_1, t_2, \ldots, t_n \in \mathbb{T} $ имеют n-мерное нормальное распределение, то есть
+    Случайный процесс $ X(t),~ t \in \mathbb{T} $ называется \textit{гауссовским}, если любые $ n $ его отсчетов $ X(t_1), X(t_2), \ldots, X(t_n), $ где $ t_1, t_2, \ldots, t_n \in \mathbb{T} $ имеют n-мерное нормальное распределение, то есть
 	\begin{equation}
-	    F_n(\cdot) \equiv \Phi_n(\cdot) \forall n.
+	    F_n(\cdot) \equiv \Phi_n(\cdot) ~ \forall n.
 	\end{equation}
 \end{Definition}
 
 %TODO в замечании вставить ссылку на какую-нибудь из статей Цеховой, чтобы было понятно, откуда оно взялось
-%TODO removed: внутренне стационарный
 \begin{Remark}
 	Если $ X(t), t \in \mathbb{T} $, --- гауссовский случайный процесс, то
 	\begin{equation*}

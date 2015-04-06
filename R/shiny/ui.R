@@ -3,6 +3,18 @@ library(ggvis)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Анализ Баторино", 
+  tabPanel("Начало",
+    fluidPage(
+      fluidRow(
+        column(1),
+        column(10, align="center",
+          titlePanel("Анализ температуры воды"),
+          tags$div(align="justify", tags$p("Данная страница посвящена введению в приложение, для чего она нужна, как использовать. Описанием проблемы и предложением ее решения."))
+        ),
+        column(1)
+      )
+    )
+  ),
   tabPanel("Исходные данные",
     
     sidebarLayout(

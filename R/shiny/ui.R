@@ -191,6 +191,20 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 tableOutput("residual_dstats")
               )
             )
+          ),
+          tabPanel("Автокорреляционная функция",
+            plotOutput("acf"),
+            fluidRow(
+              column(5,
+                h4("Тест Льюнга-Бокса"),
+                htmlOutput("ljung")
+              ),
+              column(2),
+              column(5,
+                h4("Расширенный тест Дики-Фуллера"),
+                htmlOutput("adf")
+              )
+            )
           )
         )
       )

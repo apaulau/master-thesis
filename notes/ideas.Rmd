@@ -28,3 +28,5 @@ output: html_document
 * Shiny: add ability to upload data; add grid with current data; in grid add ability to add new data points; after adding new data it should be possible to save changed data.
 
 * Shiny: includeMarkdown
+
+* Shiny: add "Interpretation" text to tests output

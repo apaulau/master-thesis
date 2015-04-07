@@ -2,6 +2,7 @@ library(shiny)
 library(ggplot2)  # eye-candy graphs
 library(ggvis)
 library(dplyr)
+library(tseries)
 
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
@@ -261,11 +262,30 @@ shinyServer(function(input, output, session) {
       shapiro = ntest.ShapiroWilk,
       pearson = ntest.PearsonChi2,
       ks = ntest.KolmogorovSmirnov)
-    print(residuals()$temperature)
     result <- test(data=residuals()$temperature)
     statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
     p.value <- paste("<b>P-значение:</b>", format(result$p.value))
     conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза отклонена.", "Нельзя отвергнуть нулевую гипотезу."))
+    HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
+  })
+  
+  output$acf <- renderPlot({
+    DrawAutoCorrelationFunction(residuals()$temperature)
+  })
+  
+  output$ljung <- renderUI({
+    result <- Box.test(residuals()$temperature, type="Ljung-Box")
+    statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
+    p.value <- paste("<b>P-значение:</b>", format(result$p.value))
+    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза (данные являются случайными) отклонена.", "Нельзя отвергнуть нулевую гипотезу о случайности данных."))
+    HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
+  })
+  
+  output$adf <- renderUI({
+    result <- adf.test(residuals()$temperature)
+    statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
+    p.value <- paste("<b>P-значение:</b>", format(result$p.value))
+    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза о стационарности данных отклонена.", "Нельзя отвергнуть нулевую гипотезу о стационарности данных."))
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   

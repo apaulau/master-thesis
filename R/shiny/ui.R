@@ -2,7 +2,7 @@ library(shiny)
 library(ggvis)
 
 # Define UI for application that draws a histogram
-shinyUI(navbarPage("Анализ Баторино", 
+shinyUI(navbarPage("Анализ Баторино",  id="nav", 
   tabPanel("Начало",
     fluidPage(
       fluidRow(
@@ -19,7 +19,6 @@ shinyUI(navbarPage("Анализ Баторино",
     
     sidebarLayout(
       sidebarPanel(
-        helpText("Выберите диапазон наблюдений"),
         sliderInput("range", label="Диапазон",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
@@ -31,7 +30,7 @@ shinyUI(navbarPage("Анализ Баторино",
           ),
           conditionalPanel(
             condition = "input.base_plot_trigger == 'histogram'",
-            sliderInput("binwidth", label="Ширирна столбца",
+            sliderInput("binwidth", label="Ширина столбца",
               min=0, max=5, value=1.15, step=.05),
             checkboxInput('density', 'Отображать плотность распределения'),
             checkboxInput('dnorm', 'Отображать плотность нормального распределения'),
@@ -54,7 +53,7 @@ shinyUI(navbarPage("Анализ Баторино",
               "Да" = "residuals"),
             inline=TRUE
           )
-        ),
+        ),        
         uiOutput("overview_ui"),
         uiOutput("scatter_ui")
       ),
@@ -73,7 +72,7 @@ shinyUI(navbarPage("Анализ Баторино",
           ),
           
           tabPanel("Первичный анализ",
-            plotOutput("base_plot"),
+            plotOutput("residual_base_plot"),
             fluidRow(
               column(5,
                 conditionalPanel(
@@ -130,6 +129,73 @@ shinyUI(navbarPage("Анализ Баторино",
     )
   ),
   
-  tabPanel("Анализ остатков")
+  tabPanel("Анализ остатков",
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("residual_range", label="Диапазон",
+          min=1, max=38, value=c(1,35)),
+        conditionalPanel(
+          condition = "input.residual_panel == 'Первичный анализ'",
+          radioButtons("residual_base_plot_trigger", "График:",
+            c("Гистограмма" = "histogram",
+              "Диаграмма рассеяния" = "scatterplot"),
+            inline=TRUE
+          ),
+          conditionalPanel(
+            condition = "input.residual_base_plot_trigger == 'histogram'",
+            sliderInput("residual_binwidth", label="Ширина столбца",
+              min=0, max=5, value=1.15, step=.05),
+            checkboxInput('residual_density', 'Отображать плотность распределения'),
+            checkboxInput('residual_dnorm', 'Отображать плотность нормального распределения'),
+            selectInput("residual_rule", label="Правило",
+              c("Стёрджеса" = "sturges",
+                "Скотта" = "scott",
+                "Фридмана-Дьякона" = "fd")
+            )
+          ),
+          selectInput("residual_ntest", label="Критерий нормальность",
+            c("Шапиро-Уилка" = "shapiro",
+              "Пирсона Хи-квадрат" = "pearson",
+              "Колмогорова Смирнова" = "ks")
+          )
+        )
+      ),
+      mainPanel(
+        tabsetPanel(
+          id="residual_panel",
+          tabPanel("Данные",
+            br(),
+            dataTableOutput("residual_source")
+          ),
+          
+          tabPanel("Обзор",
+            br(),
+            ggvisOutput("residual_overview")
+          ),
+          
+          tabPanel("Первичный анализ",
+            plotOutput("residual_plot"),
+            fluidRow(
+              column(5,
+                conditionalPanel(
+                  condition = "input.residual_base_plot_trigger == 'histogram'",
+                  h4("Рекомендуемая ширина столбца"),
+                  textOutput("residual_rule")
+                ),
+                
+                h4("Критерий нормальности"),
+                htmlOutput("residual_normality")
+              ),
+              column(2),
+              column(5,
+                tableOutput("residual_dstats")
+              )
+            )
+          )
+        )
+      )
+    )
+  ),
+  tabPanel("Вариограммный анализ")
   
 ))

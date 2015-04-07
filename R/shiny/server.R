@@ -16,9 +16,25 @@ src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, col
 kMinYear <- min(src.data$year)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
-  series <- reactive({src.data[input$range[1]:input$range[2],]})
-  breaks <- reactive({src.data[input$range[1]:input$range[2],1]})
+shinyServer(function(input, output, session) {
+  minYear <- reactive({
+    if (input$nav == "Анализ остатков") {
+      input$residual_range[1]
+    } else {
+      input$range[1]
+    }
+  })
+  maxYear <- reactive({
+    if (input$nav == "Анализ остатков") {
+      input$residual_range[2]
+    } else {
+      input$range[2]
+    }
+  })
+  series <- reactive({
+    src.data[minYear():maxYear(),]
+  })
+  breaks <- reactive({src.data[minYear():maxYear(),1]})
   binwidth <- reactive({input$binwidth})
   sturges <- reactive({
     data <- series()$temperature
@@ -33,10 +49,10 @@ shinyServer(function(input, output) {
     (max(data)-min(data)) / nclass.scott(data)
   })
   datebreaks <- reactive({
-    seq(kMinYear - 5 + input$range[1], kMinYear + 5 + input$range[2], by=2)
+    seq(kMinYear - 5 + minYear(), kMinYear + 5 + maxYear(), by=2)
   })
   model <- reactive({
-    lm(series()$temperature ~ c(input$range[1]:input$range[2]))
+    lm(series()$temperature ~ c(minYear():maxYear()))
   })
   
   output$datasource <- renderDataTable({
@@ -109,11 +125,11 @@ shinyServer(function(input, output) {
     bind_shiny("scatterplot", "scatter_ui")
   
   output$correlation <- renderText({
-    format(cor(series()$temperature, c(1:(input$range[2] - input$range[1] + 1))), digits=5)
+    format(cor(series()$temperature, c(1:(maxYear() - minYear() + 1))), digits=5)
   })
   
   output$ctest <- renderUI({    
-    result <- cor.test(series()$temperature, c(1:(input$range[2] - input$range[1] + 1)), method="pearson")
+    result <- cor.test(series()$temperature, c(1:(maxYear() - minYear() + 1)), method="pearson")
     statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
     df <- paste("<b>Степеней свободы:</b>", format(result$parameter[["df"]]))
     p.value <- paste("<b>P-значение:</b>", format(result$p.value))
@@ -126,7 +142,7 @@ shinyServer(function(input, output) {
   line <- reactive({
     data.frame(
       x_rng = breaks(), 
-      y_rng = sapply(c((input$range[1]):(input$range[2])), FUN=linear, a=coef(model())[2], b=coef(model())[1])
+      y_rng = sapply(c((minYear()):(maxYear())), FUN=linear, a=coef(model())[2], b=coef(model())[1])
     )
   })
   
@@ -134,7 +150,7 @@ shinyServer(function(input, output) {
     if (input$residuals_trigger == "src") {
       data.frame(series(), line())
     } else {
-      data.frame(temperature=model()$residuals, year = series()$year, x_rng=breaks(), y_rng=rep(0, input$range[2] - input$range[1] + 1))
+      data.frame(temperature=model()$residuals, year = series()$year, x_rng=breaks(), y_rng=rep(0, maxYear() - minYear() + 1))
     }
   })
   
@@ -175,6 +191,22 @@ shinyServer(function(input, output) {
     critical <- paste("<b>Критическое значение:</b>", format(result$Fisher$critical))
     conclusion <- paste("<b>Заключение:</b>", result$Fisher$conclusion)
     HTML(paste("<h5>Линейность</h5>", paste(determ, linearity, sep="<br>"), "<h5>Критерий Фишера</h5>", paste(statistic, critical, conclusion, sep = '<br/>')))
+  })
+
+  observe({    
+    inp <- input$range
+    updateSliderInput(session, "residual_range", value=inp, min=1, max=38, step=1)
+  })
+  
+  observe({    
+    inp <- input$residual_range
+    updateSliderInput(session, "range", value=inp, min=1, max=38, step=1)
+  })
+  
+  output$residual_source <- renderDataTable({
+    df <- data.frame(year = series()$year, sapply(X=model()$residuals, FUN=format, digits=4))
+    colnames(df) <- c("Год наблюдения", "Температура")
+    df
   })
   
 })

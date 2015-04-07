@@ -7,15 +7,15 @@ output: html_document
 
 ### What to do next? Enjoy:
 
-* Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.
+* ~~Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.~~
 
 * ~~Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))~~
 
-* Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.
+* ~~Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.~~
 
 * ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
 
-* Reformat and refactor code. Clean up useless files. _Almost done_
+* ~~Reformat and refactor code. Clean up useless files. _Almost done_~~
 
 * ~~Add computation block (for some non-visual analysis)~~
 
@@ -23,10 +23,10 @@ output: html_document
 
 * ~~Add normality tests to computation block.~~
 
-* Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)
+* ~~Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)~~
 
-* Fix references in TeX
+* ~~Fix references in TeX~~
 
-* Check new versions of automap.
+* ~~Check new versions of automap.~~
 
 * Variogram analysis must be converted to eye-candy view.

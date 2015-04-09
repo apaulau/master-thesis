@@ -4,17 +4,6 @@ require(markdown)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Анализ Баторино",  id="nav", 
-  tabPanel("Начало",
-    fluidPage(
-      fluidRow(
-        column(1),
-        column(10,
-          includeMarkdown("intro.md")
-        ),
-        column(1)
-      )
-    )
-  ),
   tabPanel("Исходные данные",
     
     sidebarLayout(
@@ -210,6 +199,30 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
       )
     )
   ),
-  tabPanel("Вариограммный анализ")
+  tabPanel("Вариограммный анализ"),
+  navbarMenu("О программе",
+    tabPanel("Введение",
+      fluidPage(
+        fluidRow(
+          column(2),
+          column(8,
+            includeMarkdown("intro.md")
+          ),
+          column(2)
+        )
+      )
+    ),
+    tabPanel("Список дел",
+      fluidPage(
+        fluidRow(
+          column(2),
+          column(8,
+            includeMarkdown("include/TODO.Rmd")
+          ),
+          column(2)
+        )
+      )
+    )
+  )
   
 ))

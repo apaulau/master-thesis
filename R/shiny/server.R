@@ -6,6 +6,7 @@ library(tseries)
 
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
+source("lib/plot.R")       # custom plots
 source("lib/ntest.R")      # normality tests
 source("lib/regr.R")       # regression tests
 

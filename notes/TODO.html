@@ -71,18 +71,68 @@ img {
 <div id="what-to-do-next-enjoy" class="section level3">
 <h3>What to do next? Enjoy:</h3>
 <ul>
-<li><p><del>Find out how to use shiny. I think it will be useful and with it’s help I can show this as great product.</del></p></li>
-<li><p><del>Use a code style (e.g. <a href="https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml">google-styleguide</a>)</del></p></li>
-<li><p><del>Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.</del></p></li>
-<li><p><del>Find out more about <a href="http://rstudio.github.io/packrat">packrat</a>: dependency manager.</del></p></li>
-<li><p><del>Reformat and refactor code. Clean up useless files. <em>Almost done</em></del></p></li>
-<li><p><del>Add computation block (for some non-visual analysis)</del></p></li>
-<li><p><del>Add descriptive statistics to computation block. Or somewhere else.</del></p></li>
-<li><p><del>Add normality tests to computation block.</del></p></li>
-<li><p><del>Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)</del></p></li>
-<li><p><del>Fix references in TeX</del></p></li>
-<li><p><del>Check new versions of automap.</del></p></li>
-<li><p>Variogram analysis must be converted to eye-candy view.</p></li>
+<li>R programming
+<ul>
+<li><del>Find out how to use shiny. I think it will be useful and with it’s help I can show this as great product.</del><br /></li>
+<li><del>Use a code style (e.g. <a href="https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml">google-styleguide</a>)</del></li>
+<li><del>Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.</del></li>
+<li><del>Find out more about <a href="http://rstudio.github.io/packrat">packrat</a>: dependency manager.</del></li>
+<li><del>Reformat and refactor code. Clean up useless files. <em>Almost done</em></del></li>
+<li><del>Add computation block (for some non-visual analysis)</del></li>
+<li><del>Add descriptive statistics to computation block. Or somewhere else.</del></li>
+<li><del>Add normality tests to computation block.</del></li>
+<li><del>Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)</del></li>
+<li><del>Fix references in TeX</del></li>
+<li><del>Check new versions of automap.</del></li>
+<li><h2>Variogram analysis must be converted to eye-candy view.</h2></li>
+</ul></li>
+<li>TeX
+<ul>
+<li>Оформление работы
+<ul>
+<li>Посмотреть статьи по оценкам вариограммы для введения внутренней стационарности.</li>
+<li>Переписать введение и понятия по геостатистике. На данный момент там околоматематичный бред, не связанный с работой чуть более, чем полностью.</li>
+<li>Дополнить/разъяснить выводы по линейным моделям. В частности о переходе к геостатистике.</li>
+<li>Исправить все замечания Цеховой в работе (<em>doc/tmp/tsekhavaya_march.pdf</em>)</li>
+</ul></li>
+<li>Доклад и презентация работы (Во всей презентации делаем акцент на то, что это сделал Я. –<strong>Я</strong> сделал то-то. –<strong>Мною</strong> получено это-то. –При помощи этого <strong>Я</strong> получил вот это.)
+<ol style="list-style-type: decimal">
+<li>Цели и задачи работы (основа - в задании к дипломной работе <em>doc/tmp/ЗаданиеКРиД.doc</em>).</li>
+<li>Постановка задачи (о данных, выборке, какие сложности, что делали, как обрабатывали, что в итоге изучалось)</li>
+<li>Первичный анализ (презентовать реализованную в рамках проекта программу, с целью показать широкие возможности первичного анализа, которые она предоставила; возможно показать на каком-то примере.)
+<ul>
+<li>Возможно некоторые (наиболее интересные) графики показывать полностью, с их анализом и выводами. То есть следует показывать только то, что будет связывать предыдущее со следующим. Представляем нить, которая должна связывать все повествование. В итоге должно получиться единое целое, откуда слов не выкинешь.</li>
+<li>Скорее всего следует подробно рассказать и показать регрессионный анализ. Во-первых есть что показать, во-вторых затрагивает почти весь первичный анализ, и в-третьих, на выводах из данного этапа обосновываем дальнейшие.</li>
+</ul></li>
+<li>Анализ остатков (сделать акцент на характеристики, которыми они должны обладать и обладают ли; показать интересные результаты, если есть; опять же, тут можно завернуть пару грамм про программное обеспечение).
+<ul>
+<li>Крайне важно на данном этапе сформировать правильные выводы о полученных результатах и детерминированных подходах. Чтобы без всяких швов перейти к геостатистике.</li>
+</ul></li>
+<li>Геостатистика (основной упор и основная работа должна быть тут, т.к. по сути, это и есть самое интересное)
+<ul>
+<li>Введение, что такое, как появилась, кто предложил и исследовал. Почему наши данные подходят для применения этого метода и вообще.</li>
+<li>Теория (привести доказанные теоремы; обосновать их введение и исследование оценки; было бы круто обосновать это построением доверительных интервалов для вариограмм) Еще нужно сделать акцент (если потребуется), что проблема исследовалась но на других ограничениях (у меня к примеру гауссовский, и в одной из теорем ограничение на вариограмму, а не на ковариацию)</li>
+<li>Было бы круто так же продемонстрировать программный функционал в данной сфере.</li>
+<li>Привести критерии и интересные результаты.</li>
+</ul></li>
+<li>Заключение (что проделано, что получено, как получено – опять же ключ: <strong>Я</strong>)
+<ul>
+<li>Тут надо сделать упор на том, что показано перед этим, с какими-нибудь пафосными речами (если получится уж).</li>
+</ul></li>
+</ol></li>
+</ul></li>
+<li>Что сделать ещё
+<ul>
+<li>Кросс-валидация
+<ul>
+<li>строим ряд аппроксимаций следующим образом: внутри - отбрасываем значение, строим аппроксимацию, возвращаем значение, убираем следующее, повторяем, получаем.</li>
+<li>полученный ряд сравниваем с исходным например по ошибкам и по коэффициенту корреляции.</li>
+<li>делаем вывод о методах геостатистических параллельно с выводами по прогнозу.</li>
+<li>подсмотреть можно в статьях савельевой (искать <a href="https://sites.google.com/site/geostatistika/home/dopolnitelno/----1999">здесь</a>, в частности вот <a href="https://docs.google.com/viewer?a=v&amp;pid=sites&amp;srcid=ZGVmYXVsdGRvbWFpbnxnZW9zdGF0aXN0aWthfGd4OjI5YTljN2Y4MzMyNjliZGY">это</a>)</li>
+<li>сравнение параметров (как на что влияют, но параметров много, нужно исследовать какие-то определённые и по какому-то правилу)</li>
+<li>получить на основе различных анализов какие-то критерии что лучше, а что нет.</li>
+</ul></li>
+</ul></li>
 </ul>
 </div>
 

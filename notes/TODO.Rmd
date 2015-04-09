@@ -6,27 +6,48 @@ output: html_document
 ---
 
 ### What to do next? Enjoy:
+* R programming
+    + ~~Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.~~  
+    + ~~Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))~~
+    + ~~Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.~~
+    + ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
+    + ~~Reformat and refactor code. Clean up useless files. _Almost done_~~
+    + ~~Add computation block (for some non-visual analysis)~~
+    + ~~Add descriptive statistics to computation block. Or somewhere else.~~
+    + ~~Add normality tests to computation block.~~
+    + ~~Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)~~
+    + ~~Fix references in TeX~~
+    + ~~Check new versions of automap.~~
+    + Variogram analysis must be converted to eye-candy view.
+---
+* TeX
+    + Оформление работы
+        - Посмотреть статьи по оценкам вариограммы для введения внутренней стационарности.
+        - Переписать введение и понятия по геостатистике. На данный момент там околоматематичный бред, не связанный с работой чуть более, чем полностью.
+        - Дополнить/разъяснить выводы по линейным моделям. В частности о переходе к геостатистике.
+        - Исправить все замечания Цеховой в работе (*doc/tmp/tsekhavaya_march.pdf*)
 
-* ~~Find out how to use shiny. I think it will be useful and with it's help I can show this as great product.~~
-
-* ~~Use a code style (e.g. [google-styleguide](https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml))~~
-
-* ~~Aim is to achieve modularity: special module for descriptive statistics, special for variogram and so on.~~
-
-* ~~Find out more about [packrat](http://rstudio.github.io/packrat): dependency manager.~~
-
-* ~~Reformat and refactor code. Clean up useless files. _Almost done_~~
-
-* ~~Add computation block (for some non-visual analysis)~~
-
-* ~~Add descriptive statistics to computation block. Or somewhere else.~~
-
-* ~~Add normality tests to computation block.~~
-
-* ~~Reimplement (cmd-c+cmd-v+reformat) tests for normality in separate module (?)~~
-
-* ~~Fix references in TeX~~
-
-* ~~Check new versions of automap.~~
-
-* Variogram analysis must be converted to eye-candy view.
+    + Доклад и презентация работы (Во всей презентации делаем акцент на то, что это сделал Я. --__Я__ сделал то-то. --__Мною__ получено это-то. --При помощи этого __Я__ получил вот это.)
+        1. Цели и задачи работы (основа - в задании к дипломной работе *doc/tmp/ЗаданиеКРиД.doc*).
+        2. Постановка задачи (о данных, выборке, какие сложности, что делали, как обрабатывали, что в итоге изучалось)
+        3. Первичный анализ (презентовать реализованную в рамках проекта программу, с целью показать широкие возможности первичного анализа, которые она предоставила; возможно показать на каком-то примере.)
+            - Возможно некоторые (наиболее интересные) графики показывать полностью, с их анализом и выводами. То есть следует показывать только то, что будет связывать предыдущее со следующим. Представляем нить, которая должна связывать все повествование. В итоге должно получиться единое целое, откуда слов не выкинешь.
+            - Скорее всего следует подробно рассказать и показать регрессионный анализ. Во-первых есть что показать, во-вторых затрагивает почти весь первичный анализ, и в-третьих, на выводах из данного этапа обосновываем дальнейшие.
+        4. Анализ остатков (сделать акцент на характеристики, которыми они должны обладать и обладают ли; показать интересные результаты, если есть; опять же, тут можно завернуть пару грамм про программное обеспечение).
+            - Крайне важно на данном этапе сформировать правильные выводы о полученных результатах и детерминированных подходах. Чтобы без всяких швов перейти к геостатистике.
+        6. Геостатистика (основной упор и основная работа должна быть тут, т.к. по сути, это и есть самое интересное)
+            - Введение, что такое, как появилась, кто предложил и исследовал. Почему наши данные подходят для применения этого метода и вообще.
+            - Теория (привести доказанные теоремы; обосновать их введение и исследование оценки; было бы круто обосновать это построением доверительных интервалов для вариограмм) Еще нужно сделать акцент (если потребуется), что проблема исследовалась но на других ограничениях (у меня к примеру гауссовский, и в одной из теорем ограничение на вариограмму, а не на ковариацию)
+            - Было бы круто так же продемонстрировать программный функционал в данной сфере.
+            - Привести критерии и интересные результаты.
+        7. Заключение (что проделано, что получено, как получено -- опять же ключ: __Я__)
+            - Тут надо сделать упор на том, что показано перед этим, с какими-нибудь пафосными речами (если получится уж).
+            
+* Что сделать ещё
+    + Кросс-валидация
+        - строим ряд аппроксимаций следующим образом: внутри - отбрасываем значение, строим аппроксимацию, возвращаем значение, убираем следующее, повторяем, получаем.
+        - полученный ряд сравниваем с исходным например по ошибкам и по коэффициенту корреляции.
+        - делаем вывод о методах геостатистических параллельно с выводами по прогнозу.
+        - подсмотреть можно в статьях савельевой (искать [здесь](https://sites.google.com/site/geostatistika/home/dopolnitelno/----1999), в частности вот [это](https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxnZW9zdGF0aXN0aWthfGd4OjI5YTljN2Y4MzMyNjliZGY))
+        - сравнение параметров (как на что влияют, но параметров много, нужно исследовать какие-то определённые и по какому-то правилу)
+        - получить на основе различных анализов какие-то критерии что лучше, а что нет.

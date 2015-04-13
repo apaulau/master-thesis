@@ -61,7 +61,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           ),
           
           tabPanel("Первичный анализ",
-            plotOutput("residual_base_plot"),
+            plotOutput("base_plot"),
             fluidRow(
               column(5,
                 conditionalPanel(

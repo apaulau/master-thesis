@@ -9,6 +9,7 @@ source("lib/draw.R")       # helpers for drawing
 source("lib/plot.R")       # custom plots
 source("lib/ntest.R")      # normality tests
 source("lib/regr.R")       # regression tests
+source("lib/afv.R")      # autofit variogram module
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -315,21 +316,27 @@ shinyServer(function(input, output, session) {
     input$psill
   })
   
-  wrap <- reactive({
+  manualVariogram <- reactive({
     observations <- input$range[2]
     data <- residuals()$temperature
-    p <- data.frame("X"=c(1:observations), "Y"=rep(1, observations))
-    coordinates(p) <- ~ X + Y
-    experimental_variogram <- variogram(data~1, p, width=1, cutoff=cutoff())
+    spdata <- data.frame("x"=c(1:observations), "y"=rep(1, observations))
+    coordinates(spdata) =~ x + y
     
-    if (psill() == 0) {
-      model.variog <- vgm(model=modelV(), range=range(), nugget=nugget())  
+    if (!input$afv) {
+      experimental_variogram <- variogram(data~1, spdata, width=1, cutoff=cutoff())
+      if (psill() == 0) {
+        model.variog <- vgm(model=modelV(), range=range(), nugget=nugget())  
+      } else {
+        model.variog <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
+      }
+      
+      if (input$fitVariogram) {
+        model.variog <- fit.variogram(experimental_variogram, model.variog)
+      }
     } else {
-      model.variog <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
-    }
-    
-    if (input$fitVariogram) {
-      model.variog <- fit.variogram(experimental_variogram, model.variog)
+      variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=FALSE, width=FALSE)
+      experimental_variogram <- variogram$exp_var
+      model.variog <- variogram$var_model
     }
     
     # Arrange the data for the ggplot2 plot
@@ -339,11 +346,12 @@ shinyServer(function(input, output, session) {
     #convert the dataframes to a long format
     Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
     Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
+
     
     data.frame(Empirical, x_rng=Modeled$dist, y_rng=Modeled$value)
   })
   
-  wrap %>% ggvis(x=~dist, y=~value) %>%
+  manualVariogram %>% ggvis(x=~dist, y=~value) %>%
     layer_paths(x=~x_rng, y=~y_rng, stroke := "blue") %>% # add checkbox to show or not
     layer_points(x=~dist, y=~value) %>% 
     scale_numeric("x", nice = FALSE) %>%

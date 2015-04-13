@@ -60,6 +60,7 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
 }
 
 ComputeManualVariogram <- function (data, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, file_modeled="") {
+  ## TODO: SEE COMPUTEVARIOGRAM FOR FAKE DF
   # Make fake second coordinate
   p <- data.frame("X"=c(1:kObservationNum), "Y"=rep(1, kObservationNum))
   coordinates(p) <- ~ X + Y

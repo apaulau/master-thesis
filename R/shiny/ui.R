@@ -199,7 +199,55 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
       )
     )
   ),
-  tabPanel("Вариограммный анализ"),
+  tabPanel("Вариограммный анализ",
+    sidebarLayout(
+      sidebarPanel(
+        conditionalPanel(
+          condition = "input.variogram_panel == 'Вариограмма'",
+          selectInput("modelV", "Модель вариограммы",
+            c(#"Эффект самородков"="Nug",
+              "Экспоненциальная"="Exp",
+              "Сферическая"="Sph",
+              "Гауссовская"="Gau",
+              "Матерна"="Mat",
+              "Штейна"="Ste",
+              "Круговая"="Cir",
+              "Линейная"="Lin",
+              "Бесселя"="Bes",
+              "Пентасферическая"="Pen",
+              "Периодическая"="Per",
+              "Волновая"="Wav",
+              "С эффектом дыр"="Hol",
+              "Логарифмическая"="Log",
+              "Сплайн"="Spl",
+              "Лежандра"="Leg")
+            ),
+          numericInput("cutoff", "Максимальный лаг", value=21, min=0, max=38, step=1),
+          numericInput("nugget", "Самородок", value=0, min=0),
+          numericInput("rangeV",  "Ранг", value=1, min=1),
+          numericInput("psill", "Порог", value=1, min=1),
+          checkboxInput("fitVariogram", "Подогнать параметры")
+        ),
+        uiOutput("variogram_ui")
+      ),
+      mainPanel(
+        tabsetPanel(
+          id="variogram_panel",
+          tabPanel("Вариограмма",
+            br(),
+            ggvisOutput("variogram")
+          ),
+          
+          tabPanel("Кригинг",
+            br()
+          ),
+          
+          tabPanel("Сравнительный анализ"
+          )
+        )
+      )
+    )
+  ),
   navbarMenu("О программе",
     tabPanel("Введение",
       fluidPage(
@@ -224,5 +272,4 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
       )
     )
   )
-  
 ))

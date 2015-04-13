@@ -290,4 +290,62 @@ shinyServer(function(input, output, session) {
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
+  modelV <- reactive({
+    input$modelV
+  })
+  
+  cutoff <- reactive({
+    input$cutoff
+  })
+  
+  nugget <- reactive({
+    input$nugget
+  })
+  
+  range <- reactive({
+    r <- input$rangeV
+    if(!is.na(r)) {
+      r
+    } else {
+      1
+    }
+  })
+  
+  psill <- reactive({
+    input$psill
+  })
+  
+  wrap <- reactive({
+    observations <- input$range[2]
+    data <- residuals()$temperature
+    p <- data.frame("X"=c(1:observations), "Y"=rep(1, observations))
+    coordinates(p) <- ~ X + Y
+    experimental_variogram <- variogram(data~1, p, width=1, cutoff=cutoff())
+    
+    if (psill() == 0) {
+      model.variog <- vgm(model=modelV(), range=range(), nugget=nugget())  
+    } else {
+      model.variog <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
+    }
+    
+    if (input$fitVariogram) {
+      model.variog <- fit.variogram(experimental_variogram, model.variog)
+    }
+    
+    # Arrange the data for the ggplot2 plot
+    # add the semivariance values of v2 to v1
+    Fitted <- data.frame(dist = seq(0.01, max(experimental_variogram$dist), length = cutoff()))
+    Fitted$gamma <- variogramLine(model.variog, dist_vector = Fitted$dist)$gamma
+    #convert the dataframes to a long format
+    Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
+    Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
+    
+    data.frame(Empirical, x_rng=Modeled$dist, y_rng=Modeled$value)
+  })
+  
+  wrap %>% ggvis(x=~dist, y=~value) %>%
+    layer_paths(x=~x_rng, y=~y_rng, stroke := "blue") %>% # add checkbox to show or not
+    layer_points(x=~dist, y=~value) %>% 
+    scale_numeric("x", nice = FALSE) %>%
+    bind_shiny("variogram", "variogram_ui")
 })

@@ -29,7 +29,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 "Фридмана-Дьякона" = "fd")
             )
           ),
-          selectInput("ntest", label="Критерий нормальность",
+          selectInput("ntest", label="Критерий нормальности",
             c("Шапиро-Уилка" = "shapiro",
               "Пирсона Хи-квадрат" = "pearson",
               "Колмогорова Смирнова" = "ks")
@@ -142,7 +142,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 "Фридмана-Дьякона" = "fd")
             )
           ),
-          selectInput("residual_ntest", label="Критерий нормальность",
+          selectInput("residual_ntest", label="Критерий нормальности",
             c("Шапиро-Уилка" = "shapiro",
               "Пирсона Хи-квадрат" = "pearson",
               "Колмогорова Смирнова" = "ks")

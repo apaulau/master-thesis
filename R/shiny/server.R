@@ -355,7 +355,9 @@ shinyServer(function(input, output, session) {
   fittedVariogram %>% ggvis(x=~dist, y=~value) %>%
     layer_paths(x=~x_rng, y=~y_rng, stroke := "blue") %>% # add checkbox to show or not
     layer_points(x=~dist, y=~value) %>% 
-    scale_numeric("x", nice = FALSE) %>%
+    add_axis("x", title="Лаг", format="d") %>%
+    add_axis("y", title="Семивариограмма") %>%
+    add_tooltip(function(df) paste(paste("<b>Лаг:</b>", df$dist), paste("<b>Значение:</b>",df$value), sep="<br>")) %>%
     bind_shiny("variogram", "variogram_ui")
   
   output$text_model <- renderUI({

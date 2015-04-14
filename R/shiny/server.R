@@ -316,44 +316,81 @@ shinyServer(function(input, output, session) {
     input$psill
   })
   
-  manualVariogram <- reactive({
+  basicVariogram <- reactive({
     observations <- input$range[2]
     data <- residuals()$temperature
     spdata <- data.frame("x"=c(1:observations), "y"=rep(1, observations))
     coordinates(spdata) =~ x + y
     
     if (!input$afv) {
-      experimental_variogram <- variogram(data~1, spdata, width=1, cutoff=cutoff())
+      exp_var <- variogram(data~1, spdata, width=1, cutoff=cutoff())
       if (psill() == 0) {
-        model.variog <- vgm(model=modelV(), range=range(), nugget=nugget())  
+        var_model <- vgm(model=modelV(), range=range(), nugget=nugget())  
       } else {
-        model.variog <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
+        var_model <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
+      }     
+      if (input$fitVariogram) {
+        var_model <- fit.variogram(exp_var, var_model)
       }
       
-      if (input$fitVariogram) {
-        model.variog <- fit.variogram(experimental_variogram, model.variog)
-      }
+      variogram <- list(exp_var = exp_var, var_model = var_model)
+      
     } else {
       variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=FALSE, width=FALSE)
-      experimental_variogram <- variogram$exp_var
-      model.variog <- variogram$var_model
     }
-    
+  })
+  
+  fittedVariogram <- reactive({
     # Arrange the data for the ggplot2 plot
     # add the semivariance values of v2 to v1
-    Fitted <- data.frame(dist = seq(0.01, max(experimental_variogram$dist), length = cutoff()))
-    Fitted$gamma <- variogramLine(model.variog, dist_vector = Fitted$dist)$gamma
+    Fitted <- data.frame(dist = seq(0.01, max(basicVariogram()$exp_var$dist), length = cutoff()))
+    Fitted$gamma <- variogramLine(basicVariogram()$var_model, dist_vector = Fitted$dist)$gamma
     #convert the dataframes to a long format
-    Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
+    Empirical <- melt(basicVariogram()$exp_var, id.vars = "dist", measure.vars = c("gamma"))
     Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
 
-    
     data.frame(Empirical, x_rng=Modeled$dist, y_rng=Modeled$value)
   })
   
-  manualVariogram %>% ggvis(x=~dist, y=~value) %>%
+  fittedVariogram %>% ggvis(x=~dist, y=~value) %>%
     layer_paths(x=~x_rng, y=~y_rng, stroke := "blue") %>% # add checkbox to show or not
     layer_points(x=~dist, y=~value) %>% 
     scale_numeric("x", nice = FALSE) %>%
     bind_shiny("variogram", "variogram_ui")
+  
+  output$text_model <- renderUI({
+    getModelName <- function (model) {
+      switch(as.character(model$model),
+        "Nug"="Эффект самородков",
+        "Exp"="Экспоненциальная модель",
+        "Sph"="Сферическая модель",
+        "Gau"="Гауссовская модель",
+        "Mat"="Модель Матерна",
+        "Ste"="Модель Штейна",
+        "Cir"="Круговая модель",
+        "Lin"="Линейная модель",
+        "Bes"="Модель Бесселя",
+        "Pen"="Пентасферическая модель",
+        "Per"="Периодическая модель",
+        "Wav"="Волновая модель",
+        "Hol"="Модель с эффектом дыр",
+        "Log"="Логарифмическая модель",
+        "Spl"="Сплайн-модель",
+        "Leg"="Модель Лежандра")
+    }
+    
+    models <- basicVariogram()$var_model
+    text <- ""
+    for (i in 1:length(models[, 1])) {
+      model <- models[i, ]
+      if (model$model == "Nug") {
+        textModel <- paste0("<b>", getModelName(model), ": </b>",  format(model$psill))
+      } else {
+        textModel <- paste("<b>", getModelName(model), "</b>", "<br><b>Ранг:</b>", format(model$range), "<br><b>Порог:</b>", format(model$psill))
+      }
+      text <- paste(text, textModel, sep=ifelse(i==1, "", "<hr>"))
+    }
+    HTML(text)
+  })
+  
 })

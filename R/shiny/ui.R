@@ -240,7 +240,18 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           id="variogram_panel",
           tabPanel("Вариограмма",
             br(),
-            ggvisOutput("variogram")
+            ggvisOutput("variogram"),
+            fluidRow(
+              column(5,             
+                h4("Модель вариограммы"),
+                htmlOutput("text_model")
+              ),
+              column(2),
+              column(5,
+                h4("TBD"),
+                htmlOutput("some_other_stuff")
+              )
+            )
           ),
           
           tabPanel("Кригинг",

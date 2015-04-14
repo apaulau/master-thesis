@@ -3,13 +3,17 @@ library(ggplot2)  # eye-candy graphs
 library(ggvis)
 library(dplyr)
 library(tseries)
+library(sp)
+library(gstat)
+library(reshape2)
 
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
 source("lib/plot.R")       # custom plots
 source("lib/ntest.R")      # normality tests
 source("lib/regr.R")       # regression tests
-source("lib/afv.R")      # autofit variogram module
+source("lib/afv.R")        # autofit variogram module
+source("lib/kriging.R")
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
@@ -333,10 +337,10 @@ shinyServer(function(input, output, session) {
         var_model <- fit.variogram(exp_var, var_model)
       }
       
-      variogram <- list(exp_var = exp_var, var_model = var_model)
+      variogram <- list(exp_var = exp_var, var_model = var_model, sserr = ifelse(is.null(attr(var_model, "SSErr")), "", attr(var_model, "SSErr")))
       
     } else {
-      variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=FALSE, width=FALSE)
+      variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=input$cressie, width=FALSE)
     }
   })
   
@@ -395,4 +399,16 @@ shinyServer(function(input, output, session) {
     HTML(text)
   })
   
+  output$sserr <- renderUI({
+    HTML(ifelse(input$afv || input$fitVariogram, paste("<b>Среднеквадратическая ошибка:</b>", format(basicVariogram()$sserr)), ""))
+  })
+  
+  kriging <- reactive({
+    PredictWithKriging(residuals()$temperature, x=input$range[1]:input$range[2], variogram_model=basicVariogram()$var_model)
+  })
+  
+  output$predictions <- renderTable({
+    k <- kriging()
+    data.frame("Прогноз"=k$var1.pred, "Дисперсия"=k$var1.var)
+  })
 })

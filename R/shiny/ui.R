@@ -231,7 +231,11 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             numericInput("psill", "Порог", value=1, min=1),
             checkboxInput("fitVariogram", "Подогнать параметры")
           ),
-          checkboxInput("afv", "Автоматический подбор модели")
+          checkboxInput("afv", "Автоматический подбор модели"),
+          conditionalPanel(
+            condition = "input.afv == true",
+            checkboxInput("cressie", "Использовать оценку Кресси")
+          )
         ),
         uiOutput("variogram_ui")
       ),
@@ -248,14 +252,24 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
               ),
               column(2),
               column(5,
-                h4("TBD"),
-                htmlOutput("some_other_stuff")
+                htmlOutput("sserr")
               )
             )
           ),
           
           tabPanel("Кригинг",
-            br()
+            br(),
+            ggvisOutput("krige"),
+            fluidRow(
+              column(5,             
+                h4("Прогноз"),
+                tableOutput("predictions")
+              ),
+              column(2),
+              column(5,
+                htmlOutput("something")
+              )
+            )
           ),
           
           tabPanel("Сравнительный анализ"

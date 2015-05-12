@@ -312,7 +312,7 @@ shinyServer(function(input, output, session) {
     if(!is.na(r)) {
       r
     } else {
-      1
+      .1
     }
   })
   
@@ -400,7 +400,7 @@ shinyServer(function(input, output, session) {
   })
   
   output$sserr <- renderUI({
-    HTML(ifelse(input$afv || input$fitVariogram, paste("<b>Среднеквадратическая ошибка:</b>", format(basicVariogram()$sserr)), ""))
+    HTML(ifelse(input$afv || input$fitVariogram, paste("<b>Невязка:</b>", format(basicVariogram()$sserr)), ""))
   })
   
   kriging <- reactive({

@@ -10,8 +10,14 @@
 % Other themes include: beamerthemebars, beamerthemelined,
 %                       beamerthemetree, beamerthemetreebars
 
+\newcommand{\inp}[1]{\input{../../out/#1}}
+\newcommand{\characteristic}[2]{\inp{#1/characteristics/#2}}
+\newcommand{\descriptive}[2]{\inp{#1/descriptive/#2}}
+\newcommand{\test}[3]{\inp{#1/test/#2/#3}}
+\newcommand{\normaldistr}{$\mathcal{N}(\descriptive{original}{mean}, \descriptive{original}{variance})$}
+
 \logo{\includegraphics[width=1cm,height=1cm,keepaspectratio]{Logo_BSU.jpg}}
-\title[Исследование гидроэкологических данных в пакете R]{Исследование гидроэкологических данных с использованием среды программирования R}    % Enter your title between curly braces
+\title[Анализ и прогнозирование гидрологических данных]{Анализ и прогнозирование гидрологических данных}    % Enter your title between curly braces
 \author[Павлов Александр]{Павлов Александр Сергеевич}                 % Enter your name between curly braces
 \institute{Кафедра Теории Вероятностей и Математической Статистики}      % Enter your institute name between curly braces
 \date{\today}                    % Enter the date or \today between curly braces
@@ -38,14 +44,12 @@
   \frametitle{Постановка задачи}   % Insert frame title between curly braces
 
   \begin{itemize}
-    \item Исследование и статистическая обработка гидроэкологических данных в пакете R
-    \item Вычисление и анализ описательных статистик
-    \item Проверка исходных данных на нормальность
-    \item Идентификация законов распределения
+    \item Первичный анализ данных
     \item Корреляционный анализ
+    \item Анализ остатков
     \item Регрессионный анализ
     \item Вариограммный анализ
-    \item Кригинг
+    \item Прогнозирование методом Кригинга
   \end{itemize}
 \end{frame}
 
@@ -60,7 +64,7 @@
 
   На рисунке представлена выборка наблюдений за температурой воды в июле месяце в период с 1975 по 2012 годы.
   \column{3in}
-  \framebox{\includegraphics[width=3in]{../figures/temperature-ts-first-overview.pdf}
+  \framebox{\includegraphics[width=3in]{../../figures/original/time-series.png}
   }
   \end{columns}
 \end{frame}
@@ -70,7 +74,7 @@
 \begin{frame}
   \frametitle{Основные описательные статистики}   % Insert frame title between curly braces
 
-  \input{../out/dstats_slides.tex}
+  \input{../../out/original/dstats.tex}
 
 \end{frame}
 
@@ -80,7 +84,7 @@
   \frametitle{Гистограмма наблюдаемых температур}   % Insert frame title between curly braces
    \begin{columns}[c]
    \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/hist.png}
+  \includegraphics[width=4.5in]{../../figures/original/histogram.png}
   \end{columns}
 \end{frame}
 
@@ -88,22 +92,9 @@
   \frametitle{График квантилей}   % Insert frame title between curly braces
    \begin{columns}[c]
    \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/qq.png}
+  \includegraphics[width=4.5in]{../../figures/original/quantile.png}
   \end{columns}
 \end{frame}
-
-\begin{frame}
-  \frametitle{Статистические критерии в R}   % Insert frame title between curly braces
-   \begin{columns}[c]
-   \column{2.2in}
-   \textit{> shapiro.test()}:
-   \input{../out/shapiro.tex}
-   \column{2in}
-  \textit{> pearson.test()}:
-   \input{../out/pearson.tex}
-  \end{columns}
-\end{frame}
-
 
 \section{Корреляционный анализ}
 
@@ -113,19 +104,12 @@
   \begin{columns}[c]
   \column{2in}  % slides are 3in high by 5in wide
   \begin{itemize}
-  \item<1-> Выборочный коэффициент корреляции: $r_{xt}=0.52$
-  \item<2-> При уровне значимости $\alpha=0.05$ выборочный коэффициент является значимым
+  \item<1-> Выборочный коэффициент корреляции: $ r_{xt} = \characteristic{original}{correlation} $
+  \item<2-> При уровне значимости $ \alpha=0.05 $ выборочный коэффициент является значимым
   \end{itemize}
   \column{3in}
-  \framebox{\includegraphics[width=3in]{../figures/article/scatterplot.png}}
+  \framebox{\includegraphics[width=3in]{../../figures/original/scatterplot.png}}
   \end{columns}
-\end{frame}
-
-\subsection{Проверка значимости выборочного коэффициента корреляции}
-\begin{frame}
-  \frametitle{Проверка критерия значимости средствами пакета R}   % Insert frame title between curly braces
-  \textit{> cor.test(method=``pearson'')}
-   \input{../out/ctest.tex}
 \end{frame}
 
 \section{Регрессионный анализ}
@@ -136,11 +120,11 @@
   \begin{columns}[c]
   \column{2in}  % slides are 3in high by 5in wide
   \begin{itemize}
-  \item<1-> Модель временного ряда: $X = T + E$
-  \item<2-> Уравнение тренда: $x = 0.108t + 17.98$
+  \item<1-> Модель временного ряда: $ X = T + E $
+  \item<2-> Уравнение тренда: $ x(t) = at + b = 0.1014t + 18.0521 $
   \end{itemize}
   \column{3in}
-  \framebox{\includegraphics[width=3in]{../figures/article/ts.png}}
+  \framebox{\includegraphics[width=3in]{../../figures/residual/time-series.png}}
   \end{columns}
 \end{frame}
 
@@ -148,20 +132,11 @@
 \begin{frame}
   \frametitle{Оценка модели}   % Insert frame title between curly braces
   \begin{itemize}
-    \item<1-> С помощью критерия Стьюдента доказана значимость коэффициентов модели регрессии
-    \item<2-> F-критерий Фишера при уровне значимости $\alpha = 0.05$ показал адекватность модели
-    \item<3-> Точность модели невысока, посколько коэффициент детерминации $\eta^2_{x(t)} = 0.275$
+    \item<1-> С помощью критерия Стьюдента доказана значимость коэффициентов регрессионной модели
+    \item<2-> F-критерий Фишера при уровне значимости $ \alpha = 0.05 $ показал адекватность модели
+    \item<3-> Точность модели невысока, посколько коэффициент детерминации $ \eta^2_{x(t)} = 0.275 $
   \end{itemize}
 \end{frame}
-
-\begin{frame}
-  \frametitle{Прогноз}   % Insert frame title between curly braces
-   \begin{columns}[c]
-   \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/actvspred.png}
-  \end{columns}
-\end{frame}
-
 
 \subsection{Анализ остатков}
 
@@ -169,7 +144,7 @@
   \frametitle{Автокорреляционная функция}   % Insert frame title between curly braces
    \begin{columns}[c]
    \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/acf.png}
+  \includegraphics[width=4.5in]{../../figures/residual/acf.png}
   \end{columns}
 \end{frame}
 
@@ -181,7 +156,7 @@
   \frametitle{График экспериментальной вариограммы}   % Insert frame title between curly braces
    \begin{columns}[c]
    \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/variog1.png}
+  % \includegraphics[width=4.5in]{../../figures/article/variog1.png}
   \end{columns}
 \end{frame}
 
@@ -197,7 +172,7 @@
   \item Ранг: $4.19$
   \end{itemize}
   \column{3in}
-  \framebox{\includegraphics[width=3in]{../figures/article/variog.png}}
+  % \framebox{\includegraphics[width=3in]{../../figures/article/variog.png}}
   \end{columns}
 \end{frame}
 
@@ -206,16 +181,16 @@
   \frametitle{Прогнозирование методом ординарного кригинга}   % Insert frame title between curly braces
    \begin{columns}[c]
    \column{4.5in}
-  \includegraphics[width=4.5in]{../figures/article/actvspredpred.png}
+  % \includegraphics[width=4.5in]{../../figures/article/actvspredpred.png}
   \end{columns}
 \end{frame}
 
-\subsection{}
-\begin{frame}
-  \frametitle{}   % Insert frame title between curly braces
-   \begin{columns}[c]
-   \column{1.3in}
-  Спасибо за внимание
-  \end{columns}
-\end{frame}
+% \subsection{}
+% \begin{frame}
+%   \frametitle{}   % Insert frame title between curly braces
+%    \begin{columns}[c]
+%    \column{1.3in}
+%   Спасибо за внимание
+%   \end{columns}
+% \end{frame}
 \end{document}

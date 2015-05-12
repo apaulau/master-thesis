@@ -5,9 +5,7 @@
 \chapter{Оценка вариограммы внутренне стационарного гауссовского случайного процесса и ее свойства}
 \label{c:variogram_estimation}
 
-Рассмотрим внутренне стационарный гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $. Не нарушая общности, далее считаем $ m(t) \equiv 0 $, $ V(t) \equiv \sigma^2,~ t \in \mathbb{Z}$.
-
-Вариограмма процесса $ X(t),~ 2 \gamma(h) $, является неизвестной.
+Рассмотрим внутренне стационарный гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой.
 
 Наблюдается процесс $ X(t),~ t \in \mathbb{Z} $, и регистрируются наблюдения $ X(1), X(2), \dots, X(n) $ в последовательные моменты времени $ 1, 2, \dots, n $.
 
@@ -39,11 +37,11 @@
 	\label{eq:est_var}
 		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2,
 	\end{equation}
-	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(t), t \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+	где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
 \end{Theorem}
 \begin{proof}
 
-Вычислим первый момент введённой оценки \eqref{eq:var_estimation}, используя свойства математического ожидания:
+Вычислим первый момент оценки \eqref{eq:var_estimation}, используя свойства математического ожидания:
 \begin{equation*}
 	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \}.
 \end{equation*}
@@ -92,8 +90,10 @@
 \nonumber
 \label{eq:cov_base}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
-	= \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2
+	= \frac{2}{(n - h_1)(n - h_2)} \times \\
+	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
 \end{eqnarray}
+что и требовалось показать.
 
 %TODO что-то здесь все строчки плывут!
 
@@ -130,7 +130,7 @@
 	\label{eq:asymptotic_var}
 		\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
 	\end{equation}
-	где $ \gamma(h), h \in \mathbb{R} $, --- семивариограмма процесса $ X(t), t \in \mathbb{R}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+	где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
 \end{Theorem}
 \begin{proof}
 
@@ -203,7 +203,7 @@
 		\end{axis}
 	\end{tikzpicture}
 
-	\caption{Замена переменных}
+	\caption{Области суммирования после замены переменных}
 	\label{fig:label}
 \end{figure}
 

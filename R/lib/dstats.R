@@ -2,10 +2,11 @@
 
 # Function for getting all descriptive statistics
 dstats.describe <- function(data, type="", locale=FALSE) {
+  cv <- dstats.coef.var(data)
   stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
              dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
              dstats.range(data), dstats.quartile.range(data), dstats.variance(data),
-             dstats.std.dev(data), dstats.coef.var(data), dstats.std.error(data),
+             dstats.std.dev(data), if(!is.na(cv)){cv}, dstats.std.error(data),
              dstats.skew(data), dstats.std.error.skew(data), dstats.kurtosis(data),
              dstats.std.error.kurtosis(data))
   
@@ -15,14 +16,14 @@ dstats.describe <- function(data, type="", locale=FALSE) {
   if (locale) {
     descr.row <- c("Среднее", "Медиана", "Нижний квартиль", "Верхний квартиль", 
                    "Минимум", "Максимум", "Размах", "Квартильный размах",
-                   "Дисперсия", "Стандартное отклонение", "Коэффициент вариации",
+                   "Дисперсия", "Стандартное отклонение", if(!is.na(cv)) {"Коэффициент вариации"},
                    "Стандартная ошибка", "Асимметрия", "Ошибка асимметрии",
                    "Эксцесс", "Ошибка эксцесса")
     descr.col <- c("Значение")
   } else {
     descr.row <- c("Mean", "Median", "Lower Quartile", "Upper Quartile", "Range",
                    "Minimum", "Maximum", "Quartile Range", "Variance", "Standard Deviation", 
-                   "Coefficient of Variance", "Standard Error", "Skewness", 
+                   if (!is.na(cv)) {"Coefficient of Variance"}, "Standard Error", "Skewness", 
                    "Std. Error Skewness", "Kurtosis", "Std. Error Kurtosis")
     descr.col <- c("Value")
   }
@@ -77,7 +78,7 @@ dstats.coef.var <- function(data) {
   if (abs(mn) > 1.987171e-15) {
     (var(data) / mean(data)) * 100
   } else
-    0
+    NA
 }
 
 dstats.std.error <- function(data) {

@@ -21,7 +21,7 @@ processPrediction <- function (data, year, variog=ComputeVariogram, cressie, cut
   WriteCharacteristic(variogram$var_model[[2]][2], type="variogram", name=paste0(name, "-psill"))
   WriteCharacteristic(variogram$var_model[[3]][2], type="variogram", name=paste0(name, "-range"))
   
-  prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), variogram_model=variogram$var_model)
+  prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model)
   residual <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, prediction, name)
   mse <- MSE(residual)
   

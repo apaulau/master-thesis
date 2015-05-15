@@ -15,17 +15,18 @@ source("lib/regr.R")       # regression tests
 source("lib/afv.R")        # autofit variogram module
 source("lib/variogram.R")
 source("lib/kriging.R")
+source("lib/misc.R")
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
 src.nrows <- 38
 src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 
-kMinYear <- min(src.data$year)
+kminRange <- min(src.data$year)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-  minYear <- reactive({
+  minRange <- reactive({
     if (input$nav == "Анализ остатков") {
       input$residual_range[1]
     } else if (input$nav == "Вариограммный анализ") {
@@ -34,7 +35,7 @@ shinyServer(function(input, output, session) {
       input$range[1]
     }
   })
-  maxYear <- reactive({
+  maxRange <- reactive({
     if (input$nav == "Анализ остатков") {
       input$residual_range[2]
     } else if (input$nav == "Вариограммный анализ") {
@@ -44,9 +45,9 @@ shinyServer(function(input, output, session) {
     }
   })
   series <- reactive({
-    src.data[minYear():maxYear(),]
+    src.data[minRange():maxRange(),]
   })
-  breaks <- reactive({src.data[minYear():maxYear(),1]})
+  breaks <- reactive({src.data[minRange():maxRange(),1]})
   binwidth <- reactive({input$binwidth})
   sturges <- reactive({
     data <- series()$temperature
@@ -61,10 +62,10 @@ shinyServer(function(input, output, session) {
     (max(data)-min(data)) / nclass.scott(data)
   })
   datebreaks <- reactive({
-    seq(kMinYear - 5 + minYear(), kMinYear + 5 + maxYear(), by=2)
+    seq(kminRange - 5 + minRange(), kminRange + 5 + maxRange(), by=2)
   })
   model <- reactive({
-    lm(series()$temperature ~ c(minYear():maxYear()))
+    lm(series()$temperature ~ c(minRange():maxRange()))
   })
   residuals <- reactive({
     data.frame(year = series()$year, temperature=model()$residuals)
@@ -140,11 +141,11 @@ shinyServer(function(input, output, session) {
     bind_shiny("scatterplot", "scatter_ui")
   
   output$correlation <- renderText({
-    format(cor(series()$temperature, c(1:(maxYear() - minYear() + 1))), digits=5)
+    format(cor(series()$temperature, c(1:(maxRange() - minRange() + 1))), digits=5)
   })
   
   output$ctest <- renderUI({    
-    result <- cor.test(series()$temperature, c(1:(maxYear() - minYear() + 1)), method="pearson")
+    result <- cor.test(series()$temperature, c(1:(maxRange() - minRange() + 1)), method="pearson")
     statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
     df <- paste("<b>Степеней свободы:</b>", format(result$parameter[["df"]]))
     p.value <- paste("<b>P-значение:</b>", format(result$p.value))
@@ -157,7 +158,7 @@ shinyServer(function(input, output, session) {
   line <- reactive({
     data.frame(
       x_rng = breaks(), 
-      y_rng = sapply(c((minYear()):(maxYear())), FUN=linear, a=coef(model())[2], b=coef(model())[1])
+      y_rng = sapply(c((minRange()):(maxRange())), FUN=linear, a=coef(model())[2], b=coef(model())[1])
     )
   })
   
@@ -165,7 +166,7 @@ shinyServer(function(input, output, session) {
     if (input$residuals_trigger == "src") {
       data.frame(series(), line())
     } else {
-      data.frame(residuals(), x_rng=breaks(), y_rng=rep(0, maxYear() - minYear() + 1))
+      data.frame(residuals(), x_rng=breaks(), y_rng=rep(0, maxRange() - minRange() + 1))
     }
   })
   
@@ -358,7 +359,7 @@ shinyServer(function(input, output, session) {
   })
   
   basicVariogram <- reactive({
-    observations <- maxYear() - minYear() + 1
+    observations <- maxRange() - minRange() + 1
     data <- residuals()$temperature
     spdata <- data.frame("x"=c(1:observations), "y"=rep(1, observations))
     coordinates(spdata) =~ x + y
@@ -371,7 +372,7 @@ shinyServer(function(input, output, session) {
         var_model <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
       }     
       if (input$fitVariogram) {
-        var_model <- fit.variogram(exp_var, var_model)
+        var_model <- fit.variogram(exp_var, var_model, debug.level=0)
       }
       
       variogram <- list(exp_var = exp_var, var_model = var_model, sserr = ifelse(is.null(attr(var_model, "SSErr")), "", attr(var_model, "SSErr")))
@@ -440,12 +441,50 @@ shinyServer(function(input, output, session) {
     HTML(ifelse(input$afv || input$fitVariogram, paste("<b>Невязка:</b>", format(basicVariogram()$sserr)), ""))
   })
   
+  observations <- reactive({
+    maxRange() - minRange() + 1
+  })
+  
   kriging <- reactive({
-    PredictWithKriging(residuals()$temperature, x=input$range[1]:input$range[2], variogram_model=basicVariogram()$var_model)
+    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model)
   })
   
   output$predictions <- renderTable({
     k <- kriging()
     data.frame("Прогноз"=k$var1.pred, "Дисперсия"=k$var1.var)
   })
+  
+  computeTrend <- function (fit, future=0) {
+    c(sapply(c(1 : (src.nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))
+  }
+  
+  trend <- reactive({
+    computeTrend(model())
+  }) 
+  
+  cp <- reactive({
+    future <- 0 # don't use it yet
+    obs <- observations()
+    year=GetPredictionYears(src.data$year, src.nrows, 0, obs)
+  
+    actual <- src.data$temperature[(obs - 1):src.nrows]
+    prediction.trend <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):src.nrows])
+    prediction.kriging <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):src.nrows] + kriging()$var1.pred)
+    
+    data.frame(year, actual, trend=prediction.trend, kriging=prediction.kriging)
+  })
+  
+  cp %>% ggvis() %>%
+  layer_paths(x=~year, y=~actual) %>%
+  layer_paths(x=~year, y=~trend, stroke := "green") %>%
+  layer_paths(x=~year, y=~kriging, stroke := "blue") %>%
+  add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+  add_axis("y", title="Температура, ºС") %>%
+  scale_numeric("x", nice = FALSE) %>%
+  bind_shiny("cross_prediction", "cross_prediction_ui")
+  
+  #output$cross_prediction <- renderPlot({
+  #  obj <- cp()
+  #  DrawCrossPrediction(actual=obj$actual, trend=obj$trend, kriging=obj$kriging, future=0)
+  #})
 })

@@ -1,12 +1,12 @@
 CrossPrediction <- function (temperature, years, trend, kriging.classical, kriging.robust, file_prediction="", future=0) {
   prediction.trend <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows]),
-    "year"=GetPredictionYears(years, src.nrows, future))
+    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
   
   prediction.krigingClassical <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows] + kriging.classical$var1.pred),
-    "year"=GetPredictionYears(years, src.nrows, future))
+    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
   
   prediction.krigingRobust <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows] + kriging.robust$var1.pred),
-    "year"=GetPredictionYears(years, src.nrows, future))
+    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
   
   actual <- data.frame("temperature"=temperature[(kObservationNum - 1):src.nrows],
     "year"=GetPredictionYears(years, src.nrows, 0))

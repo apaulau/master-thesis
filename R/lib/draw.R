@@ -94,3 +94,14 @@ DrawHScatterplot <- function (data, cutoff=trunc(2 * kObservationNum / 3)) {
   
   hsc
 }
+
+DrawCrossPrediction <- function (actual, trend, kriging, future) {
+  ggplot() + geom_line(data=actual, aes(x=year, y=temperature, linetype="Наблюдение")) +
+    geom_line(data=trend, aes(x=year, y=temperature, linetype="Прогноз(тренд)")) +
+    geom_line(data=kriging, aes(x=year, y=temperature, linetype="Прогноз(кригинг)")) +       
+    scale_linetype_manual(name="Lines", values=c("Наблюдение"="solid", "Прогноз(тренд)"="dashed", "Прогноз(кригинг)"="dotdash")) +
+    scale_x_continuous(breaks=seq(min(actual$year), max(actual$year) + 5 + future, by=1)) + xlab("Год наблюдения") +
+    scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, С") +
+    theme(axis.text.x = element_text(angle=45, hjust=1)) +
+    labs(color="")
+}

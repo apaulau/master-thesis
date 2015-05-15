@@ -2,7 +2,6 @@ library(shiny)
 library(ggvis)
 require(markdown)
 
-# Define UI for application that draws a histogram
 shinyUI(navbarPage("Анализ Баторино",  id="nav", 
   tabPanel("Исходные данные",
     
@@ -258,9 +257,9 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           
           tabPanel("Кригинг",
             br(),
-            ggvisOutput("krige"),
+            ggvisOutput("cross_prediction"),
             fluidRow(
-              column(5,             
+              column(5,       
                 h4("Прогноз"),
                 tableOutput("predictions")
               ),

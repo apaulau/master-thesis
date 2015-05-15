@@ -59,80 +59,67 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
     scale_y_continuous(breaks=seq(1.04 * min(classicalResult, robustResult), 1.04 * max(classicalResult, robustResult), 1))
 }
 
-ComputeManualVariogram <- function (data, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, file_modeled="") {
-  ## TODO: SEE COMPUTEVARIOGRAM FOR FAKE DF
-  # Make fake second coordinate
-  p <- data.frame("X"=c(1:kObservationNum), "Y"=rep(1, kObservationNum))
-  coordinates(p) <- ~ X + Y
-  experimental_variogram <- variogram(data~1, p, width=1, cutoff=cutoff)
+ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, name="") {
+  spdata <- MakeFakeSpatialData(x=x, data=data)
+  experimentalVariogram <- variogram(data~1, spdata, width=1, cutoff=cutoff)
+  
   if (psill == 0) {
-    model.variog <- vgm(model=model, range=range, nugget=nugget)  
+    modeledVariogram <- vgm(model=model, range=range, nugget=nugget)  
   } else {
-    model.variog <- vgm(model=model, psill=psill, range=range, nugget=nugget)  
+    modeledVariogram <- vgm(model=model, psill=psill, range=range, nugget=nugget)  
   }
   
   if (fit) {
-    model.variog <- fit.variogram(experimental_variogram, model.variog)
+    modeledVariogram <- fit.variogram(experimentalVariogram, modeledVariogram, debug.level=0)
   }
   
-  if (nchar(file_modeled)) {
-    # Arrange the data for the ggplot2 plot
-    # add the semivariance values of v2 to v1
-    Fitted <- data.frame(dist = seq(0.01, max(experimental_variogram$dist), length = kObservationNum))
-    Fitted$gamma <- variogramLine(model.variog, dist_vector = Fitted$dist)$gamma
-    #convert the dataframes to a long format
-    Empirical <- melt(experimental_variogram, id.vars = "dist", measure.vars = c("gamma"))
-    Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
-    
-    plot.modeled <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
-      geom_line(data = Modeled, color='blue') +
-      scale_y_continuous(expand=c(0,0), 
-        breaks=seq(0, 1.04 * max(experimental_variogram$gamma), 1),
-        limits=c(min(0, 1.04 * min(experimental_variogram$gamma)), 1.04 * max(experimental_variogram$gamma))) +
-      scale_x_continuous(expand=c(0,0),
-        breaks=seq(0, 1.04 * max(experimental_variogram$dist), 1),
-        limits=c(0, 1.04 * max(experimental_variogram$dist))) +
-      xlab("Расстояние") + ylab("Значение")
-    ggsave(plot=plot.modeled, file=file_modeled, width=7, height=4)
+  if (nchar(name)) {
+    SaveVariogramPlot(experimentalVariogram, modeledVariogram, name)
   }
-  print(xtable(data.frame("Модель"=model.variog$model, "Порог"=model.variog$psill, "Ранг"=model.variog$range), caption="Модель вариограммы", label="table:manual_model"), table.placement="H", 
-    file="out/variogram/manual-model.tex")
-  result = list(exp_var = experimental_variogram, var_model = model.variog)
+  print(xtable(data.frame("Модель"=modeledVariogram$model, "Порог"=modeledVariogram$psill, "Ранг"=modeledVariogram$range), 
+    caption="Модель вариограммы", label="table:manual_model"), table.placement="H", file="out/variogram/manual-model.tex")
+  
+  result = list(exp_var = experimentalVariogram, var_model = modeledVariogram)
+  return(result)
 }
 
 ## Calculates modeled variogram and creates plot of it.
-ComputeVariogram <- function (data, x, y=rep(1, kObservationNum), file_empirical="", file_modeled="", cressie, cutoff, width) {
-  spdata <- data.frame(cbind("x"=x, "y"=y, data))
-  coordinates(spdata) = ~x+y
+ComputeVariogram <- function (data, x, cressie, cutoff, name="") {
+  spdata <- MakeFakeSpatialData(x=x, data=data)
   
-  variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie, width=width)
-  if (nchar(file_empirical)) { ## here was another check: just <file>
-    # Arrange the data for the ggplot2 plot
-    # add the semivariance values of v2 to v1
-    Fitted <- data.frame(dist = seq(.01, max(variogram$exp_var$dist), length = kObservationNum))
-    Fitted$gamma <- variogramLine(variogram$var_model, dist_vector = Fitted$dist)$gamma
-    #convert the dataframes to a long format
-    Empirical <- melt(variogram$exp_var, id.vars="dist", measure.vars=c("gamma"))
-    Modeled <- melt(Fitted, id.vars="dist", measure.vars=c("gamma"))
-    
-    plot.empirical <- ggplot(Empirical, aes(x=dist, y=value)) +  geom_point() + 
-      scale_y_continuous(expand = c(0, 0), breaks=seq(0, 7, 1), limits=c(min(0, 1.04 * min(variogram$exp_var$gamma)), 1.04 * max(variogram$exp_var$gamma))) +
-      scale_x_continuous(expand = c(0, 0), breaks=seq(0, 1.04 * max(variogram$exp_var$dist), 2), limits=c(0, 1.04 * max(variogram$exp_var$dist))) +
-      xlab("Расстояние") + ylab("Значение")
-    ggsave(plot=plot.empirical, file=file_empirical, width=7, height=4)
-  }
-  if (nchar(file_modeled)) {
-    plot.modeled <- ggplot(Empirical, aes(x=dist, y=value)) +  geom_point() + 
-      geom_line(data=Modeled, color='blue') +
-      scale_y_continuous(expand=c(0, 0), 
-        breaks=seq(0, 1.04 * max(variogram$exp_var$gamma), 1),
-        limits=c(min(0, 1.04 * min(variogram$exp_var$gamma)), 1.04 * max(variogram$exp_var$gamma))) +
-      scale_x_continuous(expand=c(0, 0),
-        breaks=seq(0, 1.04 * max(variogram$exp_var$dist), 1),
-        limits=c(0, 1.04 * max(variogram$exp_var$dist))) +
-      xlab("Расстояние") + ylab("Значение")
-    ggsave(plot=plot.modeled, file=file_modeled, width=7, height=4)
+  variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie)
+  if (nchar(name)) {
+    SaveVariogramPlot(variogram$exp_var, variogram$var_model, name)
   }
 
-  variogram
+  return(variogram)
+}
+
+SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
+  # Arrange the data for the ggplot2 plot
+  # add the semivariance values of v2 to v1
+  Fitted <- data.frame(dist = seq(0.01, max(experimentalVariogram$dist), length = kObservationNum))
+  Fitted$gamma <- variogramLine(modeledVariogram, dist_vector = Fitted$dist)$gamma
+  #convert the dataframes to a long format
+  Empirical <- melt(experimentalVariogram, id.vars = "dist", measure.vars = c("gamma"))
+  Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
+  
+  filename <- paste0("figures/variogram/", name, "-variogram.png")
+  
+  plot.modeled <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
+    geom_line(data = Modeled, color='blue') +
+    scale_y_continuous(expand=c(0,0), 
+      breaks=seq(0, 1.04 * max(experimentalVariogram$gamma), 1),
+      limits=c(min(0, 1.04 * min(experimentalVariogram$gamma)), 1.04 * max(experimentalVariogram$gamma))) +
+    scale_x_continuous(expand=c(0,0),
+      breaks=seq(0, 1.04 * max(experimentalVariogram$dist), 1),
+      limits=c(0, 1.04 * max(experimentalVariogram$dist))) +
+    xlab("Расстояние") + ylab("Значение")
+  ggsave(plot=plot.modeled, file=filename, width=7, height=4)
+}
+
+MakeFakeSpatialData <- function (x, data) {
+  spdata <- data.frame(cbind("x"=x, "y"=rep(1, kObservationNum), data))
+  coordinates(spdata) = ~x+y
+  return(spdata)
 }

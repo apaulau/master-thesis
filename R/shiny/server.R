@@ -300,11 +300,21 @@ shinyServer(function(input, output, session) {
   })
   
   cutoff <- reactive({
-    input$cutoff
+    r <- input$cutoff
+    if(!is.na(r)) {
+      r
+    } else {
+      .1
+    }
   })
   
   nugget <- reactive({
-    input$nugget
+    r <- input$nugget
+    if(!is.na(r)) {
+      r
+    } else {
+      .1
+    }
   })
   
   range <- reactive({
@@ -317,7 +327,12 @@ shinyServer(function(input, output, session) {
   })
   
   psill <- reactive({
-    input$psill
+    r <- input$psill
+    if(!is.na(r)) {
+      r
+    } else {
+      0
+    }
   })
   
   basicVariogram <- reactive({

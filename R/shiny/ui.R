@@ -229,7 +229,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             numericInput("nugget", "Самородок", value=0, min=0),
             numericInput("rangeV",  "Ранг", value=1, min=.1, step=.1),
             numericInput("psill", "Порог", value=1, min=.1, step=.1),
-            checkboxInput("fitVariogram", "Подогнать параметры")
+            checkboxInput("fitVariogram", "Подогнать параметры", value=TRUE)
           ),
           checkboxInput("afv", "Автоматический подбор модели"),
           conditionalPanel(

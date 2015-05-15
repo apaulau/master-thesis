@@ -202,9 +202,11 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
   tabPanel("Вариограммный анализ",
     sidebarLayout(
       sidebarPanel(
+        sliderInput("variogram_range", label="Диапазон",
+          min=1, max=38, value=c(1,35)),
         conditionalPanel(
           condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг'",
-          numericInput("cutoff", "Максимальный лаг", value=21, min=0, max=38, step=1),
+          numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
             selectInput("modelV", "Модель вариограммы",

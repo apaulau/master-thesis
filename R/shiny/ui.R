@@ -203,7 +203,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
     sidebarLayout(
       sidebarPanel(
         conditionalPanel(
-          condition = "input.variogram_panel == 'Вариограмма'",
+          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг'",
           numericInput("cutoff", "Максимальный лаг", value=21, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
@@ -212,8 +212,6 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 "Экспоненциальная"="Exp",
                 "Сферическая"="Sph",
                 "Гауссовская"="Gau",
-                "Матерна"="Mat",
-                "Штейна"="Ste",
                 "Круговая"="Cir",
                 "Линейная"="Lin",
                 "Бесселя"="Bes",
@@ -222,8 +220,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 "Волновая"="Wav",
                 "С эффектом дыр"="Hol",
                 "Логарифмическая"="Log",
-                "Сплайн"="Spl",
-                "Лежандра"="Leg")
+                "Сплайн"="Spl")
             ),
             
             numericInput("nugget", "Самородок", value=0, min=0),
@@ -231,10 +228,10 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             numericInput("psill", "Порог", value=1, min=.1, step=.1),
             checkboxInput("fitVariogram", "Подогнать параметры", value=TRUE)
           ),
+          checkboxInput("cressie", "Использовать оценку Кресси"),
           checkboxInput("afv", "Автоматический подбор модели"),
           conditionalPanel(
-            condition = "input.afv == true",
-            checkboxInput("cressie", "Использовать оценку Кресси")
+            condition = "input.afv == true"
           )
         ),
         uiOutput("variogram_ui")

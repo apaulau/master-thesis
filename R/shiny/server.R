@@ -13,6 +13,7 @@ source("lib/plot.R")       # custom plots
 source("lib/ntest.R")      # normality tests
 source("lib/regr.R")       # regression tests
 source("lib/afv.R")        # autofit variogram module
+source("lib/variogram.R")
 source("lib/kriging.R")
 
 ## Read the data / pattern: year;temperature
@@ -304,7 +305,7 @@ shinyServer(function(input, output, session) {
     if(!is.na(r)) {
       r
     } else {
-      .1
+      1
     }
   })
   
@@ -342,7 +343,7 @@ shinyServer(function(input, output, session) {
     coordinates(spdata) =~ x + y
     
     if (!input$afv) {
-      exp_var <- variogram(data~1, spdata, width=1, cutoff=cutoff())
+      exp_var <- variogram(data~1, spdata, width=1, cutoff=cutoff(), cressie=input$cressie)
       if (psill() == 0) {
         var_model <- vgm(model=modelV(), range=range(), nugget=nugget())  
       } else {
@@ -355,7 +356,7 @@ shinyServer(function(input, output, session) {
       variogram <- list(exp_var = exp_var, var_model = var_model, sserr = ifelse(is.null(attr(var_model, "SSErr")), "", attr(var_model, "SSErr")))
       
     } else {
-      variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=input$cressie, width=FALSE)
+      variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff(), cressie=input$cressie)
     }
   })
   

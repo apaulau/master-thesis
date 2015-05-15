@@ -5,7 +5,7 @@ autofitVariogram = function(formula, input_data, test_models = c("Nug", "Exp", "
                                                            "Log", "Spl", "Leg"),
                             kappa=c(0.05, seq(0.2, 2, 0.1), 5, 10), GLS.model=NA, 
                             fix.values=c(NA,NA,NA), start_vals=c(NA,NA,NA),
-                            cutoff, width=1, cressie, verbose=FALSE, ...) {
+                            cutoff, width=1, cressie, verbose=T, ...) {
   
   # If you specifiy a variogram model in GLS.model the Generelised Least Squares sample variogram is constructed
   if(!is(GLS.model, "variogramModel")) {

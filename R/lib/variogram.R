@@ -60,7 +60,7 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
 }
 
 ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, name="") {
-  spdata <- MakeFakeSpatialData(x=x, data=data)
+  spdata <- MakeFakeSpatialData(x=x, data=data, observations=kObservationNum)
   experimentalVariogram <- variogram(data~1, spdata, width=1, cutoff=cutoff)
   
   if (psill == 0) {
@@ -85,7 +85,7 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
 
 ## Calculates modeled variogram and creates plot of it.
 ComputeVariogram <- function (data, x, cressie, cutoff, name="") {
-  spdata <- MakeFakeSpatialData(x=x, data=data)
+  spdata <- MakeFakeSpatialData(x=x, data=data, observations=kObservationNum)
   
   variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie)
   if (nchar(name)) {
@@ -118,8 +118,8 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
   ggsave(plot=plot.modeled, file=filename, width=7, height=4)
 }
 
-MakeFakeSpatialData <- function (x, data) {
-  spdata <- data.frame(cbind("x"=x, "y"=rep(1, kObservationNum), data))
+MakeFakeSpatialData <- function (x, data, observations) {
+  spdata <- data.frame(cbind("x"=x, "y"=rep(1, observations), data))
   coordinates(spdata) = ~x+y
   return(spdata)
 }

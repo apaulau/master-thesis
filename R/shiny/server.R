@@ -467,7 +467,7 @@ shinyServer(function(input, output, session) {
   }) 
   
   cp <- reactive({
-    future <- future() # don't use it yet
+    future <- future()
     obs <- observations()
     year=GetPredictionYears(src.data$year, src.nrows, future, obs)
   

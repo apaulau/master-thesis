@@ -7,6 +7,15 @@ library(sp)
 library(gstat)
 library(reshape2)
 
+
+
+## Read the data / pattern: year;temperature
+path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
+src.nrows <- 38
+src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
+kObservationNum <- 0
+kminRange <- min(src.data$year)
+
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
 source("lib/plot.R")       # custom plots
@@ -17,15 +26,9 @@ source("lib/variogram.R")
 source("lib/kriging.R")
 source("lib/misc.R")
 
-## Read the data / pattern: year;temperature
-path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
-src.nrows <- 38
-src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
-
-kminRange <- min(src.data$year)
-
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
+  src.nrows <- 38
   minRange <- reactive({
     if (input$nav == "Анализ остатков") {
       input$residual_range[1]
@@ -82,6 +85,7 @@ shinyServer(function(input, output, session) {
     add_axis("y", title="Температура, ºС") %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
     bind_shiny("overview", "overview_ui")
   
   output$base_plot <- renderPlot({
@@ -138,6 +142,7 @@ shinyServer(function(input, output, session) {
     add_axis("x", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
     bind_shiny("scatterplot", "scatter_ui")
   
   output$correlation <- renderText({
@@ -177,6 +182,7 @@ shinyServer(function(input, output, session) {
     add_axis("y", title="Температура, ºС") %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
     bind_shiny("regression", "regression_ui")
   
   output$lm <- renderUI({
@@ -247,6 +253,7 @@ shinyServer(function(input, output, session) {
     add_axis("y", title="Температура, ºС", title_offset=60) %>%
     add_tooltip(function(df) paste(df$year, ":", df$temperature)) %>%
     scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
     bind_shiny("residual_overview", "overview_ui")
   
   residual_binwidth <- reactive({input$residual_binwidth})
@@ -400,6 +407,7 @@ shinyServer(function(input, output, session) {
     add_axis("x", title="Лаг", format="d") %>%
     add_axis("y", title="Семивариограмма") %>%
     add_tooltip(function(df) paste(paste("<b>Лаг:</b>", df$dist), paste("<b>Значение:</b>",df$value), sep="<br>")) %>%
+    set_options(width = "auto") %>%
     bind_shiny("variogram", "variogram_ui")
   
   output$text_model <- renderUI({
@@ -455,13 +463,23 @@ shinyServer(function(input, output, session) {
   })
   
   kriging <- reactive({
-    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model, future=future())
+    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model, nrows=src.nrows, future=future())
   })
   
-  output$predictions <- renderTable({
+  output$predictions <- renderDataTable({
     k <- kriging()
-    data.frame("Прогноз"=k$var1.pred, "Дисперсия"=k$var1.var)
-  })
+    data.frame("Прогноз"=sapply(k$var1.pred, signif, digits=4), "Дисперсия"=sapply(k$var1.var, signif, digits=4))
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
+  
+  output$analysis <- renderDataTable({
+    obs <- observations()
+    k <- kriging()
+    data.frame("Год"=src.data$year[(obs + 1):src.nrows],
+      "Наблюдение"=src.data$temperature[(obs + 1):src.nrows],
+      "Тренд"=sapply(trend()[(obs + 1):src.nrows], signif, digits=4),
+      "Прогноз"=sapply(k$var1.pred + trend()[(obs + 1):src.nrows], signif, digits=4),
+      "Остаток"=sapply(src.data$temperature[(obs + 1):src.nrows] - (k$var1.pred + trend()[(obs + 1):src.nrows]), signif, digits=4))
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
   
   computeTrend <- function (fit, future=0) {
     c(sapply(c(1 : (src.nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))
@@ -484,23 +502,28 @@ shinyServer(function(input, output, session) {
   })
   
   cp %>% ggvis() %>%
-  layer_paths(x=~year, y=~actual, strokeWidth := 1.5) %>%
-  layer_paths(x=~year, y=~trend, stroke := "green", strokeWidth := 1.5) %>%
-  layer_paths(x=~year, y=~kriging, stroke := "blue", strokeWidth := 1.5) %>%
-  add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
-  add_axis("y", title="Температура, ºС") %>%
-  scale_numeric("x", nice = FALSE) %>%
-  bind_shiny("cross_prediction", "cross_prediction_ui")
-  
+    layer_paths(x=~year, y=~actual, strokeWidth := 1.5) %>%
+    layer_paths(x=~year, y=~trend, stroke := "green", strokeWidth := 1.5) %>%
+    layer_paths(x=~year, y=~kriging, stroke := "blue", strokeWidth := 1.5) %>%
+    add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("y", title="Температура, ºС") %>%
+    scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
+    bind_shiny("cross_prediction", "cross_prediction_ui")
+    
   #output$cross_prediction <- renderPlot({
   #  obj <- cp()
   #  DrawCrossPrediction(actual=obj$actual, trend=obj$trend, kriging=obj$kriging, future=0)
   #})
   
   computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
-    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff)
-    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model)
-    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
+    MSE <- function (e, N=1) {
+      sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
+    }
+    
+    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
+    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging, observations=observations(), nrows=src.nrows)
     return(MSE(residual))
   }
   
@@ -541,11 +564,11 @@ shinyServer(function(input, output, session) {
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
   
-  output$best_cutoff <- renderTable({
+  output$best_cutoff <- renderDataTable({
     cmp <- computeComparison()
-    df <- data.frame("Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), "MSE"=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
+    df <- data.frame("Оценка"=c("Фиксированная", "Классическая", "Робастная"),"Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), "MSE"=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
     rownames(df) <- c("Фиксированная", "Классическая", "Робастная")
     
     df
-  })
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
 })

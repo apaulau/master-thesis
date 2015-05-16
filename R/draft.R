@@ -35,8 +35,8 @@ output$param_comparison <- renderPlot({
   dat <- data.frame(manual=numeric(0), classical=numeric(0), robust=numeric(0))
   
   computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
-    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff)
-    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model)
+    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
     residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
     return(MSE(residual))
   }
@@ -49,7 +49,7 @@ output$param_comparison <- renderPlot({
     cutoffs <- 1:n
     
     for (cutoff in cutoffs) {
-      manualResult    <- computePredictionResidualMSE(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+      manualResult    <- computePredictionResidualMSE(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff, observations=observations())
       classicalResult <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
       robustResult    <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff)
       

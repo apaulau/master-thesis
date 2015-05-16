@@ -6,7 +6,7 @@ library(gstat)
 library(reshape2)
 
 # Just example that it works
-cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, ComputeVariogram(data=c(1,2,3,4,5,6,7,8), x=c(1:8), cressie=FALSE, cutoff=6, width=FALSE)$var_model)
+cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, ComputeVariogram(data=c(1,2,3,4,5,6,7,8), x=c(1:8), cressie=FALSE, cutoff=6, width=FALSE)$var_model, observations=8)
 
 cv.manual <- computeCV(research.data.residuals, 32, variogram.manual$var_model)
 cv.robust <- computeCV(research.data.residuals, 32, variogram.robust$var_model)

@@ -4,7 +4,7 @@ require(markdown)
 
 shinyUI(navbarPage("Анализ Баторино",  id="nav", 
   tabPanel("Исходные данные",
-    
+    includeCSS("styles.css"),  
     sidebarLayout(
       sidebarPanel(
         sliderInput("range", label="Диапазон",
@@ -260,13 +260,14 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             br(),
             ggvisOutput("cross_prediction"),
             fluidRow(
-              column(5,       
-                h4("Прогноз"),
-                tableOutput("predictions")
+              column(4,       
+                h4("Кригинг"),
+                dataTableOutput("predictions")
               ),
-              column(2),
-              column(5,
-                htmlOutput("something")
+              column(1),
+              column(6,
+                h4("Анализ"),
+                dataTableOutput("analysis")
               )
             )
           ),
@@ -278,7 +279,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             fluidRow(
               column(5,       
                 h4("Лучшие значения"),
-                tableOutput("best_cutoff")
+                dataTableOutput("best_cutoff")
               ),
               column(2),
               column(5,

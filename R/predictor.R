@@ -15,14 +15,14 @@ computeTrend <- function (fit, future=0) {
 
 # Computes prediction with passed parameters and saves all needed info and plots
 processPrediction <- function (data, year, variog=ComputeVariogram, cressie, cutoff, name, caption) {
-  variogram <- variog(data, x=ConvertYearsToNum(year), cressie=cressie, cutoff=cutoff, name=name)
+  variogram <- variog(data, x=ConvertYearsToNum(year), cressie=cressie, cutoff=cutoff, name=name, observations=kObservationNum)
   
   WriteCharacteristic(variogram$var_model[[2]][1], type="variogram", name=paste0(name, "-nug"))
   WriteCharacteristic(variogram$var_model[[2]][2], type="variogram", name=paste0(name, "-psill"))
   WriteCharacteristic(variogram$var_model[[3]][2], type="variogram", name=paste0(name, "-range"))
   
-  prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model)
-  residual <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, prediction, name)
+  prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model, nrows=src.nrows)
+  residual <- CrossPrediction(src.data$temperature, src.data$year, research.data.trend, prediction, name, observations=kObservationNum, nrows=src.nrows)
   mse <- MSE(residual)
   
   prediction.compare <- data.frame("Год"=src.data$year[(kObservationNum + 1):src.nrows],
@@ -52,7 +52,7 @@ cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 research.data.hscat <- DrawHScatterplot(research.data.residuals[1:kObservationNum], cutoff)
 
 # Compute prediction manually with choosed model ("best" what i found)
-manual <- processPrediction(data=research.data.residuals, year=research.data$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)")
+manual <- processPrediction(data=research.data.residuals, year=research.data$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)", observations=kObservationNum)
 
 # Compute prediction with auto fit model using classical estimation
 classical <- processPrediction(data=research.data.residuals, year=research.data$year, cressie=FALSE, cutoff=cutoff, name="classical", caption="Прогноз (классическая оценка)")
@@ -65,6 +65,6 @@ models.comparison <- CompareClassicalModels(manual$variogram, classical$variogra
 # Find best cutoff parameters
 cutoff <- ComparePredictionParameters(research.data.residuals, research.data.trend, ConvertYearsToNum(research.data$year), filename="figures/variogram/parameter-comparison.png")
 
-manual.best    <- processPrediction(data=research.data.residuals, year=research.data$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff$manual, name="manual-best", caption="Наилучший прогноз (сферическая модель)")
+manual.best    <- processPrediction(data=research.data.residuals, year=research.data$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff$manual, name="manual-best", caption="Наилучший прогноз (сферическая модель)", observations=kObservationNum)
 classcial.best <- processPrediction(data=research.data.residuals, year=research.data$year, cressie=FALSE, cutoff=cutoff$classical, name="classical-best", caption="Наилучший прогноз (классическая оценка)")
 robust.best    <- processPrediction(data=research.data.residuals, year=research.data$year, cressie=TRUE, cutoff=cutoff$robust, name="robust-best", caption="Наилучший прогноз (робастная оценка)")

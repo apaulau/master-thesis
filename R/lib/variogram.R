@@ -59,8 +59,8 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
     scale_y_continuous(breaks=seq(1.04 * min(classicalResult, robustResult), 1.04 * max(classicalResult, robustResult), 1))
 }
 
-ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, name="") {
-  spdata <- MakeFakeSpatialData(x=x, data=data, observations=kObservationNum)
+ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, name="", observations) {
+  spdata <- MakeFakeSpatialData(x=x, data=data, observations=observations)
   experimentalVariogram <- variogram(data~1, spdata, width=1, cutoff=cutoff)
   
   if (psill == 0) {
@@ -85,8 +85,8 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
 }
 
 ## Calculates modeled variogram and creates plot of it.
-ComputeVariogram <- function (data, x, cressie, cutoff, name="") {
-  spdata <- MakeFakeSpatialData(x=x, data=data, observations=kObservationNum)
+ComputeVariogram <- function (data, x, cressie, cutoff, name="", observations) {
+  spdata <- MakeFakeSpatialData(x=x, data=data, observations=observations)
   
   variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie)
   if (nchar(name)) {

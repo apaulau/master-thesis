@@ -74,13 +74,15 @@ autofitVariogram = function(formula, input_data,
       silent=TRUE)
     if("try-error" %in% class(obj)) {
       #print(traceback())
-      warning("An error has occured during variogram fitting. Used:\n", 
-        "\tnugget:\t", nugget, 
-        "\n\tmodel:\t", model, 
-        "\n\tpsill:\t", psill,
-        "\n\trange:\t", range,
-        "\n\tkappa:\t",ifelse(kappa == 0, NA, kappa),
-        "\n  as initial guess. This particular variogram fit is not taken into account. \nGstat error:\n", obj)
+      if (verbose) {
+        warning("An error has occured during variogram fitting. Used:\n", 
+          "\tnugget:\t", nugget, 
+          "\n\tmodel:\t", model, 
+          "\n\tpsill:\t", psill,
+          "\n\trange:\t", range,
+          "\n\tkappa:\t",ifelse(kappa == 0, NA, kappa),
+          "\n  as initial guess. This particular variogram fit is not taken into account. \nGstat error:\n", obj)
+      }
       return(NULL)
     } else return(obj)
   }

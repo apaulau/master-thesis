@@ -446,7 +446,12 @@ shinyServer(function(input, output, session) {
   })
   
   future <- reactive({
-    input$future
+    f <- input$future
+    if (is.na(f)) {
+      0
+    } else {
+      f
+    }
   })
   
   kriging <- reactive({
@@ -491,4 +496,61 @@ shinyServer(function(input, output, session) {
   #  obj <- cp()
   #  DrawCrossPrediction(actual=obj$actual, trend=obj$trend, kriging=obj$kriging, future=0)
   #})
+  
+  computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
+    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff)
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model)
+    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
+    return(MSE(residual))
+  }
+  
+  computeComparison <- eventReactive(input$computeComparison, {
+    # Create 0-row data frame which will be used to store data
+    dat <- data.frame(cutoff=numeric(0), "Фиксированная"=numeric(0), "Классическая"=numeric(0), "Робастная"=numeric(0))
+    
+    withProgress(message = 'Идет вычисление', value = 0, {
+      # Number of times we'll go through the loop
+      n <- maxRange()
+      data <- residuals()$temperature
+      trend <- trend()
+      cutoffs <- 1:n
+      
+      for (cutoff in cutoffs) {
+        manualResult    <- computePredictionResidualMSE(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+        classicalResult <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+        robustResult    <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff)
+        
+        # Each time through the loop, add another row of data. This is
+        # a stand-in for a long-running computation.
+        dat <- rbind(dat, data.frame(cutoff=cutoff, "Фиксированная"=manualResult, "Классическая"=classicalResult, "Робастная"=robustResult))
+        
+        # Increment the progress bar, and update the detail text.
+        incProgress(1/n, detail = paste0(trunc(cutoff / n * 100), "%"))
+      }
+    })
+    dat
+  })
+  
+  output$param_comparison <- renderPlot({
+    dat <- melt(computeComparison(), id=c("cutoff"))
+    ggplot(data=dat, aes(x=cutoff, y=value, group=variable, color=variable, linetype=variable)) +
+      geom_line() +
+      geom_point(size=2, shape=21, fill="white") +
+      scale_x_continuous(breaks=1:maxRange()) +
+      xlab("Максимальное расстояние") + ylab("MSE") +
+      theme(axis.text.x = element_text(angle=90, hjust=1))
+    
+#     ggplot(data=dat) + 
+#       geom_line(aes(x=cutoff, y=manual)) + 
+#       geom_line(aes(x=cutoff, y=classical)) + 
+#       geom_line(aes(x=cutoff, y=robust))
+  })
+  
+  output$best_cutoff <- renderTable({
+    cmp <- computeComparison()
+    df <- data.frame("Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), "MSE"=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
+    rownames(df) <- c("Фиксированная", "Классическая", "Робастная")
+    
+    df
+  })
 })

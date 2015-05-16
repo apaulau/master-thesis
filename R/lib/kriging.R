@@ -33,7 +33,7 @@ CrossPrediction <- function (temperature, years, trend, kriging, name="", future
 ### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
 #### todo: simpify this function, split it to several less complex functions
-ComparePredictionParameters <- function(data, trend, x, filename) {
+ComparePredictionParameters <- function(data, trend, x, filename="") {
   cutoffs <- c(1:kObservationNum)
   
   computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
@@ -47,15 +47,10 @@ ComparePredictionParameters <- function(data, trend, x, filename) {
   classicalResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff)))
   robustResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff)))
   
-  plot.check <- ggplot() + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=manualResult), aes(x=X, y=Y, linetype="Фиксированная")) + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=classicalResult), aes(x=X, y=Y, linetype="Классическая")) + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=robustResult), aes(x=X, y=Y, linetype="Робастная")) + 
-    scale_linetype_manual(name="Lines", values=c("Фиксированная"="solid", "Классическая"="dashed", "Робастная"="dotdash")) +
-    scale_x_continuous(breaks=cutoffs) +
-    xlab("Максимальное расстояние") + ylab("MSE") +
-    theme(axis.text.x = element_text(angle=90, hjust=1))
-  ggsave(plot=plot.check, file=filename, width=7, height=4)
-  
+  if (nchar(filename)) {
+    plot.check <- DrawParameterComparison(cutoffs, manualResult, classicalResult, robustResult)
+    ggsave(plot=plot.check, file=filename, width=7, height=4)
+  }
+
   list(manual=which.min(manualResult), classical=which.min(classicalResult), robust=which.min(robustResult))
 }

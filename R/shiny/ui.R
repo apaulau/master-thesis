@@ -271,7 +271,20 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             )
           ),
           
-          tabPanel("Сравнительный анализ"
+          tabPanel("Сравнительный анализ",
+            br(),
+            plotOutput("param_comparison", height=500),
+            actionButton('computeComparison', 'Вычислить'),
+            fluidRow(
+              column(5,       
+                h4("Лучшие значения"),
+                tableOutput("best_cutoff")
+              ),
+              column(2),
+              column(5,
+                htmlOutput("something2")
+              )
+            )
           )
         )
       )

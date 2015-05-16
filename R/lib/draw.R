@@ -105,3 +105,15 @@ DrawCrossPrediction <- function (actual, trend, kriging, future) {
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
     labs(color="")
 }
+
+
+DrawParameterComparison <- function(cutoffs, manual, classical, robust) {
+  ggplot() + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=manual), aes(x=X, y=Y, linetype="Фиксированная")) + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=classical), aes(x=X, y=Y, linetype="Классическая")) + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=robust), aes(x=X, y=Y, linetype="Робастная")) + 
+    scale_linetype_manual(name="Lines", values=c("Фиксированная"="solid", "Классическая"="dashed", "Робастная"="dotdash")) +
+    scale_x_continuous(breaks=cutoffs) +
+    xlab("Максимальное расстояние") + ylab("MSE") +
+    theme(axis.text.x = element_text(angle=90, hjust=1))
+}

@@ -75,9 +75,10 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
   
   if (nchar(name)) {
     SaveVariogramPlot(experimentalVariogram, modeledVariogram, name)
+    print(xtable(data.frame("Модель"=modeledVariogram$model, "Порог"=modeledVariogram$psill, "Ранг"=modeledVariogram$range), 
+      caption="Модель вариограммы", label="table:manual_model"), table.placement="H", file="out/variogram/manual-model.tex")
   }
-  print(xtable(data.frame("Модель"=modeledVariogram$model, "Порог"=modeledVariogram$psill, "Ранг"=modeledVariogram$range), 
-    caption="Модель вариограммы", label="table:manual_model"), table.placement="H", file="out/variogram/manual-model.tex")
+  
   
   result = list(exp_var = experimentalVariogram, var_model = modeledVariogram)
   return(result)

@@ -27,3 +27,48 @@ CrossPrediction <- function (temperature, years, trend, kriging.classical, krigi
   
   prediction.krigingRobust$temperature[3:(src.nrows-kObservationNum)] - actual$temperature[3:(src.nrows - kObservationNum)] ## what the heck? why 3? 
 }
+
+output$param_comparison <- renderPlot({
+  input$goPlot # Re-run when button is clicked
+  
+  # Create 0-row data frame which will be used to store data
+  dat <- data.frame(manual=numeric(0), classical=numeric(0), robust=numeric(0))
+  
+  computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
+    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff)
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model)
+    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
+    return(MSE(residual))
+  }
+  
+  withProgress(message = 'Идет вычисление', value = 0, {
+    # Number of times we'll go through the loop
+    n <- maxRange()
+    data <- residuals()$temperature
+    trend <- trend()
+    cutoffs <- 1:n
+    
+    for (cutoff in cutoffs) {
+      manualResult    <- computePredictionResidualMSE(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+      classicalResult <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+      robustResult    <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff)
+      
+      # Each time through the loop, add another row of data. This is
+      # a stand-in for a long-running computation.
+      dat <- rbind(dat, data.frame(manual=manualResult, classical=classicalResult, robust=robustResult))
+      
+      # Increment the progress bar, and update the detail text.
+      incProgress(1/n, detail = paste(trunc(cutoff / n * 100), "%"))
+    }
+  })
+  
+  ggplot() + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=dat$manual), aes(x=X, y=Y, linetype="Фиксированная")) + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=dat$classical), aes(x=X, y=Y, linetype="Классическая")) + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=dat$robust), aes(x=X, y=Y, linetype="Робастная")) +
+    scale_linetype_manual(name="Lines", values=c("Фиксированная"="solid", "Классическая"="dashed", "Робастная"="dashed")) +
+    scale_x_continuous(breaks=cutoffs) +
+    xlab("Максимальное расстояние") + ylab("MSE") +
+    theme(axis.text.x = element_text(angle=90, hjust=1))
+})
+})

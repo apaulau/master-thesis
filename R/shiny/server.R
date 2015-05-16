@@ -539,11 +539,6 @@ shinyServer(function(input, output, session) {
       scale_x_continuous(breaks=1:maxRange()) +
       xlab("Максимальное расстояние") + ylab("MSE") +
       theme(axis.text.x = element_text(angle=90, hjust=1))
-    
-#     ggplot(data=dat) + 
-#       geom_line(aes(x=cutoff, y=manual)) + 
-#       geom_line(aes(x=cutoff, y=classical)) + 
-#       geom_line(aes(x=cutoff, y=robust))
   })
   
   output$best_cutoff <- renderTable({

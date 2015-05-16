@@ -232,7 +232,8 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           checkboxInput("cressie", "Использовать оценку Кресси"),
           checkboxInput("afv", "Автоматический подбор модели"),
           conditionalPanel(
-            condition = "input.afv == true"
+            condition = "input.variogram_panel == 'Кригинг'",
+            numericInput("future", "Будущее", value=0, min=0, max=38, step=1)
           )
         ),
         uiOutput("variogram_ui")

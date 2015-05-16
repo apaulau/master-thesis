@@ -445,8 +445,12 @@ shinyServer(function(input, output, session) {
     maxRange() - minRange() + 1
   })
   
+  future <- reactive({
+    input$future
+  })
+  
   kriging <- reactive({
-    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model)
+    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model, future=future())
   })
   
   output$predictions <- renderTable({
@@ -459,25 +463,25 @@ shinyServer(function(input, output, session) {
   }
   
   trend <- reactive({
-    computeTrend(model())
+    computeTrend(model(), future())
   }) 
   
   cp <- reactive({
-    future <- 0 # don't use it yet
+    future <- future() # don't use it yet
     obs <- observations()
-    year=GetPredictionYears(src.data$year, src.nrows, 0, obs)
+    year=GetPredictionYears(src.data$year, src.nrows, future, obs)
   
-    actual <- src.data$temperature[(obs - 1):src.nrows]
-    prediction.trend <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):src.nrows])
-    prediction.kriging <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):src.nrows] + kriging()$var1.pred)
+    actual <- c(src.data$temperature[(obs - 1):src.nrows], rep(src.data$temperature[src.nrows], future))
+    prediction.trend <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)])
+    prediction.kriging <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)] + kriging()$var1.pred)
     
     data.frame(year, actual, trend=prediction.trend, kriging=prediction.kriging)
   })
   
   cp %>% ggvis() %>%
-  layer_paths(x=~year, y=~actual) %>%
-  layer_paths(x=~year, y=~trend, stroke := "green") %>%
-  layer_paths(x=~year, y=~kriging, stroke := "blue") %>%
+  layer_paths(x=~year, y=~actual, strokeWidth := 1.5) %>%
+  layer_paths(x=~year, y=~trend, stroke := "green", strokeWidth := 1.5) %>%
+  layer_paths(x=~year, y=~kriging, stroke := "blue", strokeWidth := 1.5) %>%
   add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
   add_axis("y", title="Температура, ºС") %>%
   scale_numeric("x", nice = FALSE) %>%

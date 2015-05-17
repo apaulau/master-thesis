@@ -1,7 +1,7 @@
 # Descriptive statistics
 
 # Function for getting all descriptive statistics
-dstats.describe <- function(data, type="", locale=FALSE) {
+dstats.describe <- function(data, type="", locale=FALSE, shiny=FALSE) {
   cv <- dstats.coef.var(data)
   stats <- c(dstats.mean(data), dstats.median(data), dstats.quartile.lower(data),
              dstats.quartile.upper(data), dstats.min(data), dstats.max(data),
@@ -27,14 +27,23 @@ dstats.describe <- function(data, type="", locale=FALSE) {
                    "Std. Error Skewness", "Kurtosis", "Std. Error Kurtosis")
     descr.col <- c("Value")
   }
-  df <- data.frame(stats, row.names=descr.row) 
-  colnames(df) <- descr.col
+  if (!shiny) {
+    df <- data.frame(stats, row.names=descr.row) 
+    colnames(df) <- descr.col
+  } else {
+    df <- data.frame(descr.row, sapply(stats, format, digits=2, scientific=FALSE, nsmall=1)) 
+    colnames(df) <- c("Статистика", "Значение")
+  }
   
   df
 }
 
 dstats.mean <- function(data, ...) {
-  mean(data, ...)
+  m <- mean(data, ...)
+  if (m < .0000001) {
+    m <- 0
+  }
+  m
 }
 
 dstats.median <- function(data, ...) {

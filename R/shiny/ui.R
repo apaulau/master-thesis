@@ -72,9 +72,9 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 h4("Критерий нормальности"),
                 htmlOutput("normality")
               ),
-              column(2),
-              column(5,
-                tableOutput("dstats")
+              column(1),
+              column(6,
+                dataTableOutput("dstats")
               )
             )
           ),
@@ -174,9 +174,9 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 h4("Критерий нормальности"),
                 htmlOutput("residual_normality")
               ),
-              column(2),
-              column(5,
-                tableOutput("residual_dstats")
+              column(1),
+              column(6,
+                dataTableOutput("residual_dstats")
               )
             )
           ),

@@ -118,9 +118,9 @@ shinyServer(function(input, output, session) {
     format(rule(), digits=3)
   })
   
-  output$dstats <- renderTable({
-    dstats.describe(series()$temperature, locale=TRUE)
-  })
+  output$dstats <- renderDataTable({
+    dstats.describe(series()$temperature, locale=TRUE, shiny=TRUE)
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
   
   output$normality <- renderUI({
     test <- switch(input$ntest,
@@ -288,9 +288,9 @@ shinyServer(function(input, output, session) {
     format(rule(), digits=3)
   })
   
-  output$residual_dstats <- renderTable({
-    dstats.describe(residuals()$temperature, locale=TRUE)
-  })
+  output$residual_dstats <- renderDataTable({
+    dstats.describe(residuals()$temperature, locale=TRUE, shiny=TRUE)
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
   
   output$residual_normality <- renderUI({
     test <- switch(input$residual_ntest,

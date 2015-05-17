@@ -516,14 +516,14 @@ shinyServer(function(input, output, session) {
   #  DrawCrossPrediction(actual=obj$actual, trend=obj$trend, kriging=obj$kriging, future=0)
   #})
   
+  MSE <- function (e, N=1) {
+    sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
+  }
+  
   computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
-    MSE <- function (e, N=1) {
-      sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
-    }
-    
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
     kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
-    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging, observations=observations(), nrows=src.nrows)
+    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations=observations(), nrows=src.nrows)
     return(MSE(residual))
   }
   
@@ -571,4 +571,93 @@ shinyServer(function(input, output, session) {
     
     df
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
+  
+  fitmin <- reactive({
+    r <- input$fit_min
+    if(!is.na(r)) {
+      r
+    } else {
+      0
+    }
+  })
+  
+  fitmax <- reactive({
+    r <- input$fit_max
+    if(!is.na(r)) {
+      r
+    } else {
+      0
+    }
+  })
+  
+  fitstep <- reactive({
+    r <- input$fit_step
+    if(!is.na(r)) {
+      r
+    } else {
+      .1
+    }
+  })
+  
+  fitVariogram <- reactive({
+    input$fitVariogram
+  })
+  
+  computeManualResidual <- function(data, trend, cressie, x, cutoff, observations, fit, model, nugget, sill, range) {
+    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
+      fit=fit, model=model, nugget=nugget, psill=sill, range=range)
+    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=src.nrows)
+    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, src.nrows)
+    return(residual)
+  }
+  
+  fitParameter <- eventReactive(input$fitParam, {
+    isCutoff <- input$fit_param == 1
+    isNugget <- input$fit_param == 2
+    isSill   <- input$fit_param == 3
+    isRange  <- input$fit_param == 4
+    
+    params <- seq(fitmin(), fitmax(), fitstep())
+    if (isCutoff) {
+      params <- 1:observations()
+      caption <- "Максимальное расстояние"
+    } else if (isNugget) {
+      caption <- "Наггет"
+    } else if (isSill) {
+      caption <- "Порог"
+    } else if (isRange) {    
+      caption <- "Ранг"
+    }
+    result <- numeric(0)
+
+    data <- residuals()$temperature
+    trend <- trend()
+
+    withProgress(message = 'Идет вычисление', value = 0, {  
+      n <- length(params)
+      
+      for (param in params) {
+        result <- c(result, MSE(computeManualResidual(data=data, trend=trend, x=c(1:observations()),
+            cressie=cressie(), observations=observations(), fit=fitVariogram(), model=modelV(), 
+            cutoff=ifelse(isCutoff, param, cutoff()), 
+            nugget=ifelse(isNugget, param, nugget()), 
+            sill=ifelse(isSill, param, psill()), 
+            range=ifelse(isRange, param, range()))))
+        
+        # Increment the progress bar, and update the detail text.
+        incProgress(1/n, detail = paste0(trunc(param / n * 100), "%"))
+      }
+    })
+    list(result = result, params = params, caption = caption)
+  })
+  
+  output$fit_param <- renderPlot({
+    obj <- fitParameter()
+    print(obj)
+    ggplot(data=data.frame("X"=obj$params, "Y"=obj$result), aes(x=X, y=Y)) + 
+      geom_line() + 
+      scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +
+      xlab(obj$caption) + ylab("MSE") +
+      theme(axis.text.x = element_text(angle=90, hjust=1))
+  })
 })

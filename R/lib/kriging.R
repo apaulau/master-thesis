@@ -11,7 +11,7 @@ PredictWithKriging <- function (data, x, observations, variogram_model, nrows, f
 }
 
 ## Compares predictions based on trend and kriging with actual values
-CrossPrediction <- function (temperature, years, trend, kriging, name="", future=0, observations, nrows) {
+CrossPrediction <- function (temperature, years, trend, kriging, observations, nrows, name, future=0) {
   actual <- data.frame("temperature"=temperature[(observations - 1):nrows],
     "year"=GetPredictionYears(years, nrows, 0, observations))
   
@@ -21,30 +21,34 @@ CrossPrediction <- function (temperature, years, trend, kriging, name="", future
   prediction.kriging <- data.frame("temperature"=c(temperature[(observations - 1):observations], trend[(observations + 1):nrows] + kriging$var1.pred),
     "year"=GetPredictionYears(years, nrows, future, observations))
   
-  if (nchar(name)) {
-    filename <- paste0("figures/variogram/", name, "-cross-prediction.png")
-    plot.crossprediction <- DrawCrossPrediction(actual, prediction.trend, prediction.kriging, future)
-    ggsave(plot=plot.crossprediction, file=filename, width=7, height=4)
-  }
-  actual$temperature[3:(nrows-observations+2)] - prediction.kriging$temperature[3:(nrows - observations+2)] ## 3 is because i'm not looking to first two of actual temperature values
+  plot.crossprediction <- DrawCrossPrediction(actual, prediction.trend, prediction.kriging, future)
+  filename <- paste0("figures/variogram/", name, "-cross-prediction.png")
+  ggsave(plot=plot.crossprediction, file=filename, width=7, height=4)
+}
+
+## Computes resdiuals after kriging prediction substract
+ComputeKrigingResiduals <- function(temperature, trend, kriging, observations, nrows) {
+  actual <- temperature[(observations + 1):nrows]
+  prediction <- trend[(observations + 1):nrows] + kriging$var1.pred
+    
+  actual - prediction
 }
 
 ### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
-#### todo: simpify this function, split it to several less complex functions
-ComparePredictionParameters <- function(data, trend, x, filename="") {
-  cutoffs <- c(1:kObservationNum)
+ComparePredictionParameters <- function(data, trend, x, filename="", observations, nrows) {
+  cutoffs <- c(1:observations)
   
-  computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
-    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=kObservationNum)
-    kriging <- PredictWithKriging(data, x=x, observations=kObservationNum, variogram_model=variogram$var_model, nrows=src.nrows)
-    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
+  computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff, observations) {
+    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations)
+    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, nrows)
     return(residual)
   }
   
-  manualResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, variog=ComputeManualVariogram, x=x, cressie=FALSE, cutoff=cutoff, observations=kObservationNum)))
-  classicalResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff)))
-  robustResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff)))
+  manualResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, variog=ComputeManualVariogram, x=x, cressie=FALSE, cutoff=cutoff, observations=observations)))
+  classicalResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff, observations=observations)))
+  robustResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff, observations=observations)))
   
   if (nchar(filename)) {
     plot.check <- DrawParameterComparison(cutoffs, manualResult, classicalResult, robustResult)
@@ -52,4 +56,83 @@ ComparePredictionParameters <- function(data, trend, x, filename="") {
   }
 
   list(manual=which.min(manualResult), classical=which.min(classicalResult), robust=which.min(robustResult))
+}
+
+
+RunThroughParameters <- function(data, trend, x, filename="", observations, nrows, 
+  fit=FALSE, cutoff, cressie, model, nugget, sill, range, min=.1, max=10, step=.1) {
+  
+  computePredictionResidual <- function(data, trend, cressie, x, cutoff, observations, model, nugget, sill, range) {
+    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
+      fit=fit, model=model, nugget=nugget, psill=sill, range=range)
+    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, nrows)
+    return(residual)
+  }
+  
+  params <- seq(min, max, step)
+  if (is.na(cutoff)) {
+    params <- 1:observations
+    caption <- "Максимальное расстояние"
+  } else if (is.na(nugget)) {
+    caption <- "Наггет"
+  } else if (is.na(sill)) {
+    caption <- "Порог"
+  } else if (is.na(range)) {    
+    caption <- "Ранг"
+  }
+  
+  result <- sapply(params, FUN=function(param) 
+    MSE(computePredictionResidual(data=data, trend=trend, x=x,
+      cressie=cressie, observations=observations, model=model, 
+      cutoff=ifelse(is.na(cutoff), param, cutoff), 
+      nugget=ifelse(is.na(nugget), param, nugget), 
+      sill=ifelse(is.na(sill), param, sill), 
+      range=ifelse(is.na(range), param, range))))
+  
+  ggplot() + 
+    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) + 
+    scale_x_continuous(breaks=params[seq(1, length(params), 4)]) +
+    xlab(caption) + ylab("MSE") +
+    theme(axis.text.x = element_text(angle=90, hjust=1))
+}
+
+
+RunThroughParametersSSerr <- function(data, trend, x, filename="", observations, nrows, 
+  fit=FALSE, cutoff, cressie, model, sill, range, min=.1, max=10, step=.1) {
+  
+  ComputeSSerr <- function(data, cressie, x, cutoff, observations, fit, model, sill, range) {
+    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
+      fit=fit, model=model, psill=sill, range=range)
+    
+    return(variogram$SSerr)
+  }
+  
+  params <- seq(min, max, step)
+  if (is.na(cutoff)) {
+    params <- 1:observations
+    result <- sapply(params, FUN=function(param) 
+      ComputeSSerr(data=data, x=x,
+        cressie=cressie, observations=observations,
+        fit=fit, model=model, cutoff=param, sill=sill, range=range))
+    caption <- "Максимальное расстояние"
+  } else if (is.na(sill)) {
+    result <- sapply(params, FUN=function(param) 
+      ComputeSSerr(data=data, x=x,
+        cressie=cressie, observations=observations,
+        fit=fit, model=model, cutoff=cutoff, sill=param, range=range))
+    caption <- "Порог"
+  } else if (is.na(range)) {    
+    result <- sapply(params, FUN=function(param) 
+      ComputeSSerr(data=data, x=x,
+        cressie=cressie, observations=observations,
+        fit=fit, model=model, cutoff=cutoff, sill=sill, range=param))
+    caption <- "Ранг"
+  }
+  
+  ggplot() + 
+    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) + 
+    scale_x_continuous(breaks=params[seq(1, length(params), 2)]) +
+    xlab(caption) + ylab("SSerr") +
+    theme(axis.text.x = element_text(angle=90, hjust=1))
 }

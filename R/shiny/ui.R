@@ -204,14 +204,14 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         sliderInput("variogram_range", label="Диапазон",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
-          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг'",
+          condition = "input.variogram_panel != 'Сравнительный анализ'",
           numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
             selectInput("modelV", "Модель вариограммы",
               c(#"Эффект самородков"="Nug",
-                "Экспоненциальная"="Exp",
                 "Сферическая"="Sph",
+                "Экспоненциальная"="Exp",
                 "Гауссовская"="Gau",
                 "Круговая"="Cir",
                 "Линейная"="Lin",
@@ -230,13 +230,30 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             checkboxInput("fitVariogram", "Подогнать параметры", value=TRUE)
           ),
           checkboxInput("cressie", "Использовать оценку Кресси"),
-          checkboxInput("afv", "Автоматический подбор модели"),
+          conditionalPanel(
+            condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг'",
+            checkboxInput("afv", "Автоматический подбор модели")
+          ),
           conditionalPanel(
             condition = "input.variogram_panel == 'Кригинг'",
             numericInput("future", "Будущее", value=0, min=0, max=38, step=1)
+          ),
+          conditionalPanel(
+            condition = "input.variogram_panel == 'Подбор параметров'",
+            radioButtons("fit_param", "Параметр",
+              choices = list("Максимальный лаг" = 1, "Наггет" = 2, "Порог" = 3,
+                "Ранг" = 4), selected = 1, inline=TRUE),
+            numericInput("fit_min", "Минимум",  value=.1, min=.1, step=.1),
+            numericInput("fit_max", "Максимум", value=10, min=.1, step=.1),
+            numericInput("fit_step", "Шаг", value=.1, min=.1, step=.1),
+            actionButton('fitParam', 'Подобрать')
+            
           )
         ),
-        uiOutput("variogram_ui")
+        conditionalPanel(
+          condition = "input.variogram_panel == 'Сравнительный анализ'",
+          actionButton('computeComparison', 'Сравнить')
+        )
       ),
       mainPanel(
         tabsetPanel(
@@ -253,6 +270,14 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
               column(5,
                 htmlOutput("sserr")
               )
+            )
+          ),
+          
+          tabPanel("Подбор параметров",
+            br(),
+            plotOutput("fit_param", height=500),
+            fluidRow(
+                htmlOutput("fit_mse")
             )
           ),
           
@@ -275,10 +300,9 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           tabPanel("Сравнительный анализ",
             br(),
             plotOutput("param_comparison", height=500),
-            actionButton('computeComparison', 'Вычислить'),
             fluidRow(
               column(5,       
-                h4("Лучшие значения"),
+                #h4("Лучшие значения"),
                 dataTableOutput("best_cutoff")
               ),
               column(2),

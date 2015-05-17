@@ -3,11 +3,6 @@ source("R/lib/variogram.R")
 source("R/lib/kriging.R")
 
 ## Function definition: need to be moved into isolated place
-### Just definition of mean standard error // TODO: find out exact formula and describe each parameter
-MSE <- function (e, N=1) {
-  sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
-}
-
 # Completes trend values up to source observation number
 computeTrend <- function (fit, future=0) {
   c(sapply(c(1 : (src.nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))

@@ -10,7 +10,9 @@ cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, ComputeVariogram(data=c(1,2,3,4,5
 
 cv.manual <- computeCV(research.data.residuals, 32, variogram.manual$var_model)
 cv.robust <- computeCV(research.data.residuals, 32, variogram.robust$var_model)
-cv.robust.best <- computeCV(research.data.residuals, 32, variogram.robust.best$var_model)
+
+variogram <- ComputeVariogram(research.data.residuals, x=ConvertYearsToNum(src.data$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
+cv.robust.best <- computeCV(research.data.residuals, 32, variogram$var_model)
 
 computeCVStatistics <- function(cv, digits=4){
   out = list()
@@ -19,21 +21,21 @@ computeCVStatistics <- function(cv, digits=4){
   # mean error divided by the mean of the observed values, measure for how large the mean_error is in contrast to the mean of the dataset
   out$me_mean = out$mean_error / mean(cv$observed)
   # mean absolute error, ideally 0, less vulnerable to outliers
-  out$MAE = mean(abs(cv$residual))
+  out$MAE = MAE(cv$residual)
   # MSE, ideally small
-  out$MSE = mean(cv$residual^2)
+  out$MSE = MSE(cv$residual)
   # Mean square normalized error, ideally close to 1
-  out$MSNE = mean(cv$zscore^2)
+  out$MSNE = MSE(cv$zscore)
   # correlation observed and predicted, ideally 1
   out$cor_obspred = cor(cv$observed, cv$observed - cv$residual)
   # correlation predicted and residual, ideally 0
   out$cor_predres = cor(cv$observed - cv$residual, cv$residual)
   # RMSE, ideally small
-  out$RMSE = sqrt(sum(cv$residual^2) / length(cv$residual))
+  out$RMSE = RMSE(cv$residual)
   # RMSE / sd(observed), measure for how much the residuals vary to the total variation in the dataset
   out$RMSE_sd = out$RMSE / sd(cv$observed)
   # URMSE, ideally zero
-  out$URMSE = sqrt((sum(cv$residual^2) / length(cv$residual)) - mean(cv$residual)^2)
+  out$URMSE = sqrt(out$MSE - mean(cv$residual)^2)
   # Inter quartile range, ideally small
   out$iqr = IQR(cv$residual)
   

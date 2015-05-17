@@ -7,8 +7,6 @@ library(sp)
 library(gstat)
 library(reshape2)
 
-
-
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
 src.nrows <- 38
@@ -25,6 +23,7 @@ source("lib/afv.R")        # autofit variogram module
 source("lib/variogram.R")
 source("lib/kriging.R")
 source("lib/misc.R")
+source("lib/measures.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
@@ -516,15 +515,25 @@ shinyServer(function(input, output, session) {
   #  DrawCrossPrediction(actual=obj$actual, trend=obj$trend, kriging=obj$kriging, future=0)
   #})
   
-  MSE <- function (e, N=1) {
-    sum(sapply(X=e, FUN=function(x) x**2)) / length(e)
-  }
+  measure <- reactive({
+    switch(input$measure,
+      MAE  = MAE,
+      MSE  = MSE,
+      RMSE = RMSE)
+  })
   
-  computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
+  measureText <- reactive({
+    switch(input$measure,
+      MAE  = "MAE",
+      MSE  = "MSE",
+      RMSE = "RMSE")
+  })
+
+  computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
     kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
     residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations=observations(), nrows=src.nrows)
-    return(MSE(residual))
+    return(residual)
   }
   
   computeComparison <- eventReactive(input$computeComparison, {
@@ -539,9 +548,9 @@ shinyServer(function(input, output, session) {
       cutoffs <- 1:n
       
       for (cutoff in cutoffs) {
-        manualResult    <- computePredictionResidualMSE(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
-        classicalResult <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
-        robustResult    <- computePredictionResidualMSE(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff)
+        manualResult    <- measure()(computePredictionResidual(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff))
+        classicalResult <- measure()(computePredictionResidual(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff))
+        robustResult    <- measure()(computePredictionResidual(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff))
         
         # Each time through the loop, add another row of data. This is
         # a stand-in for a long-running computation.
@@ -560,13 +569,14 @@ shinyServer(function(input, output, session) {
       geom_line() +
       geom_point(size=2, shape=21, fill="white") +
       scale_x_continuous(breaks=1:maxRange()) +
-      xlab("Максимальное расстояние") + ylab("MSE") +
+      xlab("Максимальное расстояние") + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
   
   output$best_cutoff <- renderDataTable({
     cmp <- computeComparison()
-    df <- data.frame("Оценка"=c("Фиксированная", "Классическая", "Робастная"),"Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), "MSE"=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
+    mt <- measureText()
+    df <- data.frame("Оценка"=c("Фиксированная", "Классическая", "Робастная"),"Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), mt=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
     rownames(df) <- c("Фиксированная", "Классическая", "Робастная")
     
     df
@@ -635,9 +645,11 @@ shinyServer(function(input, output, session) {
 
     withProgress(message = 'Идет вычисление', value = 0, {  
       n <- length(params)
+      i <- 0
       
       for (param in params) {
-        result <- c(result, MSE(computeManualResidual(data=data, trend=trend, x=c(1:observations()),
+        i <- i + 1
+        result <- c(result, measure()(computeManualResidual(data=data, trend=trend, x=c(1:observations()),
             cressie=cressie(), observations=observations(), fit=fitVariogram(), model=modelV(), 
             cutoff=ifelse(isCutoff, param, cutoff()), 
             nugget=ifelse(isNugget, param, nugget()), 
@@ -645,7 +657,7 @@ shinyServer(function(input, output, session) {
             range=ifelse(isRange, param, range()))))
         
         # Increment the progress bar, and update the detail text.
-        incProgress(1/n, detail = paste0(trunc(param / n * 100), "%"))
+        incProgress(1/n, detail = paste0(trunc(i / n * 100), "%"))
       }
     })
     list(result = result, params = params, caption = caption)
@@ -657,7 +669,7 @@ shinyServer(function(input, output, session) {
     ggplot(data=data.frame("X"=obj$params, "Y"=obj$result), aes(x=X, y=Y)) + 
       geom_line() + 
       scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +
-      xlab(obj$caption) + ylab("MSE") +
+      xlab(obj$caption) + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
 })

@@ -204,7 +204,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         sliderInput("variogram_range", label="Диапазон",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
-          condition = "input.variogram_panel != 'Сравнительный анализ'",
+          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров'",
           numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
@@ -222,8 +222,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 "С эффектом дыр"="Hol",
                 "Логарифмическая"="Log",
                 "Сплайн"="Spl")
-            ),
-            
+            ),       
             numericInput("nugget", "Самородок", value=0, min=0),
             numericInput("rangeV",  "Ранг", value=1, min=.1, step=.1),
             numericInput("psill", "Порог", value=1, min=.1, step=.1),
@@ -237,18 +236,25 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           conditionalPanel(
             condition = "input.variogram_panel == 'Кригинг'",
             numericInput("future", "Будущее", value=0, min=0, max=38, step=1)
-          ),
-          conditionalPanel(
-            condition = "input.variogram_panel == 'Подбор параметров'",
-            radioButtons("fit_param", "Параметр",
-              choices = list("Максимальный лаг" = 1, "Наггет" = 2, "Порог" = 3,
-                "Ранг" = 4), selected = 1, inline=TRUE),
-            numericInput("fit_min", "Минимум",  value=.1, min=.1, step=.1),
-            numericInput("fit_max", "Максимум", value=10, min=.1, step=.1),
-            numericInput("fit_step", "Шаг", value=.1, min=.1, step=.1),
-            actionButton('fitParam', 'Подобрать')
-            
           )
+        ),
+        conditionalPanel(
+          condition = "input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Сравнительный анализ'",
+          selectInput("measure", label="Мера",
+            c("MAE"  = "MAE",
+              "MSE"  = "MSE",
+              "RMSE" = "RMSE")
+          )
+        ),
+        conditionalPanel(
+          condition = "input.variogram_panel == 'Подбор параметров'",
+          radioButtons("fit_param", "Параметр",
+            choices = list("Максимальный лаг" = 1, "Наггет" = 2, "Порог" = 3,
+              "Ранг" = 4), selected = 1, inline=TRUE),
+          numericInput("fit_min", "Минимум",  value=.1, min=.1, step=.1),
+          numericInput("fit_max", "Максимум", value=10, min=.1, step=.1),
+          numericInput("fit_step", "Шаг", value=.1, min=.1, step=.1),
+          actionButton('fitParam', 'Подобрать')
         ),
         conditionalPanel(
           condition = "input.variogram_panel == 'Сравнительный анализ'",

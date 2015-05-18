@@ -18,6 +18,7 @@ source("R/lib/misc.R")       # some useful global-use functions
 source("R/lib/draw.R")       # helpers for drawing
 source("R/lib/write.R")      # helpers for writing
 source("R/lib/ntest.R")      # tests for normality
+source("R/lib/regr.R")
 source("R/lib/measures.R")
 
 ## Read the data / pattern: year;temperature

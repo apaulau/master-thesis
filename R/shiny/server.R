@@ -503,7 +503,7 @@ shinyServer(function(input, output, session) {
   cp %>% ggvis(x=~year, y=~value, stroke=~variable) %>%
     layer_points(fill:="white", size:=20) %>%
     layer_lines(strokeDash=~variable) %>%
-    add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
+    add_axis("x", title="Год наблюдения", format="d") %>%
     add_axis("y", title="Температура, ºС") %>%
     scale_numeric("x", nice = FALSE) %>%
     set_options(width = "auto") %>%
@@ -690,4 +690,20 @@ shinyServer(function(input, output, session) {
   output$cv_stats2 <- renderDataTable({
     computeCVStatistics(cv())
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
+  
+  cv_err <- reactive({
+    obj <- cv()
+    relativeError <- obj$residual / obj$observed
+    data.frame(error=relativeError, year=series()$year)
+  })
+  
+  cv_err %>% ggvis(x=~year, y=~error) %>%
+    layer_points(fill:="white", size:=20, stroke:="black") %>%
+    layer_lines() %>%
+    add_axis("x", title="Год наблюдения", format="d") %>%
+    add_axis("y", title="Ошибка") %>%
+    add_tooltip(function(df) paste(df$year, ":", format(df$error, digits=3))) %>%
+    scale_numeric("x", nice = FALSE) %>%
+    set_options(width = "auto") %>%
+    bind_shiny("cv_plot", "cv_plot_ui")
 })

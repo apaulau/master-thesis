@@ -1,3 +1,7 @@
+RSS <- function (x) {
+  sum(x^2)
+}
+
 MAE <- function (x) {
   mean(abs(x))
 }

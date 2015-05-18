@@ -251,7 +251,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           radioButtons("fit_param", "Параметр",
             choices = list("Максимальный лаг" = 1, "Наггет" = 2, "Порог" = 3,
               "Ранг" = 4), selected = 1, inline=TRUE),
-          numericInput("fit_min", "Минимум",  value=.1, min=.1, step=.1),
+          numericInput("fit_min", "Минимум",  value=.1, min=0, step=.1),
           numericInput("fit_max", "Максимум", value=10, min=.1, step=.1),
           numericInput("fit_step", "Шаг", value=.1, min=.1, step=.1),
           actionButton('fitParam', 'Подобрать')
@@ -323,6 +323,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           tabPanel("Кросс-валидация",
             br(),
             #plotOutput("param_comparison", height=500),
+            ggvisOutput("cv_plot"),
             fluidRow(
               column(6,       
                 dataTableOutput("cv")

@@ -152,6 +152,9 @@ computeCVStatistics <- function(cv, digits=4){
   out$mean_error = ifelse(mean(cv$residual) < 1*10^(-10), 0, mean(cv$residual))
   # mean error divided by the mean of the observed values, measure for how large the mean_error is in contrast to the mean of the dataset
   #out$me_mean = out$mean_error / mean(cv$observed)
+  out$RSS <- RSS(cv$residual)
+  out$bias <- mean(cv$observed) - mean(cv$residual)
+  out$effectivity <- out$RSS / sum((cv$observed - mean(cv$observed))^2)
   # mean absolute error, ideally 0, less vulnerable to outliers
   out$MAE = MAE(cv$residual)
   # MSE, ideally small
@@ -173,7 +176,7 @@ computeCVStatistics <- function(cv, digits=4){
   
   out = lapply(out, format, digits = digits)
   out = t(t(out))
-  out <- data.frame(c("Среднее значение", "MAE", "MSE", "MSE(Z-значение)", "Корреляция(наблюдение, прогноз)", "Корреляция(прогноз, остатки)", "RMSE"), out)
+  out <- data.frame(c("Среднее значение", "Сумма квадратов невязок", "Смещение", "Коэффицинт эффективности", "MAE", "MSE", "MSE(Z-значение)", "Корреляция(наблюдение, прогноз)", "Корреляция(прогноз, остатки)", "RMSE"), out)
   colnames(out) <- c("Статистика", "Значение")
   return(out)
 }

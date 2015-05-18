@@ -141,7 +141,7 @@ RunThroughParametersSSerr <- function(data, trend, x, filename="", observations,
 computeCV <- function (data, var_model, observations) {
   df <- MakeFakeSpatialData(x=1:observations, data=data, observations=observations)
   
-  out <- krige.cv(data~1, df, var_model, nfold=observations)
+  out <- krige.cv(data~1, df, var_model, nfold=observations, verbose=FALSE)
   
   return(out)
 }

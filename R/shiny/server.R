@@ -497,13 +497,12 @@ shinyServer(function(input, output, session) {
     prediction.trend <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)])
     prediction.kriging <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)] + kriging()$var1.pred)
     
-    data.frame(year, actual, trend=prediction.trend, kriging=prediction.kriging)
+    a <- melt(data.frame(year, "Наблюдение"=actual, "Тренд"=prediction.trend, "Кригинг"=prediction.kriging), id=c("year"))
   })
   
-  cp %>% ggvis() %>%
-    layer_paths(x=~year, y=~actual, strokeWidth := 1.5) %>%
-    layer_paths(x=~year, y=~trend, stroke := "green", strokeWidth := 1.5) %>%
-    layer_paths(x=~year, y=~kriging, stroke := "blue", strokeWidth := 1.5) %>%
+  cp %>% ggvis(x=~year, y=~value, stroke=~variable) %>%
+    layer_points(fill:="white", size:=20) %>%
+    layer_lines(strokeDash=~variable) %>%
     add_axis("x", title="Год наблюдения", format="d", properties=axis_props(labels=list(angle=45, align="left"))) %>%
     add_axis("y", title="Температура, ºС") %>%
     scale_numeric("x", nice = FALSE) %>%
@@ -665,7 +664,7 @@ shinyServer(function(input, output, session) {
   
   output$fit_param <- renderPlot({
     obj <- fitParameter()
-    print(obj)
+    
     ggplot(data=data.frame("X"=obj$params, "Y"=obj$result), aes(x=X, y=Y)) + 
       geom_line() + 
       scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +

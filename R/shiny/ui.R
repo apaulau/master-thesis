@@ -204,7 +204,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         sliderInput("variogram_range", label="Диапазон",
           min=1, max=38, value=c(1,35)),
         conditionalPanel(
-          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров'",
+          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
           numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
@@ -230,7 +230,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           ),
           checkboxInput("cressie", "Использовать оценку Кресси"),
           conditionalPanel(
-            condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг'",
+            condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Кросс-валидация'",
             checkboxInput("afv", "Автоматический подбор модели")
           ),
           conditionalPanel(
@@ -300,7 +300,9 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
                 h4("Анализ"),
                 dataTableOutput("analysis")
               )
-            )
+            ),
+            h4("Кросс-валидация"),
+            dataTableOutput("cv_stats")
           ),
           
           tabPanel("Сравнительный анализ",
@@ -314,6 +316,20 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
               column(2),
               column(5,
                 htmlOutput("something2")
+              )
+            )
+          ),
+          
+          tabPanel("Кросс-валидация",
+            br(),
+            #plotOutput("param_comparison", height=500),
+            fluidRow(
+              column(6,       
+                dataTableOutput("cv")
+              ),
+              column(1),
+              column(5,
+                dataTableOutput("cv_stats2")
               )
             )
           )

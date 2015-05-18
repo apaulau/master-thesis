@@ -8,3 +8,9 @@ GetPredictionYears <- function (years, number, future, observations) {
   lastYear <- max(years)
   c((lastYear - number + observations - 1) : (lastYear + future))
 }
+
+MakeFakeSpatialData <- function (x, data, observations) {
+  spdata <- data.frame(cbind("x"=x, "y"=rep(1, observations), data))
+  coordinates(spdata) = ~x+y
+  return(spdata)
+}

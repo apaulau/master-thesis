@@ -136,3 +136,44 @@ RunThroughParametersSSerr <- function(data, trend, x, filename="", observations,
     xlab(caption) + ylab("SSerr") +
     theme(axis.text.x = element_text(angle=90, hjust=1))
 }
+
+# Leave-one-out cross validation
+computeCV <- function (data, var_model, observations) {
+  df <- MakeFakeSpatialData(x=1:observations, data=data, observations=observations)
+  
+  out <- krige.cv(data~1, df, var_model, nfold=observations)
+  
+  return(out)
+}
+
+computeCVStatistics <- function(cv, digits=4){
+  out = list()
+  # mean error, ideally 0:
+  out$mean_error = ifelse(mean(cv$residual) < 1*10^(-10), 0, mean(cv$residual))
+  # mean error divided by the mean of the observed values, measure for how large the mean_error is in contrast to the mean of the dataset
+  #out$me_mean = out$mean_error / mean(cv$observed)
+  # mean absolute error, ideally 0, less vulnerable to outliers
+  out$MAE = MAE(cv$residual)
+  # MSE, ideally small
+  out$MSE = MSE(cv$residual)
+  # Mean square normalized error, ideally close to 1
+  out$MSNE = MSE(cv$zscore)
+  # correlation observed and predicted, ideally 1
+  out$cor_obspred = cor(cv$observed, cv$observed - cv$residual)
+  # correlation predicted and residual, ideally 0
+  out$cor_predres = cor(cv$observed - cv$residual, cv$residual)
+  # RMSE, ideally small
+  out$RMSE = RMSE(cv$residual)
+  # RMSE / sd(observed), measure for how much the residuals vary to the total variation in the dataset
+  #out$RMSE_sd = out$RMSE / sd(cv$observed)
+  # URMSE, ideally zero
+  #out$URMSE = sqrt(out$MSE - mean(cv$residual)^2)
+  # Inter quartile range, ideally small
+  #out$iqr = IQR(cv$residual)
+  
+  out = lapply(out, format, digits = digits)
+  out = t(t(out))
+  out <- data.frame(c("Среднее значение", "MAE", "MSE", "MSE(Z-значение)", "Корреляция(наблюдение, прогноз)", "Корреляция(прогноз, остатки)", "RMSE"), out)
+  colnames(out) <- c("Статистика", "Значение")
+  return(out)
+}

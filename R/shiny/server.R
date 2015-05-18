@@ -672,4 +672,23 @@ shinyServer(function(input, output, session) {
       xlab(obj$caption) + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
+  
+  cv <- reactive({
+    computeCV(residuals()$temperature, basicVariogram()$var_model, observations())
+  })
+  sig <- function(vec) {
+    sapply(vec, signif, digits=4)
+  }
+  output$cv <- renderDataTable({
+    obj <- cv()
+    data.frame("Прогноз"=sig(obj$var1.pred), "Дисперсия"=sig(obj$var1.var), "Наблюдение"=sig(obj$observed), "Остаток"=sig(obj$residual), "Zзначение"=sig(obj$zscore))
+  },  options=list(searching=FALSE))
+  
+  output$cv_stats <- renderDataTable({
+    computeCVStatistics(cv())
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
+  
+  output$cv_stats2 <- renderDataTable({
+    computeCVStatistics(cv())
+  }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
 })

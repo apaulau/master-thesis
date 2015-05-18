@@ -80,7 +80,7 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
   }
   
   
-  result = list(exp_var = experimentalVariogram, var_model = modeledVariogram)
+  result = list(exp_var = experimentalVariogram, var_model = modeledVariogram, SSerr = ifelse(is.null(attr(variogram, "SSErr")), 0, NULL))
   return(result)
 }
 
@@ -117,10 +117,4 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
       limits=c(0, 1.04 * max(experimentalVariogram$dist))) +
     xlab("Расстояние") + ylab("Значение")
   ggsave(plot=plot.modeled, file=filename, width=7, height=4)
-}
-
-MakeFakeSpatialData <- function (x, data, observations) {
-  spdata <- data.frame(cbind("x"=x, "y"=rep(1, observations), data))
-  coordinates(spdata) = ~x+y
-  return(spdata)
 }

@@ -9,9 +9,12 @@
 # Mac
 .DS_Store
 # TeX temporary files
-.aux
-.toc
-.log
+*.aux
+*.toc
+*.log
+*.bbl
+*.bcf
+*.blg
 *.synctex.gz
 # Packrat file
 packrat/lib*/

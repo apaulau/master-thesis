@@ -1,4 +1,5 @@
-%!TEX root = coursework.tex
+%!TEX root = thesis.tex
+
 \newpage
 
 \makeatletter
@@ -42,33 +43,39 @@
 \end{figure}
 
 \begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/manual-model.png}}
+	\center{\includegraphics[width=1\linewidth]{../figures/residual/hscat.pdf}}
+\caption{Диаграмма взаимного разброса}
+\label{img:hscat}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/manual-variogram.png}}
 \caption{Экспериментальная и теоретическая вариограмма (сферическая модель)}
-\label{img:manual-mod}
+\label{img:manual-variogram}
 \end{figure}
 
 \begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/classical-empirical.png}}
-\caption{Экспериментальная вариограмма (классическая оценка)}
-\label{img:classical_emp}
-\end{figure}
-
-\begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/manual-model.png}}
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/classical-variogram.png}}
 \caption{Экспериментальная и теоретическая вариограмма (классическая оценка)}
-\label{img:classical-mod}
+\label{img:classical-variogram}
 \end{figure}
 
 \begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-modeled.png}}
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-variogram.png}}
 \caption{Экспериментальная и теоретическая вариограмма (робастная оценка)}
-\label{img:robust-mod}
+\label{img:robust-variogram}
 \end{figure}
 
 \begin{figure}[H]
-\center{\includegraphics[width=1\linewidth]{../figures/variogram/cross-prediction-robust-best.png}}
-\caption{Сравнение прогнозных значений}
-\label{img:cross-prediction-best}
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/classical-best-cross-prediction.png}}
+\caption{Сравнение прогнозных значений (классическаая оценка)}
+\label{img:classical-best-cross-prediction}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-best-cross-prediction.png}}
+\caption{Сравнение прогнозных значений (робастная оценка)}
+\label{img:robust-best-cross-prediction}
 \end{figure}
 
 \newpage
@@ -76,7 +83,7 @@
 \label{c:app_results}
 
 \input{../out/residual/data.tex}
-\input{../out/variogram/prediction-manual.tex}
+\input{../out/variogram/manual-prediction.tex}
 
 \newpage
 \section{ Код программ}

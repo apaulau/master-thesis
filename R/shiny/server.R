@@ -659,7 +659,7 @@ shinyServer(function(input, output, session) {
         incProgress(1/n, detail = paste0(trunc(i / n * 100), "%"))
       }
     })
-    list(result = result, params = params, caption = caption)
+    list(result = result, params = params, caption = caption, min = params[which.min(result)])
   })
   
   output$fit_param <- renderPlot({
@@ -668,7 +668,7 @@ shinyServer(function(input, output, session) {
     ggplot(data=data.frame("X"=obj$params, "Y"=obj$result), aes(x=X, y=Y)) + 
       geom_line() + 
       scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +
-      xlab(obj$caption) + ylab(measureText()) +
+      xlab(paste0(obj$caption, ", min=", obj$min)) + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
   

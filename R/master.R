@@ -93,6 +93,9 @@ research.residuals <- data.frame("year"=research.data$year, "temperature"=resear
 print(xtable(research.residuals, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
       file="out/residual/data.tex")
 
+sign <- regr.significance(research.data$temperature, write=TRUE)
+adeq <- regr.adequacy(research.data$temperature, write=TRUE)
+
 ## Residuals time series (data have gotten on computing step: fitting linear model)
 plot.residuals.ts <- DrawTimeSeries(data=research.residuals, filename="residual/time-series.png", datebreaks=kDateBreaks)
 

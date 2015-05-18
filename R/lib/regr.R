@@ -1,4 +1,4 @@
-regr.significance <- function (y, alpha=.05, math='$') {
+regr.significance <- function (y, alpha=.05, math='$', write=FALSE) {
   # Makes conclusion.
   # coeff - simple letter for output
   MakeConclusion <- function(statistic, critical, coeff) {
@@ -29,11 +29,25 @@ regr.significance <- function (y, alpha=.05, math='$') {
   
   criticalPoint <- StudentCriticalPoint(alpha, n - 2)
   
+  if (write) {
+    WriteCharacteristic(a, type="original", name="sign-a")
+    WriteCharacteristic(b, type="original", name="sign-b")
+    WriteCharacteristic(n - 2, type="original", name="sign-df")
+    WriteCharacteristic(vardev, type="original", name="sign-vardev")
+    WriteCharacteristic(errorA, type="original", name="sign-errorA")
+    WriteCharacteristic(errorB, type="original", name="sign-errorB")
+    WriteCharacteristic(studentA, type="original", name="sign-studentA")
+    WriteCharacteristic(studentB, type="original", name="sign-studentB")
+    WriteCharacteristic(criticalPoint, type="original", name="sign-critical")
+    WriteCharacteristic(MakeConclusion(studentA, criticalPoint, paste(math, 'a', math)), type="original", name="sign-conclusionA")
+    WriteCharacteristic(MakeConclusion(studentB, criticalPoint, paste(math, 'b', math)), type="original", name="sign-conclusionB")
+  }
+  
   list(vardev=vardev, errors=c(errorA, errorB), coeff=c(a, b), statistic=c(studentA, studentB), critical=criticalPoint,
     conclusion=c(MakeConclusion(studentA, criticalPoint, paste(math, 'a', math)), MakeConclusion(studentB, criticalPoint, paste(math, 'b', math))))
 }
 
-regr.adequacy <- function(y, alpha=.05) {
+regr.adequacy <- function(y, alpha=.05, write=FALSE) {
   regression <- function(x, a, b) a * x + b
 
   CriticalPoint <- function(alpha, df1, df2) {
@@ -65,6 +79,16 @@ regr.adequacy <- function(y, alpha=.05) {
   
   statistic <- (n - 2) * var_ / resvar
   critical <- CriticalPoint(alpha, 1, n - 2)
+  
+  if (write) {
+    WriteCharacteristic(var_, type="original", name="adeq-var_")
+    WriteCharacteristic(determination, type="original", name="adeq-determination")
+    WriteCharacteristic(linearity, type="original", name="adeq-linearity")
+    WriteCharacteristic(resvar, type="original", name="adeq-resvar")
+    WriteCharacteristic(statistic, type="original", name="adeq-statistic")
+    WriteCharacteristic(critical, type="original", name="adeq-critical")
+    WriteCharacteristic(MakeConclusion(statistic, critical), type="original", name="adeq-conclusion")
+  }
   
   list(modvar=var_, determination=determination, linearity=linearity, 
     Fisher=list(resvar=resvar, statistic=statistic, critical=critical, conclusion=MakeConclusion(statistic, critical)))

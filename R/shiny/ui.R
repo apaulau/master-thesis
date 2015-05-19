@@ -8,7 +8,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
     sidebarLayout(
       sidebarPanel(
         sliderInput("range", label="Диапазон",
-          min=1, max=38, value=c(1,35)),
+          min=1, max=38, value=c(1,32)),
         conditionalPanel(
           condition = "input.source_panel == 'Первичный анализ'",
           radioButtons("base_plot_trigger", "График:",
@@ -99,15 +99,15 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             fluidRow(
               column(4,
                 h4("Модель"),
-                uiOutput("lm")
+                uiOutput("lm"),
+                hr(),
+                h4("Адекватность модели"),
+                htmlOutput("adequacy")
               ),
               column(1),
               column(7,
                 h4("Значимость модели"),
-                htmlOutput("signif"),
-                hr(),
-                h4("Адекватность модели"),
-                htmlOutput("adequacy")
+                htmlOutput("signif")
               )
             )
           )

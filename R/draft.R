@@ -1,15 +1,15 @@
 CrossPrediction <- function (temperature, years, trend, kriging.classical, kriging.robust, file_prediction="", future=0) {
-  prediction.trend <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows]),
-    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
+  prediction.trend <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):nrows]),
+    "year"=GetPredictionYears(years, nrows, future, kObservationNum))
   
-  prediction.krigingClassical <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows] + kriging.classical$var1.pred),
-    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
+  prediction.krigingClassical <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):nrows] + kriging.classical$var1.pred),
+    "year"=GetPredictionYears(years, nrows, future, kObservationNum))
   
-  prediction.krigingRobust <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):src.nrows] + kriging.robust$var1.pred),
-    "year"=GetPredictionYears(years, src.nrows, future, kObservationNum))
+  prediction.krigingRobust <- data.frame("temperature"=c(temperature[(kObservationNum - 1):kObservationNum], trend[(kObservationNum + 1):nrows] + kriging.robust$var1.pred),
+    "year"=GetPredictionYears(years, nrows, future, kObservationNum))
   
-  actual <- data.frame("temperature"=temperature[(kObservationNum - 1):src.nrows],
-    "year"=GetPredictionYears(years, src.nrows, 0))
+  actual <- data.frame("temperature"=temperature[(kObservationNum - 1):nrows],
+    "year"=GetPredictionYears(years, nrows, 0))
   
   if (nchar(file_prediction)) {
     plot.crossprediction <- ggplot() +
@@ -25,7 +25,7 @@ CrossPrediction <- function (temperature, years, trend, kriging.classical, krigi
     ggsave(plot=plot.crossprediction, file=file_prediction, width=7, height=4)
   }
   
-  prediction.krigingRobust$temperature[3:(src.nrows-kObservationNum)] - actual$temperature[3:(src.nrows - kObservationNum)] ## what the heck? why 3? 
+  prediction.krigingRobust$temperature[3:(nrows-kObservationNum)] - actual$temperature[3:(nrows - kObservationNum)] ## what the heck? why 3? 
 }
 
 output$param_comparison <- renderPlot({
@@ -36,8 +36,8 @@ output$param_comparison <- renderPlot({
   
   computePredictionResidualMSE <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
-    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
-    residual <- CrossPrediction(src.data$temperature, src.data$year, trend, kriging)
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=nrows)
+    residual <- CrossPrediction(src$temperature, src.data$year, trend, kriging)
     return(MSE(residual))
   }
   

@@ -9,10 +9,10 @@ library(reshape2)
 
 ## Read the data / pattern: year;temperature
 path.data <- "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
-src.nrows <- 38
-src.data  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=src.nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
+nrows <- 38
+src  <- read.csv(file=path.data, header=TRUE, sep=";", nrows=nrows, colClasses=c("numeric", "numeric"), stringsAsFactors=FALSE)
 kObservationNum <- 0
-kminRange <- min(src.data$year)
+kminRange <- min(src$year)
 
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
@@ -27,7 +27,7 @@ source("lib/measures.R")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
-  src.nrows <- 38
+  nrows <- 38
   minRange <- reactive({
     if (input$nav == "Анализ остатков") {
       input$residual_range[1]
@@ -47,9 +47,9 @@ shinyServer(function(input, output, session) {
     }
   })
   series <- reactive({
-    src.data[minRange():maxRange(),]
+    src[minRange():maxRange(),]
   })
-  breaks <- reactive({src.data[minRange():maxRange(),1]})
+  breaks <- reactive({src[minRange():maxRange(),1]})
   binwidth <- reactive({input$binwidth})
   sturges <- reactive({
     data <- series()$temperature
@@ -462,7 +462,7 @@ shinyServer(function(input, output, session) {
   })
   
   kriging <- reactive({
-    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model, nrows=src.nrows, future=future())
+    PredictWithKriging(residuals()$temperature, x=c(1:observations()), observations=observations(), variogram_model=basicVariogram()$var_model, nrows=nrows, future=future())
   })
   
   output$predictions <- renderDataTable({
@@ -473,15 +473,15 @@ shinyServer(function(input, output, session) {
   output$analysis <- renderDataTable({
     obs <- observations()
     k <- kriging()
-    data.frame("Год"=src.data$year[(obs + 1):src.nrows],
-      "Наблюдение"=src.data$temperature[(obs + 1):src.nrows],
-      "Тренд"=sapply(trend()[(obs + 1):src.nrows], signif, digits=4),
-      "Прогноз"=sapply(k$var1.pred + trend()[(obs + 1):src.nrows], signif, digits=4),
-      "Остаток"=sapply(src.data$temperature[(obs + 1):src.nrows] - (k$var1.pred + trend()[(obs + 1):src.nrows]), signif, digits=4))
+    data.frame("Год"=src$year[(obs + 1):nrows],
+      "Наблюдение"=src$temperature[(obs + 1):nrows],
+      "Тренд"=sapply(trend()[(obs + 1):nrows], signif, digits=4),
+      "Прогноз"=sapply(k$var1.pred + trend()[(obs + 1):nrows], signif, digits=4),
+      "Остаток"=sapply(src$temperature[(obs + 1):nrows] - (k$var1.pred + trend()[(obs + 1):nrows]), signif, digits=4))
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
   
   computeTrend <- function (fit, future=0) {
-    c(sapply(c(1 : (src.nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))
+    c(sapply(c(1 : (nrows + future)), FUN=function(x) fit$coefficients[[1]] + x * fit$coefficients[[2]]))
   }
   
   trend <- reactive({
@@ -491,11 +491,11 @@ shinyServer(function(input, output, session) {
   cp <- reactive({
     future <- future()
     obs <- observations()
-    year=GetPredictionYears(src.data$year, src.nrows, future, obs)
+    year=GetPredictionYears(src$year, nrows, future, obs)
   
-    actual <- c(src.data$temperature[(obs - 1):src.nrows], rep(src.data$temperature[src.nrows], future))
-    prediction.trend <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)])
-    prediction.kriging <- c(src.data$temperature[(obs - 1):obs], trend()[(obs + 1):(src.nrows + future)] + kriging()$var1.pred)
+    actual <- c(src$temperature[(obs - 1):nrows], rep(src$temperature[nrows], future))
+    prediction.trend <- c(src$temperature[(obs - 1):obs], trend()[(obs + 1):(nrows + future)])
+    prediction.kriging <- c(src$temperature[(obs - 1):obs], trend()[(obs + 1):(nrows + future)] + kriging()$var1.pred)
     
     a <- melt(data.frame(year, "Наблюдение"=actual, "Тренд"=prediction.trend, "Кригинг"=prediction.kriging), id=c("year"))
   })
@@ -530,8 +530,8 @@ shinyServer(function(input, output, session) {
 
   computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
-    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=src.nrows)
-    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations=observations(), nrows=src.nrows)
+    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=nrows)
+    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations=observations(), nrows=nrows)
     return(residual)
   }
   
@@ -615,8 +615,8 @@ shinyServer(function(input, output, session) {
   computeManualResidual <- function(data, trend, cressie, x, cutoff, observations, fit, model, nugget, sill, range) {
     variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
       fit=fit, model=model, nugget=nugget, psill=sill, range=range)
-    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=src.nrows)
-    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, src.nrows)
+    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
     return(residual)
   }
   

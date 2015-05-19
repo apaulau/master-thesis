@@ -1,6 +1,6 @@
 WriteCharacteristic <- function (expression, type, name) {
   file <- paste(paste("out", type, "characteristics", name, sep="/"), "tex", sep=".")
-  writer(format(expression, nsmall=2, digits=3), file)
+  writer(format(expression, nsmall=0, digits=3), file)
 }
 
 WriteDescriptiveStatistic <- function (expression, type, name) {

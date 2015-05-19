@@ -42,7 +42,7 @@ ComparePredictionParameters <- function(data, trend, x, filename="", observation
   computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff, observations) {
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations)
     kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, nrows)
+    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
     return(residual)
   }
   
@@ -66,7 +66,7 @@ RunThroughParameters <- function(data, trend, x, filename="", observations, nrow
     variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
       fit=fit, model=model, nugget=nugget, psill=sill, range=range)
     kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src.data$temperature, trend, kriging, observations, nrows)
+    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
     return(residual)
   }
   

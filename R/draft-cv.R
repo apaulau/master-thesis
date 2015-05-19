@@ -11,7 +11,7 @@ cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, ComputeVariogram(data=c(1,2,3,4,5
 cv.manual <- computeCV(research.data.residuals, 32, variogram.manual$var_model)
 cv.robust <- computeCV(research.data.residuals, 32, variogram.robust$var_model)
 
-variogram <- ComputeVariogram(research.data.residuals, x=ConvertYearsToNum(src.data$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
+variogram <- ComputeVariogram(research.data.residuals, x=ConvertYearsToNum(src$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
 cv.robust.best <- computeCV(research.data.residuals, 32, variogram$var_model)
 
 computeCVStatistics <- function(cv, digits=4){

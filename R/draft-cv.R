@@ -6,13 +6,16 @@ library(gstat)
 library(reshape2)
 
 # Just example that it works
-cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, ComputeVariogram(data=c(1,2,3,4,5,6,7,8), x=c(1:8), cressie=FALSE, cutoff=6, width=FALSE)$var_model, observations=8)
+vex <- ComputeVariogram(data=c(1,2,3,4,5,6,7,8), x=c(1:8), cressie=FALSE, cutoff=6, observations=8)
+kex <- PredictWithKriging(c(1,2,3,4,5,6,7,8), x=c(1:8), observations=8, variogram_model = vex$var_model, nrows=8, pred=c(4))
+cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, vex$var_model)
 
-cv.manual <- computeCV(research.data.residuals, 32, variogram.manual$var_model)
-cv.robust <- computeCV(research.data.residuals, 32, variogram.robust$var_model)
+cv.manual <- computeCV(sample.residuals, 32, variogram.manual$var_model)
+cv.robust <- computeCV(sample.residuals, 32, variogram.robust$var_model)
 
-variogram <- ComputeVariogram(research.data.residuals, x=ConvertYearsToNum(src$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
-cv.robust.best <- computeCV(research.data.residuals, 32, variogram$var_model)
+variogram <- ComputeVariogram(sample.residuals, x=ConvertYearsToNum(src$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
+kr <- PredictWithKriging(sample.residuals, x=ConvertYearsToNum(src$year), observation=32, variogram_model = variogram$var_model, nrows=38, pred=c(1))
+cv.robust.best <- computeCV(sample.residuals, kObservationNum, variogram$var_model)
 
 computeCVStatistics <- function(cv, digits=4){
   out = list()
@@ -53,4 +56,19 @@ computeCV <- function (data, length, var_model) {
   out <- krige.cv(data~1, df, var_model, nfold=length)
   
   return(out)
+}
+
+#Randomly shuffle the data
+yourData<-yourData[sample(nrow(yourData)),]
+
+#Create 10 equally size folds
+folds <- cut(seq(1,nrow(yourData)),breaks=10,labels=FALSE)
+
+#Perform 10 fold cross validation
+for(i in 1:10){
+  #Segement your data by fold using the which() function 
+  testIndexes <- which(folds==i,arr.ind=TRUE)
+  testData <- yourData[testIndexes, ]
+  trainData <- yourData[-testIndexes, ]
+  #Use test and train data partitions however you desire...
 }

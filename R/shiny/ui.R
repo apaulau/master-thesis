@@ -121,7 +121,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
     sidebarLayout(
       sidebarPanel(
         sliderInput("residual_range", label="Диапазон",
-          min=1, max=38, value=c(1,35)),
+          min=1, max=38, value=c(1,32)),
         conditionalPanel(
           condition = "input.residual_panel == 'Первичный анализ'",
           radioButtons("residual_base_plot_trigger", "График:",
@@ -202,7 +202,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
     sidebarLayout(
       sidebarPanel(
         sliderInput("variogram_range", label="Диапазон",
-          min=1, max=38, value=c(1,35)),
+          min=1, max=38, value=c(1,32)),
         conditionalPanel(
           condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
           numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
@@ -259,6 +259,10 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         conditionalPanel(
           condition = "input.variogram_panel == 'Сравнительный анализ'",
           actionButton('computeComparison', 'Сравнить')
+        ),
+        conditionalPanel(
+          condition = "input.variogram_panel == 'Кросс-валидация'",
+          numericInput("nfold", "nfold", value=32, min=2, max=38)
         )
       ),
       mainPanel(

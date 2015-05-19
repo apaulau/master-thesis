@@ -671,9 +671,11 @@ shinyServer(function(input, output, session) {
       xlab(paste0(obj$caption, ", min=", obj$min)) + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
-  
+  nfold <- reactive({
+    input$nfold
+  })
   cv <- reactive({
-    computeCV(residuals()$temperature, basicVariogram()$var_model, observations())
+    computeCV(residuals()$temperature, basicVariogram()$var_model, observations(), nfold())
   })
   sig <- function(vec) {
     sapply(vec, signif, digits=4)
@@ -694,6 +696,7 @@ shinyServer(function(input, output, session) {
   cv_err <- reactive({
     obj <- cv()
     relativeError <- obj$residual / obj$observed
+    #relativeError <- obj$var1.pred[1:maxRange()] + trend()
     data.frame(error=relativeError, year=series()$year)
   })
   

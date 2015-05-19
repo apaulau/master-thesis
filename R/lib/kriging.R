@@ -1,10 +1,20 @@
 ## Calculates kriging prediction based on passed variogram model
-PredictWithKriging <- function (data, x, observations, variogram_model, nrows, future=0) {
+PredictWithKriging <- function (data, x, observations, variogram_model, nrows, future=0, pred=F) {
   y <- rep(1, observations)
   src_data <- data.frame(cbind("x"=x, "y"=y, data))
   coordinates(src_data) = ~x+y
+
+  if (!pred) {
+    pred1 <- c((observations + 1):(nrows + future))
+    pred2 <- rep(1, nrows - observations + future)
+  } else {
+    pred1 <- c(x[1:(pred-1)],x[(pred+1):length(x)])
+    
+    pred2 <- c(rep(1, pred - 1), rep(1, length(x)-pred))
+  }
   
-  new_data <- data.frame("X"=c((observations + 1):(nrows + future)), "Y"=rep(1, nrows - observations + future))
+  new_data <- data.frame("X"=pred1, "Y"=pred2)
+  print(new_data)
   coordinates(new_data) = ~X+Y
   
   krige(data~1, src_data, new_data, model=variogram_model, debug.level=0)
@@ -138,10 +148,10 @@ RunThroughParametersSSerr <- function(data, trend, x, filename="", observations,
 }
 
 # Leave-one-out cross validation
-computeCV <- function (data, var_model, observations) {
+computeCV <- function (data, var_model, observations, nfold) {
   df <- MakeFakeSpatialData(x=1:observations, data=data, observations=observations)
   
-  out <- krige.cv(data~1, df, var_model, nfold=observations, verbose=FALSE)
+  out <- krige.cv(data~1, df, var_model, nfold=nfold, verbose=FALSE)
   
   return(out)
 }
@@ -162,7 +172,7 @@ computeCVStatistics <- function(cv, digits=4){
   # Mean square normalized error, ideally close to 1
   out$MSNE = MSE(cv$zscore)
   # correlation observed and predicted, ideally 1
-  out$cor_obspred = cor(cv$observed, cv$observed - cv$residual)
+  out$cor_obspred = cor(cv$observed, cv$var1.pred)
   # correlation predicted and residual, ideally 0
   out$cor_predres = cor(cv$observed - cv$residual, cv$residual)
   # RMSE, ideally small

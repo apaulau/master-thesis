@@ -16,6 +16,7 @@
 *.bcf
 *.blg
 *.synctex.gz
+*.fdb_latexmk
 # Packrat file
 packrat/lib*/
 packrat/src/

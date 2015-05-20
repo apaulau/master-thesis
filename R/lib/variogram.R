@@ -70,7 +70,7 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
   }
   
   if (fit) {
-    modeledVariogram <- fit.variogram(experimentalVariogram, modeledVariogram, debug.level=0)
+    modeledVariogram <- fit.variogram(experimentalVariogram, modeledVariogram, debug.level=0, fit.method = 6)
   }
   
   if (nchar(name)) {

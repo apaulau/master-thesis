@@ -70,7 +70,7 @@ autofitVariogram = function(formula, input_data,
       model = vgm(psill=psill, model=model, range=range,
         nugget=nugget,kappa = kappa),
       fit.ranges = c(fit_range), fit.sills = c(fit_nugget, fit_sill),
-      debug.level=0), 
+      debug.level=0, fit.method = 6), 
       silent=TRUE)
     if("try-error" %in% class(obj)) {
       #print(traceback())

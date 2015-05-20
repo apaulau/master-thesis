@@ -39,7 +39,7 @@ sample.residuals <- sample.fit$residuals
 cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 
 # Draw H-Scatterplot
-sample.hscat <- DrawHScatterplot(sample.residuals[1:kObservationNum], cutoff)
+sample.hscat <- DrawHScatterplot(sample.residuals[1:kObservationNum])
 
 # Compute prediction manually with choosed model ("best" what i found)
 manual <- processPrediction(data=sample.residuals, year=sample$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)")

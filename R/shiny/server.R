@@ -378,7 +378,7 @@ shinyServer(function(input, output, session) {
         var_model <- vgm(model=modelV(), psill=psill(), range=range(), nugget=nugget())  
       }     
       if (input$fitVariogram) {
-        var_model <- fit.variogram(exp_var, var_model, debug.level=0)
+        var_model <- fit.variogram(exp_var, var_model, debug.level=0, fit.method = 6)
       }
       
       variogram <- list(exp_var = exp_var, var_model = var_model, sserr = ifelse(is.null(attr(var_model, "SSErr")), "", attr(var_model, "SSErr")))
@@ -537,17 +537,26 @@ shinyServer(function(input, output, session) {
       input$measure
     }
   })
-
-  computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
+  
+  computePredictionEstimation <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
+    print("<<<<")
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
-    kriging <- PredictWithKriging(data, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations=observations(), nrows=nrows)
-    return(residual)
+    if (!input$cross) {
+      print(">>>>")
+      kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
+      estimation <- measure()(residual)
+      print(estimation)
+    } else {
+      crv <- computeCV(residuals()$temperature, variogram$var_model, observations(), nfold())
+      estimation <- compStat(crv)[[measure()]]
+    }
+    return(estimation)
   }
   
   computeComparison <- eventReactive(input$computeComparison, {
     # Create 0-row data frame which will be used to store data
-    dat <- data.frame(cutoff=numeric(0), "Фиксированная"=numeric(0), "Классическая"=numeric(0), "Робастная"=numeric(0))
+    dat <- data.frame(cutoff=numeric(0), "Классическая"=numeric(0), "Робастная"=numeric(0))
     
     withProgress(message = 'Идет вычисление', value = 0, {
       # Number of times we'll go through the loop
@@ -557,13 +566,12 @@ shinyServer(function(input, output, session) {
       cutoffs <- 1:n
       
       for (cutoff in cutoffs) {
-        manualResult    <- measure()(computePredictionResidual(data=data, trend=trend, variog=ComputeManualVariogram, x=c(1:observations()), cressie=FALSE, cutoff=cutoff))
-        classicalResult <- measure()(computePredictionResidual(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff))
-        robustResult    <- measure()(computePredictionResidual(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff))
+        classicalResult <- computePredictionEstimation(data=data, trend=trend, x=c(1:observations()), cressie=FALSE, cutoff=cutoff)
+        robustResult    <- computePredictionEstimation(data=data, trend=trend, x=c(1:observations()), cressie=TRUE, cutoff=cutoff)
         
         # Each time through the loop, add another row of data. This is
         # a stand-in for a long-running computation.
-        dat <- rbind(dat, data.frame(cutoff=cutoff, "Фиксированная"=manualResult, "Классическая"=classicalResult, "Робастная"=robustResult))
+        dat <- rbind(dat, data.frame(cutoff=cutoff, "Классическая"=classicalResult, "Робастная"=robustResult))
         
         # Increment the progress bar, and update the detail text.
         incProgress(1/n, detail = paste0(trunc(cutoff / n * 100), "%"))
@@ -584,9 +592,9 @@ shinyServer(function(input, output, session) {
   
   output$best_cutoff <- renderDataTable({
     cmp <- computeComparison()
-    mt <- measureText()
-    df <- data.frame("Оценка"=c("Фиксированная", "Классическая", "Робастная"),"Расстояние"=c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), mt=c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
-    rownames(df) <- c("Фиксированная", "Классическая", "Робастная")
+    df <- data.frame(c("Классическая", "Робастная"), c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
+    colnames(df) <- c("Оценка", "Расстояние", measureText())
+    rownames(df) <- c("Классическая", "Робастная")
     
     df
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))

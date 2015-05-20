@@ -76,14 +76,13 @@ DrawAutoCorrelationFunction <- function (data, filename="") {
   plot.acf
 }
 
-DrawHScatterplot <- function (data, cutoff=trunc(2 * kObservationNum / 3)) {  
+DrawHScatterplot <- function (data) {  
   # Make fake second coordinate
   p <- data.frame("X"=c(1:kObservationNum), "Y"=rep(1, kObservationNum))
   # Calculate distances
   p.dist<-as.matrix(dist(p[,c("X", "Y")]))
   dist.breaks<-quantile(p.dist,seq(.1, .9, by=.1))
   coordinates(p) <- ~ X + Y
-  p.breaks <- (0:cutoff) * 1
   
   Residuals <- data
   hsc <- hscat(Residuals~1, p, breaks=0:20)

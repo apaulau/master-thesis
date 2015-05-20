@@ -240,11 +240,26 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         ),
         conditionalPanel(
           condition = "input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Сравнительный анализ'",
-          selectInput("measure", label="Мера",
-            c("MAE"  = "MAE",
-              "MSE"  = "MSE",
-              "RMSE" = "RMSE")
+          checkboxInput("cross", "Кросс-валидация"),
+          conditionalPanel(
+            condition = "!input.cross",
+            selectInput("measure", label="Мера",
+              c("MAE"  = "MAE",
+                "MSE"  = "MSE",
+                "RMSE" = "RMSE")
+            )
+          ),
+          conditionalPanel(
+            condition = "input.cross",
+            selectInput("cvm", label="Мера",
+              c("MAE"  = "MAE",
+                "RSS"  = "RSS",
+                "MSE"  = "MSE",
+                "RMSE" = "RMSE",
+                "Корреляция" = "cor_obspred")
+            )
           )
+          
         ),
         conditionalPanel(
           condition = "input.variogram_panel == 'Подбор параметров'",

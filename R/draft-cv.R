@@ -13,9 +13,11 @@ cv.example <- computeCV(c(1,2,3,4,5,6,7,8), 8, vex$var_model)
 cv.manual <- computeCV(sample.residuals, 32, variogram.manual$var_model)
 cv.robust <- computeCV(sample.residuals, 32, variogram.robust$var_model)
 
-variogram <- ComputeVariogram(sample.residuals, x=ConvertYearsToNum(src$year), cressie=TRUE, cutoff=6, observations=kObservationNum)
-kr <- PredictWithKriging(sample.residuals, x=ConvertYearsToNum(src$year), observation=32, variogram_model = variogram$var_model, nrows=38, pred=c(1))
-cv.robust.best <- computeCV(sample.residuals, kObservationNum, variogram$var_model)
+fit = lm(src$temperature[1:32] ~ c(1:32))
+res <- fit$residuals #sapply(1:32, FUN=function(i) fit$residuals[[i]])
+variogram <- vgm("Lin", nugget=0.3, range=6, psill=2)
+kr <- PredictWithKriging(sample.residuals, x=ConvertYearsToNum(src$year), observation=32, variogram_model = variogram$var_model, nrows=38)
+cvb <- computeCV(res, 32, variogram$var_model)
 
 computeCVStatistics <- function(cv, digits=4){
   out = list()
@@ -50,7 +52,7 @@ computeCVStatistics <- function(cv, digits=4){
 
 # Leave-one-out cross validation
 computeCV <- function (data, length, var_model) {
-  df <- data.frame("data"=data, "x"=c(1:length), "y"=rep(1, length))
+  df <- data.frame(data=data, "x"=c(1:length), "y"=rep(1, length))
   coordinates(df) <- ~x+y
   
   out <- krige.cv(data~1, df, var_model, nfold=length)

@@ -1,20 +1,10 @@
 ## Calculates kriging prediction based on passed variogram model
-PredictWithKriging <- function (data, x, observations, variogram_model, nrows, future=0, pred=F) {
+PredictWithKriging <- function (data, x, observations, variogram_model, nrows, future=0) {
   y <- rep(1, observations)
   src_data <- data.frame(cbind("x"=x, "y"=y, data))
   coordinates(src_data) = ~x+y
-
-  if (!pred) {
-    pred1 <- c((observations + 1):(nrows + future))
-    pred2 <- rep(1, nrows - observations + future)
-  } else {
-    pred1 <- c(x[1:(pred-1)],x[(pred+1):length(x)])
-    
-    pred2 <- c(rep(1, pred - 1), rep(1, length(x)-pred))
-  }
   
-  new_data <- data.frame("X"=pred1, "Y"=pred2)
-  print(new_data)
+  new_data <- data.frame("X"=c((observations + 1):(nrows + future)), "Y"=rep(1, nrows - observations + future))
   coordinates(new_data) = ~X+Y
   
   krige(data~1, src_data, new_data, model=variogram_model, debug.level=0)
@@ -156,7 +146,7 @@ computeCV <- function (data, var_model, observations, nfold) {
   return(out)
 }
 
-computeCVStatistics <- function(cv, digits=4){
+compStat <- function(cv) {
   out = list()
   # mean error, ideally 0:
   out$mean_error = ifelse(mean(cv$residual) < 1*10^(-10), 0, mean(cv$residual))
@@ -183,6 +173,10 @@ computeCVStatistics <- function(cv, digits=4){
   #out$URMSE = sqrt(out$MSE - mean(cv$residual)^2)
   # Inter quartile range, ideally small
   #out$iqr = IQR(cv$residual)
+  return(out)
+}
+computeCVStatistics <- function(cv, digits=4){
+  out <- compStat(cv)
   
   out = lapply(out, format, digits = digits)
   out = t(t(out))

@@ -515,17 +515,27 @@ shinyServer(function(input, output, session) {
   #})
   
   measure <- reactive({
-    switch(input$measure,
-      MAE  = MAE,
-      MSE  = MSE,
-      RMSE = RMSE)
+    if (input$cross) {
+      input$cvm
+    } else {
+      switch(input$measure,
+        MAE  = MAE,
+        MSE  = MSE,
+        RMSE = RMSE)
+    }
   })
   
   measureText <- reactive({
-    switch(input$measure,
-      MAE  = "MAE",
-      MSE  = "MSE",
-      RMSE = "RMSE")
+    if(input$cross) {
+      switch(input$cvm,
+        MAE  = "MAE",
+        MSE  = "MSE",
+        RMSE = "RMSE",
+        RSS  = "RSS",
+        cor_obspred = "Корреляция")
+    } else {
+      input$measure
+    }
   })
 
   computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
@@ -612,12 +622,20 @@ shinyServer(function(input, output, session) {
     input$fitVariogram
   })
   
-  computeManualResidual <- function(data, trend, cressie, x, cutoff, observations, fit, model, nugget, sill, range) {
+  computeEstimation <- function(data, trend, cressie, x, cutoff, observations, fit, model, nugget, sill, range) {
     variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
       fit=fit, model=model, nugget=nugget, psill=sill, range=range)
-    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
-    return(residual)
+    if (!input$cross) {
+      kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
+      estimation <- measure()(residual)
+    } else {
+      crv <- computeCV(residuals()$temperature, variogram$var_model, observations(), nfold())
+      estimation <- compStat(crv)[[measure()]]
+    }
+  
+    print(estimation)
+    return(estimation)
   }
   
   fitParameter <- eventReactive(input$fitParam, {
@@ -648,18 +666,18 @@ shinyServer(function(input, output, session) {
       
       for (param in params) {
         i <- i + 1
-        result <- c(result, measure()(computeManualResidual(data=data, trend=trend, x=c(1:observations()),
+        result <- c(result, computeEstimation(data=data, trend=trend, x=c(1:observations()),
             cressie=cressie(), observations=observations(), fit=fitVariogram(), model=modelV(), 
             cutoff=ifelse(isCutoff, param, cutoff()), 
             nugget=ifelse(isNugget, param, nugget()), 
             sill=ifelse(isSill, param, psill()), 
-            range=ifelse(isRange, param, range()))))
+            range=ifelse(isRange, param, range())))
         
         # Increment the progress bar, and update the detail text.
         incProgress(1/n, detail = paste0(trunc(i / n * 100), "%"))
       }
     })
-    list(result = result, params = params, caption = caption, min = params[which.min(result)])
+    list(result = result, params = params, caption = caption, wmin = params[which.min(result)], wmax = params[which.max(result)], min = format(min(result), digits=3), max = format(max(result), digits=3))
   })
   
   output$fit_param <- renderPlot({
@@ -668,7 +686,7 @@ shinyServer(function(input, output, session) {
     ggplot(data=data.frame("X"=obj$params, "Y"=obj$result), aes(x=X, y=Y)) + 
       geom_line() + 
       scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +
-      xlab(paste0(obj$caption, ", min=", obj$min)) + ylab(measureText()) +
+      xlab(paste0(obj$caption, ", min=", obj$wmin, ", max=", obj$wmax)) + ylab(paste0(measureText(), ", min=", obj$min, ", max=", obj$max)) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
   })
   nfold <- reactive({

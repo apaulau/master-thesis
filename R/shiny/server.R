@@ -539,14 +539,11 @@ shinyServer(function(input, output, session) {
   })
   
   computePredictionEstimation <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
-    print("<<<<")
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
     if (!input$cross) {
-      print(">>>>")
       kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
       residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
       estimation <- measure()(residual)
-      print(estimation)
     } else {
       crv <- computeCV(residuals()$temperature, variogram$var_model, observations(), nfold())
       estimation <- compStat(crv)[[measure()]]
@@ -642,7 +639,6 @@ shinyServer(function(input, output, session) {
       estimation <- compStat(crv)[[measure()]]
     }
   
-    print(estimation)
     return(estimation)
   }
   

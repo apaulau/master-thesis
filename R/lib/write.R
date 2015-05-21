@@ -17,6 +17,12 @@ WriteTest <- function (statistic, p.value, df=FALSE, type, name) {
   }
 }
 
+WriteVariogramParams <- function (model, name) {
+  WriteCharacteristic(model[[2]][1], type="variogram", name=paste0(name, "-nug"))
+  WriteCharacteristic(model[[2]][2], type="variogram", name=paste0(name, "-psill"))
+  WriteCharacteristic(model[[3]][2], type="variogram", name=paste0(name, "-range"))
+}
+
 writer <- function (expression, file) {
   sink(file=file, type="output")
   cat(expression)

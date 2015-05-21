@@ -26,7 +26,7 @@ ggacf <- function (data, ci=.95, lag.max=30, xlab="Лаг", ylab="Автокор
 }
 
 ## ggplot wrapper for saving plots. 
-plot.save <- function(plot, filename, path="figures", width=7, height=4, ...) {
+plot.save <- function(plot, filename, path="figures", width=7, height=3.3, ...) {
   filepath <- paste(path, filename, sep="/")
   ggsave(plot=plot, file=filepath, width=width, height=height, ...)
 }

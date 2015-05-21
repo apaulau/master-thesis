@@ -23,7 +23,7 @@ CrossPrediction <- function (temperature, years, trend, kriging, observations, n
   
   plot.crossprediction <- DrawCrossPrediction(actual, prediction.trend, prediction.kriging, future)
   filename <- paste0("figures/variogram/", name, "-cross-prediction.png")
-  ggsave(plot=plot.crossprediction, file=filename, width=7, height=4)
+  ggsave(plot=plot.crossprediction, file=filename, width=7, height=3.3)
 }
 
 ## Computes resdiuals after kriging prediction substract
@@ -52,7 +52,7 @@ ComparePredictionParameters <- function(data, trend, x, filename="", observation
   
   if (nchar(filename)) {
     plot.check <- DrawParameterComparison(cutoffs, manualResult, classicalResult, robustResult)
-    ggsave(plot=plot.check, file=filename, width=7, height=4)
+    ggsave(plot=plot.check, file=filename, width=7, height=3.3)
   }
 
   list(manual=which.min(manualResult), classical=which.min(classicalResult), robust=which.min(robustResult))

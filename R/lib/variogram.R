@@ -74,6 +74,7 @@ ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph",
   }
   
   if (nchar(name)) {
+    WriteVariogramParams(modeledVariogram, name)
     SaveVariogramPlot(experimentalVariogram, modeledVariogram, name)
     print(xtable(data.frame("Модель"=modeledVariogram$model, "Порог"=modeledVariogram$psill, "Ранг"=modeledVariogram$range), 
       caption="Модель вариограммы", label="table:manual_model"), table.placement="H", file="out/variogram/manual-model.tex")
@@ -89,7 +90,9 @@ ComputeVariogram <- function (data, x, cressie, cutoff, name="", observations) {
   spdata <- MakeFakeSpatialData(x=x, data=data, observations=observations)
   
   variogram <- autofitVariogram(data~1, spdata, cutoff=cutoff, cressie=cressie)
+  
   if (nchar(name)) {
+    WriteVariogramParams(variogram$var_model, name)
     SaveVariogramPlot(variogram$exp_var, variogram$var_model, name)
   }
 
@@ -105,10 +108,8 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
   Empirical <- melt(experimentalVariogram, id.vars = "dist", measure.vars = c("gamma"))
   Modeled <- melt(Fitted, id.vars = "dist", measure.vars = c("gamma"))
   
-  filename <- paste0("figures/variogram/", name, "-variogram.png")
-  
-  plot.modeled <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
-    geom_line(data = Modeled, color='blue') +
+  plot.var <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
+    
     scale_y_continuous(expand=c(0,0), 
       breaks=seq(0, 1.04 * max(experimentalVariogram$gamma), 1),
       limits=c(min(0, 1.04 * min(experimentalVariogram$gamma)), 1.04 * max(experimentalVariogram$gamma))) +
@@ -116,5 +117,8 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
       breaks=seq(0, 1.04 * max(experimentalVariogram$dist), 1),
       limits=c(0, 1.04 * max(experimentalVariogram$dist))) +
     xlab("Расстояние") + ylab("Значение")
-  ggsave(plot=plot.modeled, file=filename, width=7, height=4)
+  ggsave(plot=plot.var, file=paste0("figures/variogram/", name, "-variogram.png"), width=7, height=3.3)
+  
+  plot.modeled <- plot.var + geom_line(data = Modeled, color='blue')
+  ggsave(plot=plot.modeled, file=paste0("figures/variogram/", name, "-modeled.png"), width=7, height=3.3)
 }

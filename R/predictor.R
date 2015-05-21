@@ -10,12 +10,8 @@ computeTrend <- function (fit, future=0) {
 
 # Computes prediction with passed parameters and saves all needed info and plots
 processPrediction <- function (data, year, variog=ComputeVariogram, cressie, cutoff, name, caption) {
+  
   variogram <- variog(data, x=ConvertYearsToNum(year), cressie=cressie, cutoff=cutoff, name=name, observations=kObservationNum)
-  
-  WriteCharacteristic(variogram$var_model[[2]][1], type="variogram", name=paste0(name, "-nug"))
-  WriteCharacteristic(variogram$var_model[[2]][2], type="variogram", name=paste0(name, "-psill"))
-  WriteCharacteristic(variogram$var_model[[3]][2], type="variogram", name=paste0(name, "-range"))
-  
   prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model, nrows=nrows)
   CrossPrediction(src$temperature, src$year, trend, prediction, name, observations=kObservationNum, nrows=nrows)
   residual <- ComputeKrigingResiduals(src$temperature, trend, prediction, observations=kObservationNum, nrows=nrows)
@@ -40,6 +36,9 @@ cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 
 # Draw H-Scatterplot
 sample.hscat <- DrawHScatterplot(sample.residuals[1:kObservationNum])
+
+lin.var1 <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=21, model="Lin", name="lin", psill=4, range=0, nugget=0, fit=FALSE)
+lin.fit <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=21, model="Lin", name="lin-fit", psill=4, range=0, nugget=0, fit=TRUE)
 
 # Compute prediction manually with choosed model ("best" what i found)
 manual <- processPrediction(data=sample.residuals, year=sample$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)")

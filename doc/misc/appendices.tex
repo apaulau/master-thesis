@@ -1,22 +1,26 @@
-%!TEX root = thesis.tex
+%!TEX root = ../thesis.tex
 
 \newpage
 
-\makeatletter
+% \makeatletter
 \renewcommand\appendixname{Приложение}
-\gdef\appendix{\par
-\setcounter{section}{0}%
-\setcounter{subsection}{0}%
-\def\thesection{\@Alph\c@section}
-\def\section##1{\refstepcounter{section}
-\setcounter{table}{0}
-\def\thetable{\@Alph\c@section.\arabic{table}}
-\goodbreak\noindent{\indent\Large\bf\hbox to 8.5em{\appendixname\
-\thesection\hss}\hspace{0.8ex}##1}%
-\nobreak\vspace{1em}\nobreak\noindent%
-
-\addcontentsline{toc}{chapter}{\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1}}}
-\makeatother
+\gdef\appendix{
+	\par
+	\setcounter{section}{0}%
+	\setcounter{subsection}{0}%
+	\def\thesection{\Asbuk{section}}
+	\def\section##1{
+		\refstepcounter{section}
+		\setcounter{table}{0}
+		\def\thetable{\Asbuk{section}.\arabic{table}}
+		\goodbreak\noindent{
+			\indent\Large\bf\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1
+		}
+		\nobreak\vspace{1em}\nobreak\noindent
+		\addcontentsline{toc}{chapter}{\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1}
+	}
+}
+% \makeatother
 
 \appendix
 
@@ -50,26 +54,56 @@
 
 \begin{figure}[H]
 	\center{\includegraphics[width=1\linewidth]{../figures/variogram/lin-fit-modeled.png}}
-\caption{Экспериментальная и теоретическая вариограмма $ 4 \cdot Lin(h, 0) $}
-\label{img:lin-modeled}
+\caption{Экспериментальная и теоретическая вариограмма $ 4.08 \cdot Nug(h) $}
+\label{img:lin-fit}
 \end{figure}
 
 \begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/classical-variogram.png}}
-\caption{Экспериментальная и теоретическая вариограмма (классическая оценка)}
-\label{img:classical-variogram}
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/lin-fit-cv-modeled.png}}
+\caption{Экспериментальная и теоретическая вариограмма $ 4 \cdot Lin(h, 4) $}
+\label{img:lin-fit-cv}
 \end{figure}
 
 \begin{figure}[H]
-	\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-variogram.png}}
-\caption{Экспериментальная и теоретическая вариограмма (робастная оценка)}
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/lin-fit-cv-cross-prediction.png}}
+\caption{Прогноз $ 4 \cdot Lin(h, 4) $}
+\label{img:lin-fit-cv-pred}
+\end{figure}
+
+\begin{figure}[ht]
+	\center{\includegraphics[width=1\linewidth]{../figures/static/lin-range-adapt.png}}
+\caption{Зависимость качества линейной модели от значения ранга}
+\label{img:lin-range-adapt}
+\end{figure}
+
+\begin{figure}[ht]
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/lin-fit-adapt-modeled.png}}
+\caption{Экспериментальная и теоретическая вариограмма $ 2 \cdot Lin(h, 2) $}
+\label{img:lin-adapt-modeled}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/sph-fit-adapt-modeled.png}}
+\caption{Экспериментальная и теоретическая вариограмма $ 0.9 + 4 \cdot Sph(h, 6.9) $}
+\label{img:sph-adapt-modeled}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/sph-fit-adapt-cross-prediction.png}}
+\caption{Прогноз $ 0.9 + 4 \cdot Sph(h, 6.9) $}
+\label{img:sph-adapt-pred}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{../figures/variogram/per-fit-cv-modeled.png}}
+\caption{Экспериментальная и теоретическая вариограмма $ 4 \cdot Per(h, 0.898) $}
+\label{img:per-cv-modeled}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-variogram.png}}
+\caption{Экспериментальная вариограмма (оценка Кресси-Хокинса)}
 \label{img:robust-variogram}
-\end{figure}
-
-\begin{figure}[H]
-\center{\includegraphics[width=1\linewidth]{../figures/variogram/classical-best-cross-prediction.png}}
-\caption{Сравнение прогнозных значений (классическаая оценка)}
-\label{img:classical-best-cross-prediction}
 \end{figure}
 
 \begin{figure}[H]
@@ -83,7 +117,7 @@
 \label{c:app_results}
 
 \input{../out/residual/data.tex}
-\input{../out/variogram/manual-prediction.tex}
+\input{../out/variogram/per-fit-cv-prediction.tex}
 
 \newpage
 \section{ Код программ}

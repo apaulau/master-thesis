@@ -61,7 +61,7 @@ CompareVariogramParameters <- function (data, x, y=rep(1, kObservationNum), widt
 
 ComputeManualVariogram <- function (data, x, cressie=FALSE, cutoff, model="Sph", psill=0, range=3.9, nugget=3.4, fit=TRUE, name="", observations) {
   spdata <- MakeFakeSpatialData(x=x, data=data, observations=observations)
-  experimentalVariogram <- variogram(data~1, spdata, width=1, cutoff=cutoff)
+  experimentalVariogram <- variogram(data~1, spdata, width=1, cutoff=cutoff, cressie=cressie)
   
   if (psill == 0) {
     modeledVariogram <- vgm(model=model, range=range, nugget=nugget)  
@@ -111,8 +111,8 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
   plot.var <- ggplot(Empirical, aes(x = dist, y = value)) +  geom_point() + 
     
     scale_y_continuous(expand=c(0,0), 
-      breaks=seq(0, 1.04 * max(experimentalVariogram$gamma), 1),
-      limits=c(min(0, 1.04 * min(experimentalVariogram$gamma)), 1.04 * max(experimentalVariogram$gamma))) +
+      breaks=seq(0, 1.5 * max(experimentalVariogram$gamma), 1),
+      limits=c(min(0, 1.04 * min(experimentalVariogram$gamma)), 1.5 * max(experimentalVariogram$gamma))) +
     scale_x_continuous(expand=c(0,0),
       breaks=seq(0, 1.04 * max(experimentalVariogram$dist), 1),
       limits=c(0, 1.04 * max(experimentalVariogram$dist))) +

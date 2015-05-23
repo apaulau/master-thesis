@@ -9,9 +9,8 @@ computeTrend <- function (fit, future=0) {
 }
 
 # Computes prediction with passed parameters and saves all needed info and plots
-processPrediction <- function (data, year, variog=ComputeVariogram, cressie, cutoff, name, caption) {
+processPrediction <- function (data, year, variogram, cressie, cutoff, name, caption) {
   
-  variogram <- variog(data, x=ConvertYearsToNum(year), cressie=cressie, cutoff=cutoff, name=name, observations=kObservationNum)
   prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model, nrows=nrows)
   CrossPrediction(src$temperature, src$year, trend, prediction, name, observations=kObservationNum, nrows=nrows)
   residual <- ComputeKrigingResiduals(src$temperature, trend, prediction, observations=kObservationNum, nrows=nrows)
@@ -20,8 +19,9 @@ processPrediction <- function (data, year, variog=ComputeVariogram, cressie, cut
   prediction.compare <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
     "Наблюдение"=src$temperature[(kObservationNum + 1):nrows],
     "Прогноз"=prediction$var1.pred+trend[(kObservationNum + 1):nrows],
-    "Тренд"=trend[(kObservationNum + 1):nrows])
-  print(xtable(prediction.compare, caption=caption, label=paste0("table:", name, "-prediction"), digits=c(0, 0, 3, 3, 3)),
+    "Тренд"=trend[(kObservationNum + 1):nrows],
+    "Ошибка"=residual)
+  print(xtable(prediction.compare, caption=caption, label=paste0("table:", name, "-prediction"), digits=c(0, 0, 3, 3, 3, 3)),
     file=paste0("out/variogram/", name, "-prediction.tex"))
   
   WriteCharacteristic(mse, type="variogram", name=paste0(name, "-mse"))
@@ -37,8 +37,18 @@ cutoff <- trunc(2 * kObservationNum / 3) # let it be "classical" value
 # Draw H-Scatterplot
 sample.hscat <- DrawHScatterplot(sample.residuals[1:kObservationNum])
 
-lin.var1 <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=21, model="Lin", name="lin", psill=4, range=0, nugget=0, fit=FALSE)
-lin.fit <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=21, model="Lin", name="lin-fit", psill=4, range=0, nugget=0, fit=TRUE)
+lin.var1 <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Lin", name="lin", psill=4, range=0, nugget=0, fit=FALSE)
+lin.fit <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Lin", name="lin-fit", psill=4, range=0, nugget=0, fit=TRUE)
+lin.fit.cv <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Lin", name="lin-fit-cv", psill=4, range=4, nugget=0, fit=FALSE)
+lin.fit.adapt <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Lin", name="lin-fit-adapt", psill=4, range=2, nugget=0, fit=FALSE)
+lin.fit.cv.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=lin.fit.cv, cutoff=cutoff, name="lin-fit-cv", caption="Прогноз (линейная модель с порогом)")
+lin.fit.adapt.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=lin.fit.adapt, cutoff=cutoff, name="lin-fit-adapt", caption="Адаптивный прогноз (линейная модель с порогом)")
+sph.fit.adapt <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Sph", name="sph-fit-adapt", psill=4, range=6.9, nugget=0.9, fit=FALSE)
+sph.fit.adapt.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=sph.fit.adapt, cutoff=cutoff, name="sph-fit-adapt", caption="Адаптивный прогноз (сферическая модель)")
+per.fit.cv <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Per", name="per-fit-cv", psill=4.1, range=0.898, nugget=0.001, fit=FALSE)
+per.fit.cv.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=per.fit.cv, cutoff=cutoff, name="per-fit-cv", caption="Прогноз (периодическая модель)")
+
+for.robust.only <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=TRUE, cutoff=20, model="Lin", name="robust", psill=0, range=0, nugget=0, fit=FALSE)
 
 # Compute prediction manually with choosed model ("best" what i found)
 manual <- processPrediction(data=sample.residuals, year=sample$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)")

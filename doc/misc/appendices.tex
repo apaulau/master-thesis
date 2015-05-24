@@ -2,26 +2,6 @@
 
 \newpage
 
-% \makeatletter
-\renewcommand\appendixname{Приложение}
-\gdef\appendix{
-	\par
-	\setcounter{section}{0}%
-	\setcounter{subsection}{0}%
-	\def\thesection{\Asbuk{section}}
-	\def\section##1{
-		\refstepcounter{section}
-		\setcounter{table}{0}
-		\def\thetable{\Asbuk{section}.\arabic{table}}
-		\goodbreak\noindent{
-			\indent\Large\bf\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1
-		}
-		\nobreak\vspace{1em}\nobreak\noindent
-		\addcontentsline{toc}{chapter}{\hbox to 8.5em{\appendixname\ \thesection\hss}\hspace{0.8ex}##1}
-	}
-}
-% \makeatother
-
 \appendix
 
 \section{ Исходные данные}
@@ -107,9 +87,33 @@
 \end{figure}
 
 \begin{figure}[H]
-\center{\includegraphics[width=1\linewidth]{../figures/variogram/robust-best-cross-prediction.png}}
-\caption{Сравнение прогнозных значений (робастная оценка)}
-\label{img:robust-best-cross-prediction}
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/auto-class-20-modeled.png}}
+\caption{Экспериментальная и теоретическая вариограмма $ 1.011 \cdot Wav(h, 1.14) $}
+\label{img:auto-class-modeled}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/auto-class-20-cross-prediction.png}}
+\caption{Прогноз $ 1.011 \cdot Wav(h, 1.14) $}
+\label{img:auto-class-20-pred}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/auto-class-26-cross-prediction.png}}
+\caption{Прогноз $ 3.46 + 0.5 \cdot Per(h, 2.67) $}
+\label{img:auto-class-26-pred}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/auto-rob-5-cross-prediction.png}}
+\caption{Прогноз $ 4.11 + 1.65 \cdot Wav(h, 3.59) $}
+\label{img:auto-rob-5-pred}
+\end{figure}
+
+\begin{figure}[H]
+\center{\includegraphics[width=1\linewidth]{../figures/variogram/auto-class-18-cross-prediction.png}}
+\caption{Прогноз $ 3.8 + 0.32 \cdot Per(h, 1.3) $}
+\label{img:auto-class-18-pred}
 \end{figure}
 
 \newpage
@@ -118,13 +122,16 @@
 
 \input{../out/residual/data.tex}
 \input{../out/variogram/per-fit-cv-prediction.tex}
+\input{../out/variogram/auto-rob-5-prediction.tex}
 
 \newpage
 \section{ Код программ}
 \label{c:listings}
-\renewcommand{\thelstlisting}{D.1}
+\renewcommand{\thelstlisting}{Г.1}
 \lstinputlisting[language=R, caption=Описательные статистики, label=lst:dstats]{../R/lib/dstats.R}
-\renewcommand{\thelstlisting}{D.2}
-\lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../R/master.R}
-\renewcommand{\thelstlisting}{D.3}
+% \renewcommand{\thelstlisting}{Г.2}
+% \lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../R/master.R}
+\renewcommand{\thelstlisting}{Г.2}
 \lstinputlisting[language=R, caption=Вариограммный анализ, label=lst:variogram]{../R/predictor.R}
+\renewcommand{\thelstlisting}{Г.3}
+\lstinputlisting[language=R, caption=Автоматический подбор моделей, label=lst:afv]{../R/lib/afv.R}

@@ -50,8 +50,23 @@ per.fit.cv.prediction <- processPrediction(data=sample.residuals, year=sample$ye
 
 for.robust.only <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=TRUE, cutoff=20, model="Lin", name="robust", psill=0, range=0, nugget=0, fit=FALSE)
 
+auto.class <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-20", cressie=FALSE, cutoff=20)
+auto.class.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class, cutoff=20, name="auto-class-20", caption="Прогноз (волновая модель)")
+auto.rob <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-rob-20", cressie=TRUE, cutoff=20)
+auto.rob.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.rob, cutoff=20, name="auto-rob-20", caption="Прогноз (волновая модель)")
+auto.class <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-26", cressie=FALSE, cutoff=26)
+auto.class.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class, cutoff=26, name="auto-class-26", caption="Прогноз (периодическая модель)")
 # Compute prediction manually with choosed model ("best" what i found)
 manual <- processPrediction(data=sample.residuals, year=sample$year, variog=ComputeManualVariogram, cressie=FALSE, cutoff=cutoff, name="manual", caption="Прогноз (сферическая модель)")
+
+cv.cutoff <- ComparePredictionParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/auto-corr-cutoff.png", observations=kObservationNum, nrows=nrows, adapt=FALSE)
+adapt.cutoff <- ComparePredictionParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/auto-mse-cutoff.png", observations=kObservationNum, nrows=nrows)
+
+auto.rob.adapt <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-rob-5", cressie=TRUE, cutoff=5)
+auto.rob.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.rob.adapt, cutoff=5, name="auto-rob-5", caption="Прогноз (волновая модель)")
+auto.class.adapt <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-18", cressie=FALSE, cutoff=18)
+auto.class.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class.adapt, cutoff=18, name="auto-class-18", caption="Прогноз (периодическая модель)")
+
 
 # Compute prediction with auto fit model using classical estimation
 classical <- processPrediction(data=sample.residuals, year=sample$year, cressie=FALSE, cutoff=cutoff, name="classical", caption="Прогноз (классическая оценка)")

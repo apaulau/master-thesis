@@ -34,28 +34,33 @@ ComputeKrigingResiduals <- function(temperature, trend, kriging, observations, n
   actual - prediction
 }
 
-### Missed complete understanding of this functionality, because it aren't used in further work. Seems like it used only for selection best parameters.
+
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
-ComparePredictionParameters <- function(data, trend, x, filename="", observations, nrows) {
+ComparePredictionParameters <- function(data, trend, x, filename="", observations, nrows, adapt=TRUE) {
   cutoffs <- c(1:observations)
   
-  computePredictionResidual <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff, observations) {
-    variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations)
-    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
-    return(residual)
+  computePredictionEstimation <- function(data, trend, cressie, x, cutoff, observations) {
+    variogram <- ComputeVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations)
+    if (adapt) {
+      kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
+      estimation <- MSE(residual)
+    } else {
+      crv <- computeCV(data, variogram$var_model, observations, nfold=observations)
+      estimation <- cor(crv$observed, crv$var1.pred)
+    }
+    return(estimation)
   }
   
-  manualResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, variog=ComputeManualVariogram, x=x, cressie=FALSE, cutoff=cutoff, observations=observations)))
-  classicalResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff, observations=observations)))
-  robustResult <- sapply(cutoffs, FUN=function(cutoff) MSE(computePredictionResidual(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff, observations=observations)))
-  
+  classicalResult <- sapply(cutoffs, FUN=function(cutoff) computePredictionEstimation(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff, observations=observations))
+  robustResult <- sapply(cutoffs, FUN=function(cutoff) computePredictionEstimation(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff, observations=observations))
+    
   if (nchar(filename)) {
-    plot.check <- DrawParameterComparison(cutoffs, manualResult, classicalResult, robustResult)
+    plot.check <- DrawParameterComparison(cutoffs, classicalResult, robustResult, adapt)
     ggsave(plot=plot.check, file=filename, width=7, height=3.3)
   }
 
-  list(manual=which.min(manualResult), classical=which.min(classicalResult), robust=which.min(robustResult))
+  list(classical=which.min(classicalResult), robust=which.min(robustResult))
 }
 
 

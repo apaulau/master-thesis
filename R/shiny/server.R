@@ -541,8 +541,8 @@ shinyServer(function(input, output, session) {
   computePredictionEstimation <- function(data, trend, variog=ComputeVariogram, cressie, x, cutoff) {
     variogram <- variog(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations())
     if (!input$cross) {
-      kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
+      kriging <- PredictWithKriging(residuals()$temperature, x=x, observations=observations(), variogram_model=variogram$var_model, nrows=nrows)
+      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations(), nrows)
       estimation <- measure()(residual)
     } else {
       crv <- computeCV(residuals()$temperature, variogram$var_model, observations(), nfold())
@@ -553,7 +553,7 @@ shinyServer(function(input, output, session) {
   
   computeComparison <- eventReactive(input$computeComparison, {
     # Create 0-row data frame which will be used to store data
-    dat <- data.frame(cutoff=numeric(0), "Классическая"=numeric(0), "Робастная"=numeric(0))
+    dat <- data.frame(cutoff=numeric(0), "Матерона"=numeric(0), "Кресси-Хокинса"=numeric(0))
     
     withProgress(message = 'Идет вычисление', value = 0, {
       # Number of times we'll go through the loop
@@ -568,7 +568,7 @@ shinyServer(function(input, output, session) {
         
         # Each time through the loop, add another row of data. This is
         # a stand-in for a long-running computation.
-        dat <- rbind(dat, data.frame(cutoff=cutoff, "Классическая"=classicalResult, "Робастная"=robustResult))
+        dat <- rbind(dat, data.frame(cutoff=cutoff, "Матерона"=classicalResult, "КрессиХокинса"=robustResult))
         
         # Increment the progress bar, and update the detail text.
         incProgress(1/n, detail = paste0(trunc(cutoff / n * 100), "%"))
@@ -581,7 +581,7 @@ shinyServer(function(input, output, session) {
     dat <- melt(computeComparison(), id=c("cutoff"))
     ggplot(data=dat, aes(x=cutoff, y=value, group=variable, color=variable, linetype=variable)) +
       geom_line() +
-      geom_point(size=2, shape=21, fill="white") +
+     # geom_point(size=2, shape=21, fill="white") +
       scale_x_continuous(breaks=1:maxRange()) +
       xlab("Максимальное расстояние") + ylab(measureText()) +
       theme(axis.text.x = element_text(angle=90, hjust=1))
@@ -589,9 +589,9 @@ shinyServer(function(input, output, session) {
   
   output$best_cutoff <- renderDataTable({
     cmp <- computeComparison()
-    df <- data.frame(c("Классическая", "Робастная"), c(which.min(cmp$Фиксированная), which.min(cmp$Классическая), which.min(cmp$Робастная)), c(min(cmp$Фиксированная), min(cmp$Классическая), min(cmp$Робастная)))
+    df <- data.frame(c("Матерона", "Кресси-Хокинса"), c(which.min(cmp$Матерона), which.min(cmp$КрессиХокинса)), c(min(cmp$Матерона), min(cmp$КрессиХокинса)))
     colnames(df) <- c("Оценка", "Расстояние", measureText())
-    rownames(df) <- c("Классическая", "Робастная")
+    rownames(df) <- c("Матерона", "Кресси-Хокинса")
     
     df
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))

@@ -96,23 +96,21 @@ DrawHScatterplot <- function (data) {
 
 DrawCrossPrediction <- function (actual, trend, kriging, future) {
   ggplot() + geom_line(data=actual, aes(x=year, y=temperature, linetype="Наблюдение")) +
-    geom_line(data=trend, aes(x=year, y=temperature, linetype="Прогноз(тренд)")) +
-    geom_line(data=kriging, aes(x=year, y=temperature, linetype="Прогноз(кригинг)")) +       
-    scale_linetype_manual(name="Lines", values=c("Наблюдение"="solid", "Прогноз(тренд)"="dashed", "Прогноз(кригинг)"="dotdash")) +
+    geom_line(data=trend, aes(x=year, y=temperature, linetype="Тренд")) +
+    geom_line(data=kriging, aes(x=year, y=temperature, linetype="Прогноз")) +       
+    scale_linetype_manual(name="Lines", values=c("Наблюдение"="solid", "Тренд"="dashed", "Прогноз"="dotdash")) +
     scale_x_continuous(breaks=seq(min(actual$year), max(actual$year) + 5 + future, by=1)) + xlab("Год наблюдения") +
     scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, С") +
     theme(axis.text.x = element_text(angle=45, hjust=1)) +
     labs(color="")
 }
 
-
-DrawParameterComparison <- function(cutoffs, manual, classical, robust) {
+DrawParameterComparison <- function(cutoffs, classical, robust, adapt) {
   ggplot() + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=manual), aes(x=X, y=Y, linetype="Фиксированная")) + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=classical), aes(x=X, y=Y, linetype="Классическая")) + 
-    geom_line(data=data.frame("X"=cutoffs, "Y"=robust), aes(x=X, y=Y, linetype="Робастная")) + 
-    scale_linetype_manual(name="Lines", values=c("Фиксированная"="solid", "Классическая"="dashed", "Робастная"="dotdash")) +
+    geom_line(data=data.frame("X"=cutoffs, "Y"=classical), aes(x=X, y=Y, linetype="Матерона")) + 
+    geom_line(data=data.frame("X"=cutoffs, "Y"=robust), aes(x=X, y=Y, linetype="Кресси-Хокинса")) + 
+    scale_linetype_manual(name="Lines", values=c("Матерона"="dashed", "Кресси-Хокинса"="dotdash")) +
     scale_x_continuous(breaks=cutoffs) +
-    xlab("Максимальное расстояние") + ylab("MSE") +
+    xlab("Максимальное расстояние") + ylab(ifelse(adapt, "MSE", "Корреляция")) +
     theme(axis.text.x = element_text(angle=90, hjust=1))
 }

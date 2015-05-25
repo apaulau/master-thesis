@@ -87,7 +87,7 @@ sample.residuals.prediction.trend <- data.frame("Год"=src$year[(kObservationN
                                                   "Актуальное"=src$temperature[(kObservationNum + 1):nrows],
                                                   "Прогнозное"=trend,
                                                   "Ошибка"=src$temperature[(kObservationNum + 1):nrows] - trend)
-print(xtable(sample.residuals.prediction.trend, caption="Сравнение прогнозных значений (тренда)", label="table:prediction_trend", digits=c(0, 0, 2, 2)),
+print(xtable(sample.residuals.prediction.trend, caption="Сравнение прогнозных значений (тренда)", label="table:prediction_trend", digits=c(0, 0, 2, 2, 2)),
   file="out/residual/prediction-trend.tex")
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)

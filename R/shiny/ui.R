@@ -181,7 +181,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
             )
           ),
           tabPanel("Автокорреляционная функция",
-            plotOutput("acf"),
+            plotOutput("acf", height=600),
             fluidRow(
               column(5,
                 h4("Тест Льюнга-Бокса"),
@@ -300,7 +300,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           
           tabPanel("Подбор параметров",
             br(),
-            plotOutput("fit_param", height=500),
+            plotOutput("fit_param", height=900),
             fluidRow(
                 htmlOutput("fit_mse")
             )
@@ -326,7 +326,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           
           tabPanel("Сравнительный анализ",
             br(),
-            plotOutput("param_comparison", height=500),
+            plotOutput("param_comparison", height=700),
             fluidRow(
               column(5,       
                 #h4("Лучшие значения"),

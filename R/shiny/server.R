@@ -589,7 +589,7 @@ shinyServer(function(input, output, session) {
   
   output$best_cutoff <- renderDataTable({
     cmp <- computeComparison()
-    df <- data.frame(c("Матерона", "Кресси-Хокинса"), c(which.min(cmp$Матерона), which.min(cmp$КрессиХокинса)), c(min(cmp$Матерона), min(cmp$КрессиХокинса)))
+    df <- data.frame(c("Матерона", "Кресси-Хокинса"), c(which.min(cmp$Матерона), which.min(cmp$Кресси-Хокинса)), c(min(cmp$Матерона), min(cmp$КрессиХокинса)))
     colnames(df) <- c("Оценка", "Расстояние", measureText())
     rownames(df) <- c("Матерона", "Кресси-Хокинса")
     
@@ -671,7 +671,7 @@ shinyServer(function(input, output, session) {
       for (param in params) {
         i <- i + 1
         result <- c(result, computeEstimation(data=data, trend=trend, x=c(1:observations()),
-            cressie=cressie(), observations=observations(), fit=fitVariogram(), model=modelV(), 
+            cressie=input$cressie, observations=observations(), fit=fitVariogram(), model=modelV(), 
             cutoff=ifelse(isCutoff, param, cutoff()), 
             nugget=ifelse(isNugget, param, nugget()), 
             sill=ifelse(isSill, param, psill()), 

@@ -3,7 +3,7 @@ library(ggvis)
 require(markdown)
 
 shinyUI(navbarPage("Анализ Баторино",  id="nav", 
-  tabPanel("Исходные данные",
+  tabPanel("Первичный анализ",
     includeCSS("styles.css"),  
     sidebarLayout(
       sidebarPanel(
@@ -13,7 +13,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           condition = "input.source_panel == 'Первичный анализ'",
           radioButtons("base_plot_trigger", "График:",
             c("Гистограмма" = "histogram",
-              "Диаграмма рассеяния" = "scatterplot"),
+              "Квантиль-Квантиль" = "quantile"),
             inline=TRUE
           ),
           conditionalPanel(
@@ -126,7 +126,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           condition = "input.residual_panel == 'Первичный анализ'",
           radioButtons("residual_base_plot_trigger", "График:",
             c("Гистограмма" = "histogram",
-              "Диаграмма рассеяния" = "scatterplot"),
+              "Квантиль-Квантиль" = "quantile"),
             inline=TRUE
           ),
           conditionalPanel(

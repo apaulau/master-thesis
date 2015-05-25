@@ -82,9 +82,11 @@ WriteTest(sample.ctest$statistic, sample.ctest$p.value, sample.ctest$parameter[[
 sample.fit <- lm(sample$temperature ~ c(1:kObservationNum))
 
 linear <- function(x, a, b) a * x + b
+trend <- sapply(X=ConvertYearsToNum(src$year[(kObservationNum + 1):nrows]), FUN=linear, a=sample.fit$coefficients[[2]], b=sample.fit$coefficients[[1]])
 sample.residuals.prediction.trend <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
                                                   "Актуальное"=src$temperature[(kObservationNum + 1):nrows],
-                                                  "Прогнозное"=sapply(X=ConvertYearsToNum(src$year[(kObservationNum + 1):nrows]), FUN=linear, a=sample.fit$coefficients[[2]], b=sample.fit$coefficients[[1]]))
+                                                  "Прогнозное"=trend,
+                                                  "Ошибка"=src$temperature[(kObservationNum + 1):nrows] - trend)
 print(xtable(sample.residuals.prediction.trend, caption="Сравнение прогнозных значений (тренда)", label="table:prediction_trend", digits=c(0, 0, 2, 2)),
   file="out/residual/prediction-trend.tex")
 

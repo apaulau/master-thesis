@@ -255,10 +255,11 @@
 \end{multline*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
-\begin{multline*}
+\begin{multline}
+\label{eq:cov1}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
-\end{multline*}
+\end{multline}
 
 Аналогично для случая $h_1 < h_2$:
 \begin{multline*}
@@ -308,92 +309,53 @@
 \end{multline*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
-\begin{multline*}
+\begin{multline}
+\label{eq:cov2}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2)
-\end{multline*}
+\end{multline}
 
-\textbf{Дальше начинаются рассуждения!!!}
+Далее, для доказательства \eqref{eq:asymptotic_cov} оценим разность, используя условие \eqref{eq:var_abs}, выражение \eqref{eq:cov1} и лемму Кронекера \cite{shiryaev1980}:
+\begin{multline}
+\label{eq:asyfirst}
+	\vert (n - h_2) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \frac{1}{n - h_1} \sum_{m = 0}^{n - h_1 - 1} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
+\end{multline}
+при $ n \to \infty$.
 
-Нужно доказать: при $ h_1 > h_2 $
-\begin{equation}
-\lim_{n \to \infty} (n - h_2) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-\end{equation}
+Рассуждая аналогично, в силу сходимости ряда \eqref{eq:var_abs}, выражения \eqref{eq:cov2} и леммы Кронекера \cite{shiryaev1980}, получаем оценку разности для случая $ h_1 < h_2 $
+\begin{multline}
+\label{eq:asysecond}
+	\vert (n - h_1) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \frac{1}{n - h_2} \sum_{m = -n + h_2 + 1}^{0} \vert m \vert \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
+\end{multline}
+при $ n \to \infty$.
 
-Изначально для поиска предела нужно домножать $ cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} $ на $ (n - h_2) $, потому что эта ковариация была расписана в виде произведения, а предел произведения искать мы не можем.
 
-Дальше смотрим:
-\begin{multline*}
-  % \begin{split}
-		\lim_{n \to \infty} (n - h_2) \frac{2}{n - h_2}(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) =  \\
-		= \lim_{n \to \infty} 2(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) = \\
-		= 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-		- 4 \lim_{n \to \infty} \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-	% \end{split}
-\end{multline*}
+Тогда, объединяя вместе полученные в \eqref{eq:asyfirst} и \eqref{eq:asysecond} результаты, получаем требуемое предельное соотношение \eqref{eq:asymptotic_cov}:
+\begin{equation*}
+	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
+\end{equation*}
 
-Последнее равно стоит потому, что в первой сумме от n зависели только пределы суммирования, и они стали бесконечностями. Дальше нужно работать с выражением $ - 4 \lim_{n \to \infty} \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 $ и показать, что оно равно $ 0 $.
-
-Тут, кажется, можно использовать несколько способов (но ни один у меня не вышел).
-
-Используем способ, как в доказательстве теоремы о свойствах выборочного среднего для временного ряда (Харин-Зуев-Жук, с 409 или ЭУМК по ТВиМС на с. 1840). Идея состоит в том, что если ряд из гамма сходится абсолютно, то любая его часть ограничена и с некоторого места даже мала. Это нас более чем устраивает, но в нашем пределе гамма стоит в квадрате, да еще и домножается на $ m $.
-
-Второй способ заключается в том, что мы берем не просто предел, а предел от модуля того же выражения, можем везде его по максимуму раскрывать и ставить знаки $ \le $. И снова пытаться действовать, как в той теореме. И вопрос возникает такой же - у нас выражения с гамма под квадратом и есть сомножитель.
-
-На странице 411 из Харин Зуев Жук (страница  1842 и 1843 ЭУМК) есть интересные сходимости для рядов, влекомые нашим условием. Может, может получиться что-то с ними.
-
-%Найдём предел для случая $ h_1 > h_2 $:
-%\begin{multline*}
-%  % \begin{split}
-%		\lim_{n \to \infty} (n - h_2) \frac{2}{n - h_2}(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-%		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) =  \\
-%		= \lim_{n \to \infty} 2(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-%		- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) = \\
-%		= 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-%		- 4 \lim_{n \to \infty} \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-%	% \end{split}
-%\end{multline*}
-%
-%Из условия \eqref{eq:var_abs} ряд $ \sum\limits_{h = -\infty}^{+\infty} \gamma(h) $, сходится абсолютно $ \gamma(h) $ следовательно стремится к $ 0 $, при $ n \to \infty $, быстрее, чем $ \frac{1}{n} $. Тогда
-%$$ \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) $$
-%стремится к $ 0 $, при $ m \to \infty $, быстрее, чем $\frac{1}{m}$, значит
-%\begin{align*}
-%	\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \sim o(\frac{1}{m}) \\
-%	(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \sim o(\frac{1}{m^2})
-%\end{align*}
-%
-%Тогда ряд $ \sum\limits_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 $ сходится при $ n \to \infty $, а значит
-%\begin{equation*}
-%	\lim_{n \to \infty} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 = 0 \quad \text{и}
-%\end{equation*}
-%\begin{align}
-%\nonumber
-%	\lim_{n \to \infty} (n - h_2) \frac{2}{n - h_2}(\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\ \nonumber
-%	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2) = \\
-%	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-%\label{eq:asyfirst}
-%\end{align}
-%
-%Рассуждая аналогично, получаем предел при $ h_1 < h_2 $:
-%\begin{align}
-%\nonumber
-%	\lim_{n \to \infty} (n - h_1) \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\ \nonumber
-%	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2) = \\
-%	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-%\label{eq:asysecond}
-%\end{align}
-%
-%Тогда, объединяя вместе \eqref{eq:asyfirst} и \eqref{eq:asysecond}, получаем:
-%\begin{equation*}
-%	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
-%\end{equation*}
-%
-%Нетрудно видеть, что если положить $ h_1 = h_2 = h $, то
-%\begin{equation*}
-%	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
-%\end{equation*}
+Нетрудно видеть, что если в \eqref{eq:asymptotic_cov} положить $ h_1 = h_2 = h $, то получаем равенство для дисперсии оценки вариограммы \eqref{eq:asymptotic_var}. Действительно,
+\begin{equation*}
+	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
+\end{equation*}
 
 \end{proof}
+
+\begin{Corollary}
+	Из теоремы 2 следует соотношение
+	\begin{equation*}
+		\lim_{n \to \infty} V\{ 2 \tilde{\gamma}(h) \} = 0, \quad h = \overline{0, n - 1}
+	\end{equation*}
+\end{Corollary}
+
+\begin{Remark}
+	В силу первого утверждения теоремы 1 и вышеприведённого следствия получаем, что оценка вариограммы $ \tilde{\gamma(h)} $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $
+\end{Remark}
 % section new_section (end)

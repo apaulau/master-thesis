@@ -1,10 +1,10 @@
 %!TEX root = thesis.tex
 
 \newpage
-\chapter{Случайный процесс и его характеристики}
+\chapter{Вспомогательные определения}
 \label{c:definitions}
 
-\section{Случайный процесс. Стационарность}
+\section{Случайный процесс и его основные характеристики}
 
 Для введения следующих понятий воспользуемся \cite{brillinjer-ts, trush-ts}.
 
@@ -14,7 +14,7 @@
 \label{def:stochastic-process}
 	\textit{Действительным случайным процессом} $ X(t) = X(\omega, t) $ называется семейство действительных случайных величин, заданных на вероятностном пространстве $ (\Omega, \mathcal{F}, P) $, где $ \omega \in \Omega, t \in \mathbb{T}$, где $ \mathbb{T} $ --- некоторое параметрическое множество.
 
-	При $ \omega = \omega_{0} $, $ t \in \mathbb{T} $ $ X(\omega_{0}, t) $ является неслучайной функцией временного аргумента и называется \textit{траекторией случайного процесса}.
+	При $ \omega = \omega_{0} $, $ t \in \mathbb{T} $, $ X(\omega_{0}, t) $ является неслучайной функцией временного аргумента и называется \textit{траекторией случайного процесса}.
 
 	При $ t = t_{0} $, $ \omega \in \Omega $, $ X(\omega, t_{0}) $ является случайной величиной и называется \textit{отсчетом случайного процесса}.
 \end{Definition}
@@ -53,7 +53,7 @@
 \begin{Definition}
 	\textit{Ковариационной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
 	\begin{eqnarray*}
-		& cov(t_1, t_2) = cov\{ X(t_1), X(t_2) \} = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
+		& R(t_1, t_2) = cov\{ X(t_1), X(t_2) \} = E \{ (X(t_1) - m(t_1)) (X(t_2) - m(t_2)) \} = \\
 		& = \iint \limits_{\mathbb{R}^2} (x_1 - m(t_1)) (x_2 - m(t_2)) \, dF_2(x_1, x_2; t_1, t_2)
 	\end{eqnarray*}
 \end{Definition}
@@ -61,24 +61,24 @@
 \begin{Definition}
 	\textit{Корреляционной функцией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
 	\begin{equation*}
-		corr\{ X(t_1), X(t_2) \} = E \{ X(t_1)X(t_2) \} = \iint \limits_{\mathbb{R}^2} x_1 x_2 \, dF_2(x_1, x_2; t_1, t_2)
+		r(t_1, t_2) = E \{ X(t_1)X(t_2) \} = \iint \limits_{\mathbb{R}^2} x_1 x_2 \, dF_2(x_1, x_2; t_1, t_2)
 	\end{equation*}
 \end{Definition}
 
-\begin{Remark}
-\label{rem:corr_cov}
-	Имеет место следующее соотношение, связывающее ковариационную и корреляционную функции:
+\begin{Definition}
+\label{def:corr_cov}
+	\textit{Нормированной ковариационной функцией} называется функция вида
 	\begin{equation*}
 		corr\{ X(t_1), X(t_2)\} = \frac{cov\{ X(t_1), X(t_2) \}}{\sqrt{ V\{ X(t_1) \} V\{ X(t_2) \} }},
 	\end{equation*}
 	где $ X(t), t \in \mathbb{T} $, --- случайный процесс.
-\end{Remark}
+\end{Definition}
 
 \begin{Definition}
-	Случайный процесс $ X (t), t \in \mathbb{T} $, называется \textit{стационарным в широком смысле}, если $ \exists E \{ x^2(t) \} < \infty, t \in \mathbb{T} $, и
+	Случайный процесс $ X (t), t \in \mathbb{T} $, называется \textit{стационарным в широком смысле}, если $ \exists E \{ X^2(t) \} < \infty, t \in \mathbb{T} $, и
 	\begin{enumerate}
-		\item $ m(t) = E \{ x(t) \} = m = const, t \in \mathbb{T} $;
-		\item $ cov(t_1, t_2) = cov(t_1 - t_2), t_1,t_2 \in \mathbb{T} $.
+		\item $ m(t) = E \{ X(t) \} = m = const, t \in \mathbb{T} $;
+		\item $ R(t_1, t_2) = R(t_1 - t_2), t_1,t_2 \in \mathbb{T} $.
 	\end{enumerate}
 \end{Definition}
 
@@ -90,14 +90,14 @@
 \end{Definition}
 
 \begin{Remark}
-	Если случайный процесс $ X(t), t \in \mathbb{T} $, является стационарным в узком смысле и $ \exists E \{ x^2(t) \} < \infty, t \in \mathbb{T} $, то он будет стационарным и в широком смысле, но не наоборот.
+	Если случайный процесс $ X(t), t \in \mathbb{T} $, является стационарным в узком смысле и $ \exists E \{ X^2(t) \} < \infty, t \in \mathbb{T} $, то он будет стационарным и в широком смысле, но не наоборот.
 \end{Remark}
 
-\section{Вариограмма и внутренне стационарный случайный процесс}
+\section{Вариограмма случайного процесса}
 \label{sec:variogramAndInnerStationarity}
 % Ссылка на литературу
 \begin{Definition}
-    \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида
+    \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{T} $, называется функция вида
 	\begin{equation}
 	    2 \gamma (h) = V \{ X(t + h) - X(t) \},~ t, h \in \mathbb{T}.
 	\end{equation}
@@ -117,6 +117,12 @@
 \end{Definition}
 
 % Связь стац в широком смысле и внутр стац
+\begin{Remark}
+	Если $ X(t), t \in \mathbb{T} $, стационарный в широком смысле случайный процесс с ковариационной функцией $ R(t), t \in \mathbb{T} $, и семивариограммой $ \gamma(t), t \in \mathbb{T} $, то
+	\begin{equation*}
+		\gamma(t) = R(0) - R(t), \quad t \in \mathbb{T}.
+	\end{equation*}
+\end{Remark}
 
 %TODO в замечании вставить ссылку на какую-нибудь из статей Цеховой, чтобы было понятно, откуда оно взялось
 \begin{Remark}

@@ -356,29 +356,29 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         )
       )
     )
-  ),
-  navbarMenu("О программе",
-    tabPanel("Введение",
-      fluidPage(
-        fluidRow(
-          column(2),
-          column(8,
-            includeMarkdown("intro.md")
-          ),
-          column(2)
-        )
-      )
-    ),
-    tabPanel("Список дел",
-      fluidPage(
-        fluidRow(
-          column(2),
-          column(8,
-            includeMarkdown("include/TODO.Rmd")
-          ),
-          column(2)
-        )
-      )
-    )
+#   ),
+#   navbarMenu("О программе",
+#     tabPanel("Введение",
+#       fluidPage(
+#         fluidRow(
+#           column(2),
+#           column(8,
+#             includeMarkdown("intro.md")
+#           ),
+#           column(2)
+#         )
+#       )
+#     ),
+#     tabPanel("Список дел",
+#       fluidPage(
+#         fluidRow(
+#           column(2),
+#           column(8,
+#             includeMarkdown("include/TODO.Rmd")
+#           ),
+#           column(2)
+#         )
+#       )
+#     )
   )
 ))

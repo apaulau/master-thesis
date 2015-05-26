@@ -5,7 +5,7 @@
 \chapter{Оценка вариограммы внутренне стационарного гауссовского случайного процесса и ее свойства}
 \label{c:variogram_estimation}
 
-Рассмотрим внутренне стационарный гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой.
+Рассмотрим стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
 
 Наблюдается процесс $ X(t),~ t \in \mathbb{Z} $, и регистрируются наблюдения $ X(1), X(2), \dots, X(n) $ в последовательные моменты времени $ 1, 2, \dots, n $.
 
@@ -27,7 +27,7 @@
 		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h), % DIRTY HACK
 	\end{equation}
 	\begin{equation*}
-		cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) =
+		cov \{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} =
 	\end{equation*}
 	\begin{equation}
 	\label{eq:est_cov}
@@ -53,7 +53,7 @@
 
 Таким образом, оценка \eqref{eq:var_estimation} является \textbf{несмещённой} оценкой вариограммы.
 
-Найдём второй момент оценки вариограммы при различных значениях $h$:
+Найдём второй момент оценки вариограммы.
 \begin{eqnarray}
 \label{eq:cov_support}
 \nonumber
@@ -66,7 +66,7 @@
 \end{eqnarray}
 % Здесь переход можно делать потому (и это очень легко!), что произведение сумм равняется сумме от произведений!
 
-Из свойства \ref{rem:corr_cov} корреляции получаем, что
+Из определения \ref{def:corr_cov} нормированной ковариационной функции получаем, что
 \begin{multline*}
 	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
 	\times \sqrt{V\{ (X( t + h_1) - X(t))^2 \} V\{ (X(s + h_2) - X(s))^2 \}}
@@ -85,14 +85,11 @@
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} ( \frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} )^2
 \end{multline*}
 
-Воспользовавшись леммой 3 из \cite{tsekhavaya-brest} и определением корреляционной функции, получаем соотношение \eqref{eq:est_cov}:
-\begin{eqnarray}
-\nonumber
-\label{eq:cov_base}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
-	= \frac{2}{(n - h_1)(n - h_2)} \times \\
+Воспользовавшись леммой 3 из \cite{tsekhavaya-brest}, получаем соотношение \eqref{eq:est_cov}:
+\begin{multline*}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
-\end{eqnarray}
+\end{multline*}
 что и требовалось показать.
 
 %TODO что-то здесь все строчки плывут!
@@ -107,10 +104,10 @@
 \end{proof}
 % section variogram_moments (end)
 
-\section{Асимптотическое поведение оценки вариограммы} % (fold)
+\section{Асимптотическое поведение моментов второго порядка оценки вариограммы} % (fold)
 \label{sec:new_section}
 
-Проанализируем асимптотическое поведение моментов второго порядка оценки \eqref{eq:var_estimation}.
+Исследуем асимптотическое поведение моментов второго порядка оценки \eqref{eq:var_estimation}.
 
 \begin{Theorem}
 	Если имеет место соотношение
@@ -134,7 +131,7 @@
 \end{Theorem}
 \begin{proof}
 
-В \eqref{eq:cov_base} сделаем следующую замену переменных
+В \eqref{eq:est_cov} сделаем следующую замену переменных
 \begin{equation*}
 	t = t, \quad m = t - s.
 \end{equation*}
@@ -212,7 +209,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}\sum_{t = 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Заметим, что выражение под знаком суммы не зависит от $t$, получим:
@@ -220,7 +217,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ (n - h_1)\sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Вынесем $ n - h_1 $ из каждого слагаемого:
@@ -228,7 +225,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (1 + \frac{h_1 + m - h_2}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = 1}^{n - h_1 - 1}(1 - \frac{m}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = 1}^{n - h_1 - 1}(1 - \frac{m}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Раскроем скобки под знаками сумм:
@@ -237,28 +234,28 @@
 	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{n - h_1 - 1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Приведём подобные:
 \begin{multline*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Во втором слагаемом сделаем замену переменных $ m = -(m + h_1 - h_2) $, получим:
 \begin{multline*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(-m - h_1) + \gamma(-m + h_2) - \gamma(-m - h_1 + h_2) - \gamma(-m))^2 - \\
-	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
 \begin{multline}
 \label{eq:cov1}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline}
 
 Аналогично для случая $h_1 < h_2$:
@@ -266,7 +263,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}\sum_{t = m + 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Выражение под знаком суммы не зависит от $t$:
@@ -274,7 +271,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ (n - h_2)\sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Вынесем $ n - h_2 $ из каждого слагаемого:
@@ -282,7 +279,7 @@
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0} (1 + \frac{m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(1 + \frac{h_2 - h_1 - m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(1 + \frac{h_2 - h_1 - m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Раскроем скобки под знаками сумм:
@@ -291,28 +288,28 @@
 	+ \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 -m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 -m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
-Приведём подобные:
+Приведём подобные: %цеховая: слагаемые
 \begin{multline*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 - m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2)
+	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 - m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
 \end{multline*}
 
 Во втором слагаемом сделаем замену переменных $ m = -m $, в третьем $ m = m - h_1 + h_2 $, получим:
 \begin{multline*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_2} \sum_{m = 0}^{n - h_2 - 1} m (\gamma(-m - h_2) + \gamma(-m + h_1) - \gamma(-m) - \gamma(-m + h_1 - h_2))^2 - \\
-	- \frac{1}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m - h_1) + \gamma(m + h_2) - \gamma(m - h_1 + h_2) - \gamma(m))^2)
+	- \frac{1}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m - h_1) + \gamma(m + h_2) - \gamma(m - h_1 + h_2) - \gamma(m))^2).
 \end{multline*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
 \begin{multline}
 \label{eq:cov2}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
-	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2)
+	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2).
 \end{multline}
 
 Далее, для доказательства \eqref{eq:asymptotic_cov} оценим разность, используя условие \eqref{eq:var_abs}, выражение \eqref{eq:cov1} и лемму Кронекера \cite{shiryaev1980}:
@@ -335,7 +332,6 @@
 \end{multline}
 при $ n \to \infty$.
 
-
 Тогда, объединяя вместе полученные в \eqref{eq:asyfirst} и \eqref{eq:asysecond} результаты, получаем требуемое предельное соотношение \eqref{eq:asymptotic_cov}:
 \begin{equation*}
 	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
@@ -356,6 +352,6 @@
 \end{Corollary}
 
 \begin{Remark}
-	В силу первого утверждения теоремы 1 и вышеприведённого следствия получаем, что оценка вариограммы $ \tilde{\gamma(h)} $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $
+	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ \tilde{\gamma(h)} $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $
 \end{Remark}
 % section new_section (end)

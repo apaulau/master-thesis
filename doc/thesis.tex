@@ -1,4 +1,9 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,14pt]{extreport}
+
+% Шрифты для отображения кириллических символов
+\usepackage[T1,T2A]{fontenc}
+% Входная кодировка utf-8
+\usepackage[utf8]{inputenc}
 
 \usepackage{bsu/style/bsumain}
 \usepackage{bsu/style/bsudiplomatitle}
@@ -7,12 +12,15 @@
 \pgfplotsset{compat=1.9}
 
 \subfaculty{Кафедра теории вероятностей и математической статистики}
-\title{Анализ и прогнозирование гидрологических данных}
-\author{Павлов Александр Сергеевич}
-\mentor{Цеховая Татьяна Вячеславовна \\
+\title{АНАЛИЗ И ПРОГНОЗИРОВАНИЕ ГИДРОЛОГИЧЕСКИХ ДАННЫХ}
+\author{ПАВЛОВ \\
+ Александр Сергеевич}
+\mentor{канд. физ.-мат. наук, \\
         доцент кафедры ТВиМС \\
-        канд. физ.-мат. наук
+        Цеховая Т.В.
 }
+\reviewer{Зав. кафедрой ТВиМС \\
+          докт. физ.-мат. наук, профессор Труш Н.Н.}
 
 \begin{document}
 
@@ -20,10 +28,11 @@
 
   % \include{annotation}
   % \include{abstract}
+
   \include{misc/tableofcontent}
 
+  \include{0-abstract}
   \include{0-introduction}
-  \include{0-5-abstract}
   \include{1-definitions}
   \include{2-proofs}
   \include{2-5-implementation}

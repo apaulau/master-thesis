@@ -36,8 +36,10 @@ WriteCharacteristic(expression=kObservationNum, type="original", name="n")
 ## Source data as basic time series plot: points connected with line
 plot.source <- DrawDataRepresentation(data=src, filename="source.png", datebreaks=kDateBreaks)
 
-print(xtable(src, caption="Исходные данные.", label="table:source"),  table.placement="H", 
-      file="out/original/data.tex")
+tmp <- src
+colnames(tmp) <- c("Год", "Температура, ºС")
+print(xtable(tmp, caption="Исходные данные.", label="table:source", digits=c(0, 0, 2), align="r|rc|"),  table.placement="H", 
+      file="out/original/data.tex", include.rownames=FALSE)
 
 ## Form the data for research
 sample <- src[0:kObservationNum, ]
@@ -85,19 +87,22 @@ linear <- function(x, a, b) a * x + b
 pr.trend <- sapply(X=ConvertYearsToNum(src$year[(kObservationNum + 1):nrows]), FUN=linear, a=sample.fit$coefficients[[2]], b=sample.fit$coefficients[[1]])
 sample.residuals.prediction.trend <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
                                                   "Актуальное"=src$temperature[(kObservationNum + 1):nrows],
-                                                  "Прогнозное"=trend,
+                                                  "Прогнозное"=pr.trend,
                                                   "Ошибка"=src$temperature[(kObservationNum + 1):nrows] - pr.trend)
 pr.mse <- MSE(src$temperature[(kObservationNum + 1):nrows] - pr.trend)
-print(xtable(sample.residuals.prediction.trend, caption="Сравнение прогнозных значений (тренда)", label="table:prediction_trend", digits=c(0, 0, 2, 2, 2)),
-  file="out/residual/prediction-trend.tex")
+colnames(sample.residuals.prediction.trend) <- c("", "$X(t)$", "$y(t)$", "$ X(t) - y(t) $")
+print(xtable(sample.residuals.prediction.trend, caption="Сравнение прогнозных значений (модель $ y(t) $)", label="table:prediction_trend", digits=c(0, 0, 3, 3, 3), align="rr|ccc"),
+  file="out/residual/prediction-trend.tex", sanitize.text.function=function(x){x}, include.rownames=FALSE)
 
 ## Time series (which is by default is research data) with trend line based on linear module estimate (lm)
 plot.data.ts <- DrawTimeSeries(data=sample, filename="original/time-series.png", datebreaks=kDateBreaks)
 
 ## Next step is research residuals computed few lines above
 sample.residuals <- data.frame("year"=sample$year, "temperature"=sample.fit$residuals)
-print(xtable(sample.residuals, caption="Временной ряд остатков.", label="table:residuals"), table.placement="H", 
-      file="out/residual/data.tex")
+tmp <- sample.residuals
+colnames(tmp) <- c("Год", "Температура, ºС")
+print(xtable(tmp, caption="Временной ряд остатков", label="table:residuals", digits=c(0, 0, 2), align="r|rc|"),  table.placement="H", 
+  file="out/residual/data.tex", include.rownames=FALSE)
 
 sign <- regr.significance(sample$temperature, write=TRUE)
 adeq <- regr.adequacy(sample$temperature, write=TRUE)

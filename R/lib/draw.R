@@ -96,12 +96,13 @@ DrawHScatterplot <- function (data) {
 
 DrawCrossPrediction <- function (actual, trend, kriging, future) {
   ggplot() + geom_line(data=actual, aes(x=year, y=temperature, linetype="Наблюдение")) +
-    geom_line(data=trend, aes(x=year, y=temperature, linetype="Тренд")) +
     geom_line(data=kriging, aes(x=year, y=temperature, linetype="Прогноз")) +       
-    scale_linetype_manual(name="Lines", values=c("Наблюдение"="solid", "Тренд"="dashed", "Прогноз"="dotdash")) +
+    geom_line(data=trend, aes(x=year, y=temperature, linetype="Тренд")) +
+    scale_linetype_manual(name="Lines", values=c("Наблюдение"="solid", "Прогноз"="dotdash", "Тренд"="dashed"), 
+      labels=c(expression(X(t)), expression(X^{"*"}*(t)), expression(y(t)))) +
     scale_x_continuous(breaks=seq(min(actual$year), max(actual$year) + 5 + future, by=1)) + xlab("Год наблюдения") +
-    scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, С") +
-    theme(axis.text.x = element_text(angle=45, hjust=1)) +
+    scale_y_continuous(breaks=seq(16, 28, .5)) + ylab("Температура, ºС") +
+    theme(legend.title=element_blank()) +
     labs(color="")
 }
 
@@ -109,7 +110,7 @@ DrawParameterComparison <- function(cutoffs, classical, robust, adapt) {
   ggplot() + 
     geom_line(data=data.frame("X"=cutoffs, "Y"=classical), aes(x=X, y=Y, linetype="Матерона")) + 
     geom_line(data=data.frame("X"=cutoffs, "Y"=robust), aes(x=X, y=Y, linetype="Кресси-Хокинса")) + 
-    scale_linetype_manual(name="Lines", values=c("Матерона"="dashed", "Кресси-Хокинса"="dotdash")) +
+    scale_linetype_manual(name="Оценка", values=c("Матерона"="solid", "Кресси-Хокинса"="dashed")) +
     scale_x_continuous(breaks=cutoffs) +
     xlab("Максимальное расстояние") + ylab(ifelse(adapt, "MSE", "Корреляция")) +
     theme(axis.text.x = element_text(angle=90, hjust=1))

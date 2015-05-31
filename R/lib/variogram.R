@@ -116,7 +116,7 @@ SaveVariogramPlot <- function (experimentalVariogram, modeledVariogram, name) {
     scale_x_continuous(expand=c(0,0),
       breaks=seq(0, 1.04 * max(experimentalVariogram$dist), 1),
       limits=c(0, 1.04 * max(experimentalVariogram$dist))) +
-    xlab("Расстояние") + ylab("Значение")
+    xlab(expression(h)) + ylab(expression(tilde(gamma)(h)))
   ggsave(plot=plot.var, file=paste0("figures/variogram/", name, "-variogram.png"), width=7, height=3.3)
   
   plot.modeled <- plot.var + geom_line(data = Modeled, color='blue')

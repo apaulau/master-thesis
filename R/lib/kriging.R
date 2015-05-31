@@ -65,14 +65,20 @@ ComparePredictionParameters <- function(data, trend, x, filename="", observation
 
 
 RunThroughParameters <- function(data, trend, x, filename="", observations, nrows, 
-  fit=FALSE, cutoff, cressie, model, nugget, sill, range, min=.1, max=10, step=.1) {
+  fit=FALSE, cutoff, cressie, model, nugget, sill, range, min=.1, max=10, step=.1, adapt=TRUE) {
   
-  computePredictionResidual <- function(data, trend, cressie, x, cutoff, observations, model, nugget, sill, range) {
+  computePredictionEstimation <- function(data, trend, cressie, x, cutoff, observations, model, nugget, sill, range, adapt) {
     variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
       fit=fit, model=model, nugget=nugget, psill=sill, range=range)
-    kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
-    residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
-    return(residual)
+    if (adapt) {
+      kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
+      residual <- ComputeKrigingResiduals(src$temperature, trend, kriging, observations, nrows)
+      estimation <- MSE(residual)
+    } else {
+      crv <- computeCV(data, variogram$var_model, observations, nfold=observations)
+      estimation <- cor(crv$observed, crv$var1.pred)
+    }
+    return(estimation)
   }
   
   params <- seq(min, max, step)
@@ -86,19 +92,19 @@ RunThroughParameters <- function(data, trend, x, filename="", observations, nrow
   } else if (is.na(range)) {    
     caption <- "Ранг"
   }
-  
+
   result <- sapply(params, FUN=function(param) 
-    MSE(computePredictionResidual(data=data, trend=trend, x=x,
+    computePredictionEstimation(data=data, trend=trend, x=x, adapt=adapt,
       cressie=cressie, observations=observations, model=model, 
       cutoff=ifelse(is.na(cutoff), param, cutoff), 
       nugget=ifelse(is.na(nugget), param, nugget), 
       sill=ifelse(is.na(sill), param, sill), 
-      range=ifelse(is.na(range), param, range))))
+      range=ifelse(is.na(range), param, range)))
   
   ggplot() + 
     geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) + 
     scale_x_continuous(breaks=params[seq(1, length(params), 4)]) +
-    xlab(caption) + ylab("MSE") +
+    xlab(caption) + ylab(ifelse(adapt, "MSE", "Корреляция")) +
     theme(axis.text.x = element_text(angle=90, hjust=1))
 }
 
@@ -187,5 +193,10 @@ computeCVStatistics <- function(cv, digits=4){
   out = t(t(out))
   out <- data.frame(c("Среднее значение", "Сумма квадратов невязок", "Смещение", "Коэффицинт эффективности", "MAE", "MSE", "MSE(Z-значение)", "Корреляция(наблюдение, прогноз)", "Корреляция(прогноз, остатки)", "RMSE"), out)
   colnames(out) <- c("Статистика", "Значение")
+  return(out)
+}
+
+computePlainStatistics <- function(cv, digits=4){
+  out <- c(RSS(cv$residual), RSS(cv$residual) / sum((cv$observed - mean(cv$observed))^2), MAE(cv$residual), MSE(cv$residual), cor(cv$observed, cv$var1.pred))
   return(out)
 }

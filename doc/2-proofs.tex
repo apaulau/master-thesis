@@ -27,11 +27,11 @@
 		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h), % DIRTY HACK
 	\end{equation}
 	\begin{equation*}
-		cov \{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} =
+		cov \{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times
 	\end{equation*}
 	\begin{equation}
 	\label{eq:est_cov}
-		= \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
+		 \times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
 	\end{equation}
 	\begin{equation}
 	\label{eq:est_var}
@@ -54,55 +54,53 @@
 Таким образом, оценка \eqref{eq:var_estimation} является \textbf{несмещённой} оценкой вариограммы.
 
 Найдём второй момент оценки вариограммы.
-\begin{eqnarray}
+\begin{equation}\begin{gathered}
 \label{eq:cov_support}
-\nonumber
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = E\{ (2 \tilde{\gamma}(h_1) - E\{ 2 \tilde{\gamma}(h_1) \}) (2 \tilde{\gamma}(h_2) - E\{ 2 \tilde{\gamma}(h_2) \}) \} = \\
-\nonumber
 	= E\{ \frac{1}{n - h_1} \sum_{t = 1}^{n - h_1}((X(t + h_1) - X(t))^2 - E\{ (X(t + h_1) - X(t))^2 \}) \times \\
-\nonumber
 	\times \frac{1}{n - h_2} \sum_{s = 1}^{n - h_2}((X(s + h_2) - X(s))^2 - E\{ (X(s + h_2) - X(s))^2 \}) \} = \\
 	= \frac{1}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
-\end{eqnarray}
+\end{gathered}\end{equation}
 % Здесь переход можно делать потому (и это очень легко!), что произведение сумм равняется сумме от произведений!
 
 Из определения \ref{def:corr_cov} нормированной ковариационной функции получаем, что
-\begin{multline*}
-	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
+\begin{equation*}\begin{gathered}
+	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} =  \\
+	= corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
 	\times \sqrt{V\{ (X( t + h_1) - X(t))^2 \} V\{ (X(s + h_2) - X(s))^2 \}}
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Принимая во внимание \eqref{eq:V_diff_inc} и предыдущее соотношение, из \eqref{eq:cov_support} получаем:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Далее воспользуемся леммой 1 из \cite{tsekhavaya-brest}:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \})^2 = \\
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} ( \frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} )^2
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Воспользовавшись леммой 3 из \cite{tsekhavaya-brest}, получаем соотношение \eqref{eq:est_cov}:
-\begin{multline*}
+\begin{gather*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
-\end{multline*}
+\end{gather*}
 что и требовалось показать.
 
-%TODO что-то здесь все строчки плывут!
-
 Отсюда нетрудно получить соотношение \eqref{eq:est_var} для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
-\begin{multline*}
-\nonumber
-	V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n - h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - \gamma(t - s) - \gamma(t + h - s - h) )^2 = \\
+\begin{equation*}\begin{gathered}
+	V \{ 2 \tilde{\gamma}(h) \} = \\
+	= \frac{2}{(n - h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - \gamma(t - s) - \gamma(t + h - s - h) )^2 = \\
 	= \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2.
-\end{multline*}
+\end{gathered}\end{equation*}
 
 \end{proof}
 % section variogram_moments (end)
+
+\vspace{1em}
 
 \section{Асимптотическое поведение моментов второго порядка оценки вариограммы} % (fold)
 \label{sec:new_section}
@@ -136,11 +134,11 @@
 	t = t, \quad m = t - s.
 \end{equation*}
 Получим
-\begin{multline}
+\begin{equation}\begin{gathered}
 \label{eq:cov_split}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
-	= \frac{2}{(n - h_1) (n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{t - m = 1}^{n - h_2} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
-\end{multline}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
+	\times \sum_{t = 1}^{n - h_1}\sum_{t - m = 1}^{n - h_2} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2
+\end{gathered}\end{equation}
 
 Таким образом, в зависимости от $h_1$ и $h_2$, возможны два случая: $h_1 > h_2$ и $h_1 < h_2$.
 
@@ -205,137 +203,158 @@
 \end{figure}
 
 Рассмотрим первый случай: $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
-\begin{multline*}
+
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}\sum_{t = 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Заметим, что выражение под знаком суммы не зависит от $t$, получим:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ (n - h_1)\sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Вынесем $ n - h_1 $ из каждого слагаемого:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} \times \\
-	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (1 + \frac{h_1 + m - h_2}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	\times (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (1 + \frac{h_1 + m - h_2}{n - h_1}) \times \\
+	\times (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{n - h_1 - 1}(1 - \frac{m}{n - h_1})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Раскроем скобки под знаками сумм:
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2) \times \\
+	\times (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1}^{0}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{n - h_1 - 1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Приведём подобные:
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+	+ \frac{1}{n - h_1} \sum_{m = 1 - n + h_2}^{h_2 - h_1 - 1} (h_1 + m - h_2) \times \\
+	\times (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Во втором слагаемом сделаем замену переменных $ m = -(m + h_1 - h_2) $, получим:
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+\end{gathered}\end{equation*}
+\begin{equation*}\begin{gathered}
 	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(-m - h_1) + \gamma(-m + h_2) - \gamma(-m - h_1 + h_2) - \gamma(-m))^2 - \\
 	- \frac{1}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
-\begin{multline}
+\begin{equation}\begin{gathered}
 \label{eq:cov1}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_2} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{2}{n - h_1} \sum_{m = 1}^{n - h_1 - 1} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline}
+\end{gathered}\end{equation}
 
 Аналогично для случая $h_1 < h_2$:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0}\sum_{t = 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}\sum_{t = m + 1}^{m + n - h_2}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}\sum_{t = m + 1}^{n - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Выражение под знаком суммы не зависит от $t$:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0}(m + n - h_2)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ (n - h_2)\sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(n - h_1 - m)(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 Вынесем $ n - h_2 $ из каждого слагаемого:
-\begin{multline*}
+\begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} \times \\
 	\times (\sum_{m = 1 - n + h_2}^{0} (1 + \frac{m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(1 + \frac{h_2 - h_1 - m}{n - h_2})(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(1 + \frac{h_2 - h_1 - m}{n - h_2}) \times \\
+	\times (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
+\end{gathered}\end{equation*}
 
 Раскроем скобки под знаками сумм:
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{0} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{0} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \sum_{m = 1}^{h_2 - h_1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 -m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+	+ \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1}(\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \frac{1}{n - h_2} \times \\
+	\times \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 -m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
+\end{gathered}\end{equation*}
 
 Приведём подобные: %цеховая: слагаемые
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
 	+ \frac{1}{n - h_2} \sum_{m = 1 - n + h_2}^{0} m (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 + \\
-	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 - m) (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
-\end{multline*}
+	+ \frac{1}{n - h_2} \sum_{m = h_2 - h_1 + 1}^{n - h_1 - 1} (h_2 - h_1 - m) \times \\
+\end{gathered}\end{equation*}
+\begin{equation*}\begin{gathered}
+	\times (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2).
+\end{gathered}\end{equation*}
 
 Во втором слагаемом сделаем замену переменных $ m = -m $, в третьем $ m = m - h_1 + h_2 $, получим:
-\begin{multline*}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+\begin{equation*}\begin{gathered}
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_2} \sum_{m = 0}^{n - h_2 - 1} m (\gamma(-m - h_2) + \gamma(-m + h_1) - \gamma(-m) - \gamma(-m + h_1 - h_2))^2 - \\
 	- \frac{1}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m - h_1) + \gamma(m + h_2) - \gamma(m - h_1 + h_2) - \gamma(m))^2).
-\end{multline*}
+\end{gathered}\end{equation*}
 
 По определению семивариограммы, $ \gamma(-h) = \gamma(h) $, тогда
-\begin{multline}
+\begin{equation}\begin{gathered}
 \label{eq:cov2}
-	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
+	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= \frac{2}{n - h_1} (\sum_{m = 1 - n + h_2}^{n - h_1 - 1} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 - \\
 	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2).
-\end{multline}
+\end{gathered}\end{equation}
 
 Далее, для доказательства \eqref{eq:asymptotic_cov} оценим разность, используя условие \eqref{eq:var_abs}, выражение \eqref{eq:cov1} и лемму Кронекера \cite{shiryaev1980}:
-\begin{multline}
+\begin{equation}\begin{gathered}
 \label{eq:asyfirst}
-	\vert (n - h_2) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\vert (n - h_2) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \\
+	- \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
 	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
 	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
 	+ \frac{1}{n - h_1} \sum_{m = 0}^{n - h_1 - 1} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
-\end{multline}
+\end{gathered}\end{equation}
 при $ n \to \infty$.
 
 Рассуждая аналогично, в силу сходимости ряда \eqref{eq:var_abs}, выражения \eqref{eq:cov2} и леммы Кронекера \cite{shiryaev1980}, получаем оценку разности для случая $ h_1 < h_2 $
-\begin{multline}
+\begin{equation}\begin{gathered}
 \label{eq:asysecond}
-	\vert (n - h_1) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\vert (n - h_1) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \\
+	- \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
 	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
 	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
 	+ \frac{1}{n - h_2} \sum_{m = -n + h_2 + 1}^{0} \vert m \vert \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
-\end{multline}
+\end{gathered}\end{equation}
 при $ n \to \infty$.
 
 Тогда, объединяя вместе полученные в \eqref{eq:asyfirst} и \eqref{eq:asysecond} результаты, получаем требуемое предельное соотношение \eqref{eq:asymptotic_cov}:
-\begin{equation*}
-	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
-\end{equation*}
+\begin{equation*}\begin{gathered}
+	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
+	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
+\end{gathered}\end{equation*}
 
 Нетрудно видеть, что если в \eqref{eq:asymptotic_cov} положить $ h_1 = h_2 = h $, то получаем равенство для дисперсии оценки вариограммы \eqref{eq:asymptotic_var}. Действительно,
 \begin{equation*}
@@ -345,13 +364,13 @@
 \end{proof}
 
 \begin{Corollary}
-	Из теоремы 2 следует соотношение
+	Из теоремы 2.2 следует соотношение
 	\begin{equation*}
 		\lim_{n \to \infty} V\{ 2 \tilde{\gamma}(h) \} = 0, \quad h = \overline{0, n - 1}
 	\end{equation*}
 \end{Corollary}
 
 \begin{Remark}
-	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ \tilde{\gamma(h)} $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $
+	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ \tilde{\gamma}(h) $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $.
 \end{Remark}
 % section new_section (end)

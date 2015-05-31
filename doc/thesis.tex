@@ -1,12 +1,12 @@
 \documentclass[a4paper,14pt]{extreport}
 
-% Шрифты для отображения кириллических символов
 \usepackage[T1,T2A]{fontenc}
-% Входная кодировка utf-8
 \usepackage[utf8]{inputenc}
 
 \usepackage{bsu/style/bsumain}
-\usepackage{bsu/style/bsudiplomatitle}
+\usepackage{bsu/style/bsudiplomatitle14}
+
+\renewcommand{\theenumii}{\asbuk{enumii}}
 
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.9}
@@ -29,6 +29,7 @@
   \setcounter{page}{2}
 
   % \include{annotation}
+  \input{0-tasks}
   \include{0-abstract}
 
   \include{misc/tableofcontent}

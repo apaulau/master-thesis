@@ -629,7 +629,23 @@
 
 \begin{frame}
   \frametitle{Заключение}
-
+  \begin{enumerate}
+    \item Проведён предварительный статистический анализ данных;
+      \begin{itemize}
+        \item показана близость выборочного распределения к нормальному \normaldistr
+        \item показана умеренная положительная зависимость температуры от времени
+        \item построена регрессионная модель и вычислен ряд остатков
+      \end{itemize}
+    \item ?Выполнен вариограммный анализ
+      \begin{itemize}
+        \item Рассмотрены два подхода по подбору моделей семивариограмм
+        \item Визуальным подходом построены наилучшие модели: линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6}.
+        \item Автоматическим подходом построены модели: волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10}.
+      \end{itemize}
+    \item ?Исследование статистических свойств оценки семивариограммы гауссовского случайного процесса.
+    \item ?Прогнозирование значений временного ряда с помощью интерполяционного метода Кригинг.
+    \item ?Исследование точности прогноза в зависимости от оценки семивариограммы и модели семивариограммы, лежащих в основе метода Кригинг.
+  \end{enumerate}
 \end{frame}
 
 \begin{frame}
@@ -654,7 +670,7 @@
     \beamertemplatebookbibitems
     \bibitem{cook}
       Paul~Teetor
-      \newblock {\em R Cookbook (O’Reilly Cookbooks))}.
+      \newblock {\em R Cookbook (O’Reilly Cookbooks)}.
       \newblock O’Reilly Media, 1 edition, 2011.
   \end{thebibliography}
 \end{scriptsize}

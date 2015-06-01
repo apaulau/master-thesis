@@ -204,11 +204,11 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
         sliderInput("variogram_range", label="Диапазон",
           min=1, max=38, value=c(1,32)),
         conditionalPanel(
-          condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
+          condition = "input.variogram_panel == 'Семивариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
           numericInput("cutoff", "Максимальный лаг", value=1, min=0, max=38, step=1),
           conditionalPanel(
             condition = "input.afv == false",
-            selectInput("modelV", "Модель вариограммы",
+            selectInput("modelV", "Модель семивариограммы",
               c(#"Эффект самородков"="Nug",
                 "Сферическая"="Sph",
                 "Экспоненциальная"="Exp",
@@ -230,7 +230,7 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
           ),
           checkboxInput("cressie", "Использовать оценку Кресси"),
           conditionalPanel(
-            condition = "input.variogram_panel == 'Вариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Кросс-валидация'",
+            condition = "input.variogram_panel == 'Семивариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Кросс-валидация'",
             checkboxInput("afv", "Автоматический подбор модели")
           ),
           conditionalPanel(
@@ -283,12 +283,12 @@ shinyUI(navbarPage("Анализ Баторино",  id="nav",
       mainPanel(
         tabsetPanel(
           id="variogram_panel",
-          tabPanel("Вариограмма",
+          tabPanel("Семивариограмма",
             br(),
             ggvisOutput("variogram"),
             fluidRow(
               column(5,             
-                h4("Модель вариограммы"),
+                h4("Модель семивариограммы"),
                 htmlOutput("text_model")
               ),
               column(2),

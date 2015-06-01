@@ -26,6 +26,8 @@
 \newtheorem{Definition}{Определение}
 \let\Theorem\relax
 \newtheorem{Theorem}{Теорема}
+\let\Corollary\relax
+\newtheorem{Corollary}{Следствие}
 
 \newcommand{\inp}[1]{\input{../../out/#1}}
 \newcommand{\characteristic}[2]{\inp{#1/characteristics/#2}}
@@ -324,20 +326,55 @@
 \end{Theorem}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Асимптотическое поведение оценки вариограммы}
+  \begin{Corollary}
+    Из теоремы 2 следует соотношение
+    \begin{equation*}
+      \lim_{n \to \infty} V\{ 2 \tilde{\gamma}(h) \} = 0, \quad h = \overline{0, n - 1}
+    \end{equation*}
+  \end{Corollary}
+
+  \begin{Corollary}
+    В силу показанной в теореме 1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ 2\tilde{\gamma}(h) $ является состоятельной в среднеквадратическом смысле для вариограммы $ \gamma(h), h \in \mathbb{Z} $.
+  \end{Corollary}
+\end{frame}
+
 \subsection{Вариограммный анализ}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
-  \framesubtitle{График экспериментальной вариограммы}
-   \begin{columns}[c]
-   \column{4.5in}
-  \includegraphics[width=0.95\textwidth]{../../figures/variogram/lin-variogram.png}
+  \frametitle{Визуальный подход. \small{График экспериментальной вариограммы}}
+  \begin{columns}[c]
+  \column{2.5in}
+    Прогнозные значения $ X^{*}(t) $ вычисляются по формуле:
+    \begin{equation*}
+      X^{*}(t) = y(t) + \varepsilon^{*}(t),
+    \end{equation*}
+    где $ y(t) $ --- тренд, $ \varepsilon^{*}(t) $ --- значения, вычисленные с помощью кригинга.
+
+    \vspace{0.5em}
+
+    Для оценки качества модели используются
+    \begin{itemize}
+      \item коэффициент корреляции $ r_{\varepsilon\varepsilon^{*}} $
+      \item Среднеквадратическая ошибка
+        \begin{equation}
+        \label{eq:mse}
+          MSE = \frac{1}{n} \sum_{i=1}^{n} (\varepsilon(t_i) - \varepsilon^{*}(t_i))^2,
+        \end{equation}
+        где $ n $ --- объём выборки
+    \end{itemize}
+
+  \column{3.5in}
+    \begin{figure}[h]
+    \includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}
+    \caption{Оценка семивариограммы Матерона}
+  \end{figure}
   \end{columns}
 \end{frame}
 
 \begin{frame}
-\frametitle{Визуальный подход}
-  \framesubtitle{Линейная модель}
+  \frametitle{Визуальный подход. \small{Линейная модель}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -375,8 +412,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
-  \framesubtitle{Чистый эффект самородков}
+  \frametitle{Визуальный подход. \small{Чистый эффект самородков}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -414,8 +450,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
-  \framesubtitle{Линейная модель с порогом}
+  \frametitle{Визуальный подход. \small{Линейная модель с порогом}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -454,8 +489,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
-  \framesubtitle{Сферическая модель}
+  \frametitle{Визуальный подход. \small{Сферическая модель}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -494,8 +528,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
-  \framesubtitle{Периодическая модель}
+  \frametitle{Визуальный подход. \small{Периодическая модель}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}
@@ -531,8 +564,7 @@
 \subsection{Автоматический подход}
 
 \begin{frame}
-  \frametitle{Автоматический подход}
-  \framesubtitle{Волновая модель}
+  \frametitle{Автоматический подход. \small{Волновая модель}}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}
@@ -566,8 +598,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Автоматический подход}
-  \framesubtitle{Периодическая модель}
+  \frametitle{Автоматический подход. \small{Периодическая модель}}
   \begin{columns}[c]
   \column{3in}
   Модель семивариограммы вида \eqref{eq:per}.

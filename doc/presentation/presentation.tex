@@ -570,11 +570,7 @@
   \framesubtitle{Периодическая модель}
   \begin{columns}[c]
   \column{3in}
-  \begin{equation}
-  \label{eq:per}
-    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
-  \end{equation}
-  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
+  Модель семивариограммы вида \eqref{eq:per}.
 
   \vspace{0.5em}
 
@@ -597,21 +593,6 @@
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
     \caption{Прогноз по модели $\widehat{\gamma}_{10}(h)$}
   \end{figure}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Прогнозирование методом ординарного кригинга}
-  \includegraphics[width=0.95\textwidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Волновая модель}
-  \begin{columns}[c]
-  \column{2in}
-  Подобранная модель: $ 4.11 + 1.65 \cdot Wav(h, 3.59) $
-  \column{3in}
-   \includegraphics[width=3in]{../../figures/variogram/auto-rob-5-modeled.png}
   \end{columns}
 \end{frame}
 

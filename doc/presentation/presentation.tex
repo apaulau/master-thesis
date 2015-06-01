@@ -38,7 +38,7 @@
 
 \title{Анализ и прогнозирование гидрологических данных}
 \subtitle[]{}
-\author[Павлов Александр \hspace{0.2\textwidth} \insertframenumber\,/\,\inserttotalframenumber]{ Павлов Александр Сергеевич \\ \vspace{2em} \small{Научный руководитель: Цеховая Татьяна Вячеславовна \\Рецензент: Рафеенко Екатерина Дмитриевна} }
+\author[Павлов Александр \hspace{0.2\textwidth} \insertframenumber\,/\,\inserttotalframenumber]{ Павлов Александр Сергеевич \\ \vspace{2em} \small{Научный руководитель: Цеховая Татьяна Вячеславовна} }
 
 \institute[]{Кафедра Теории Вероятностей и Математической Статистики \vspace{2pt} \\ Факультет Прикладной Математики и Информатики \vspace{2pt} \\ Белорусский Государственный Университет }
 \date{Минск, 2015}
@@ -47,6 +47,17 @@
 
 \begin{frame}[plain]
   \titlepage
+\end{frame}
+
+\begin{frame}
+  \frametitle{Постановка задачи}
+  \begin{enumerate}
+    \item Предварительный статистический анализ гидроэкологических данных озера Баторино;
+    \item Вариограммный анализ временного ряда: построение оценок семивариограммы,  подбор моделей семивариограммы.
+    \item Исследование статистических свойств оценки семивариограммы гауссовского случайного процесса.
+    \item Прогнозирование значений временного ряда с помощью интерполяционного метода Кригинг.
+    \item Исследование точности прогноза в зависимости от оценки семивариограммы и модели семивариограммы, лежащих в основе метода Кригинг.
+  \end{enumerate}
 \end{frame}
 
 \section[Содержание]{}
@@ -62,7 +73,7 @@
   \begin{itemize}
     \item Доступно с любого устройства, имеющего доступ в интернет, по адресу \href{https://apaulau.shinyapps.io/batorino}{apaulau.shinyapps.io/batorino}
     \item Реализовано на языке программирования \textbf{R}
-    \item Логически разделёно на три модуля
+    \item Логически разделено на три модуля
     \item Имеет простой, быстро расширяемый гибкий интерфейс
     \item Широкие графические возможности
     \item Проверка тестов и критериев
@@ -74,7 +85,6 @@
 \subsection{Модуль предварительного анализа}
 
 \begin{frame}
-  % \frametitle{Первичный анализ и описательные статистики}
   \frametitle{Модуль предварительного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/1_basis.png}
@@ -83,7 +93,6 @@
 \end{frame}
 
 \begin{frame}
-  % \frametitle{Корреляционный анализ}
   \frametitle{Модуль предварительного анализа}
   \begin{figure}[h]
     \center{\includegraphics[width=0.75\textwidth]{../../figures/static/p_corr.png}}
@@ -92,7 +101,6 @@
 \end{frame}
 
 \begin{frame}
-  % \frametitle{Регрессионный анализ}
   \frametitle{Модуль предварительного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/2_regr.png}
@@ -103,7 +111,6 @@
 \subsection{Модуль анализа остатков}
 
 \begin{frame}
-  % \frametitle{Автокорреляционная функция}
   \frametitle{Модуль анализа остатков}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/3_acf.png}
@@ -114,7 +121,6 @@
 \subsection{Модуль вариограммного анализа}
 
 \begin{frame}
-  % \frametitle{Возможности по подбору модели вариограммы}
   \frametitle{Модуль вариограммного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/4_variogram.png}
@@ -123,7 +129,6 @@
 \end{frame}
 
 \begin{frame}
-  % \frametitle{Подбор параметров модели вариограммы}
   \frametitle{Модуль вариограммного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/5_fit.png}
@@ -132,7 +137,6 @@
 \end{frame}
 
 \begin{frame}
-  % \frametitle{Сравнение прогнозных значений}
   \frametitle{Модуль вариограммного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/6_krige.png}
@@ -146,11 +150,11 @@
   \frametitle{Исходные данные}
   \begin{columns}[c]
   \column{2in}
-  Исседуемые данные получены от учебно-научного центра <<Нарочанская биологическая станция им. Г.Г.Винберга>>.
+  Данные получены от учебно-научного центра <<Нарочанская биологическая станция им. Г.Г.Винберга>>.
 
   \vspace{0.5em}
 
-  Исходные данные представляют собой выборку $ X(t) $, состоящую из значений средней температуры воды в июле месяце каждый год в период с 1975 по 2012 годы.
+  Исходные данные представляют собой выборку $ X(t), t = \overline{1,n}, n = 38 $, состоящую из значений средней температуры воды в июле месяце каждый год в период с 1975 по 2012 годы.
   \column{4in}
   \begin{figure}[h]
     \includegraphics[width=1\linewidth]{../../figures/source.png}
@@ -165,11 +169,11 @@
   \frametitle{Проверка на нормальность}
   \begin{columns}[c]
   \column{2in}
-  Визуально и проверкой критериев Шапиро-Уилка, $\chi^2$-Пирсона и Колмогороваа-Смирнова была показана близость выборочного распределения к нормальному с параметрами \normaldistr.
+  По описательным статистикам выборочное распределение характеризуется небольшой скошенностью вправо (коэффициент асимметрии $ \descriptive{original}{skew} $) и пологостью пика кривой распределения (коэффициент эксцесса $ \descriptive{original}{kurtosis} $) относительного нормального.
 
   \vspace{0.5em}
 
-  При этом выборочное распредлеение характеризуется небольшой скошенностью вправо (коэффициент асимметрии $ \descriptive{original}{skew} $) и пологостью пика кривой распределения ($ \descriptive{original}{kurtosis} $) относительного нормального.
+  Визуально и проверкой критериев Шапиро-Уилка, $\chi^2$-Пирсона и Колмогороваа-Смирнова была показана близость выборочного распределения к нормальному с параметрами \normaldistr.
   \column{4in}
   \begin{figure}[h]
     \includegraphics[width=1\linewidth]{../../figures/original/quantile.png}
@@ -203,7 +207,7 @@
 
 \subsection{Регрессионный анализ}
 
-\subsubsection{Регрессионная модель}
+% \subsubsection{Регрессионная модель}
 \begin{frame}
   \frametitle{Регрессионная модель}
   \begin{columns}[c]
@@ -225,7 +229,7 @@
   \end{columns}
 \end{frame}
 
-\subsubsection{Качество регрессионной модели}
+% \subsubsection{Качество регрессионной модели}
 \begin{frame}
   \frametitle{Качество регрессионной модели}
   \begin{columns}[c]
@@ -249,7 +253,7 @@
 
     \vspace{0.5em}
 
-    По графику было сделано предположение об отсутствии значимых автокорреляций. Проведённый тест Льюнга-Бокса подтвердил данное замечание.
+    По графику и тестом Льюнга-Бокса сделано заключение об отсутствии значимых автокорреляций.
 
     \vspace{0.5em}
 
@@ -323,7 +327,8 @@
 \subsection{Вариограммный анализ}
 
 \begin{frame}
-  \frametitle{График экспериментальной вариограммы}
+  \frametitle{Визуальный подход}
+  \framesubtitle{График экспериментальной вариограммы}
    \begin{columns}[c]
    \column{4.5in}
   \includegraphics[width=0.95\textwidth]{../../figures/variogram/lin-variogram.png}
@@ -331,7 +336,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Линейная модель}
+\frametitle{Визуальный подход}
+  \framesubtitle{Линейная модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -369,7 +375,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Чистый эффект самородков}
+  \frametitle{Визуальный подход}
+  \framesubtitle{Чистый эффект самородков}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -407,7 +414,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Линейная модель с порогом}
+  \frametitle{Визуальный подход}
+  \framesubtitle{Линейная модель с порогом}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -446,7 +454,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Сферическая модель}
+  \frametitle{Визуальный подход}
+  \framesubtitle{Сферическая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -485,7 +494,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Периодическая модель}
+  \frametitle{Визуальный подход}
+  \framesubtitle{Периодическая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}
@@ -518,15 +528,75 @@
   \end{columns}
 \end{frame}
 
-\subsection{Автоматический подбор}
+\subsection{Автоматический подход}
 
 \begin{frame}
-  \frametitle{Периодическая модель}
+  \frametitle{Автоматический подход}
+  \framesubtitle{Волновая модель}
   \begin{columns}[c]
-  \column{2in}
-  Подобранная модель: $ 3.8 + 0.32 \cdot Per(h, 1.3) $
   \column{3in}
-   \includegraphics[width=3in]{../../figures/variogram/auto-class-18-modeled.png}
+  \begin{equation}
+  \label{eq:wave}
+    \widehat{\gamma}(h) = c_0 + c \cdot Wav(h, a) = 1 - \frac{a}{h} \cdot sin(\frac{h}{a}),
+  \end{equation}
+  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
+
+  \vspace{0.5em}
+
+  Подобранная модель:
+  \begin{equation}
+  \label{eq:gamma9}
+    \widehat{\gamma}_9(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
+  \end{equation}
+
+  Показатели качества
+  \begin{equation*}
+    r_{\varepsilon\varepsilon^{*}} = -1, \quad MSE = 4.20
+  \end{equation*}
+
+  \column{3in}
+  \vspace{-14.5pt}
+  \begin{figure}[H]
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-modeled.png} \\
+    \caption{Модель семивариограммы $\widehat{\gamma}_9(h)$}
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
+    \caption{Прогноз по модели $\widehat{\gamma}_9(h)$}
+  \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Автоматический подход}
+  \framesubtitle{Периодическая модель}
+  \begin{columns}[c]
+  \column{3in}
+  \begin{equation}
+  \label{eq:per}
+    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
+  \end{equation}
+  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
+
+  \vspace{0.5em}
+
+  Подобранная модель:
+  \begin{equation}
+  \label{eq:gamma10}
+    \widehat{\gamma}_{10}(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
+  \end{equation}
+
+  Показатели качества
+  \begin{equation*}
+    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
+  \end{equation*}
+
+  \column{3in}
+  \vspace{-14.5pt}
+  \begin{figure}[H]
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
+    \caption{Модель семивариограммы $\widehat{\gamma}_{10}(h)$}
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
+    \caption{Прогноз по модели $\widehat{\gamma}_{10}(h)$}
+  \end{figure}
   \end{columns}
 \end{frame}
 
@@ -546,13 +616,36 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Прогнозирование методом ординарного кригинга}
-  \includegraphics[width=0.95\textwidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
+  \frametitle{Заключение}
+
 \end{frame}
 
 \begin{frame}
-  \frametitle{Заключение}
-
+  \frametitle{Список использованных источников}
+  \begin{scriptsize}
+  \begin{thebibliography}{5}
+    \beamertemplatebookbibitems
+    \bibitem{cressie}
+      Cressie~N.
+      \newblock {\em Statistics for Spatial Data}.
+      \newblock New York. --- Wiley, 1991.
+    \beamertemplatebookbibitems
+    \bibitem{saveliev}
+      А.А.~Савельев, С.С.~Мухарамова, А.Г.~Пилюгин, Н.А.~Чижикова
+      \newblock {\em Геостатистический анализ данных в экологии и природопользовании (с применением пакета R)}
+      \newblock Казань: Казанский университет, 2012.
+    \beamertemplatebookbibitems
+    \bibitem{shumway}
+      Robert H.~Shumway, David S.~Stoffer
+      \newblock {\em Time series and Its Applications: With R Examples (Springer Texts in Statistics)}.
+      \newblock Springer Science+Business Media, LLC 2011, 3d edition, 2011.
+    \beamertemplatebookbibitems
+    \bibitem{cook}
+      Paul~Teetor
+      \newblock {\em R Cookbook (O’Reilly Cookbooks))}.
+      \newblock O’Reilly Media, 1 edition, 2011.
+  \end{thebibliography}
+\end{scriptsize}
 \end{frame}
 
 \subsection{}

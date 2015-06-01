@@ -2,3 +2,4 @@ name: batorino_analysis
 account: apaulau
 bundleId: 163345
 url: http://apaulau.shinyapps.io/batorino_analysis
+server: shinyapps.io

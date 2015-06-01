@@ -131,7 +131,7 @@ shinyServer(function(input, output, session) {
     result <- test(data=series()$temperature)
     statistic <- paste("<b>Статистика:</b>", format(result$statistic[[1]]))
     p.value <- paste("<b>P-значение:</b>", format(result$p.value))
-    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза отклонена.", "Нельзя отвергнуть нулевую гипотезу."))
+    conclusion <- paste("<b>Заключение:</b>", ifelse(result$p.value <= .05, "Нулевая гипотеза о нормальном распределении данных отклонена.", "Нельзя отвергнуть нулевую гипотезу о нормальном распределении данных."))
     HTML(paste(statistic, p.value, conclusion, sep = '<br/>'))
   })
   
@@ -186,7 +186,7 @@ shinyServer(function(input, output, session) {
   
   output$lm <- renderUI({
     m <- model()
-    withMathJax(sprintf("$$ y = %.03f t + %.03f $$", coef(model())[2], coef(model())[1]))
+    HTML(sprintf("y = %.03ft + %.03f", coef(model())[2], coef(model())[1]))
 #     withMathJax(
 #       helpText(paste("$$ y = ", format(coef(model())[2], digits=4), "x +", format(coef(model())[2], digits=4), "$$"))  
 #     )

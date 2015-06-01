@@ -30,7 +30,7 @@ DrawScatterPlot <- function (data, filename="", datebreaks) {
 DrawHistogram <- function (data, filename="", binwidth=1.2, fit=TRUE) {
   plot.hist <- ggplot(data, aes(x=temperature), geom='blank') +   
     geom_histogram(aes(y=..density..), colour="darkgrey", fill="white", binwidth=binwidth, alpha=.6) +
-    labs(color="") + xlab("Температура, ºС") + ylab("Плотность")
+    labs(color="") + xlab("Температура, ºС") + ylab("Гистограмма")
   
   if (fit) {
     plot.hist <- plot.hist + stat_function(fun=dnorm, colour="#D55E00", arg=list(mean=mean(data$temperature), sd=sd(data$temperature)))

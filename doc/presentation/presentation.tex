@@ -56,7 +56,7 @@
   \begin{enumerate}
     \item Предварительный статистический анализ гидроэкологических данных озера Баторино;
     \item Вариограммный анализ временного ряда: построение оценок семивариограммы, подбор моделей семивариограммы.
-    \item Исследование статистических свойств оценки семивариограммы гауссовского случайного процесса.
+    \item Исследование статистических свойств оценки вариограммы гауссовского случайного процесса.
     \item Прогнозирование значений временного ряда с помощью интерполяционного метода Кригинг.
     \item Исследование точности прогноза в зависимости от оценки вариограммы и модели вариограммы, лежащих в основе метода Кригинг.
   \end{enumerate}
@@ -71,7 +71,7 @@
 \section{Обзор реализованного программного обеспечения}
 
 \begin{frame}
-  \frametitle{Особенности}
+  \frametitle{Особенности приложения}
   \begin{itemize}
     \item Доступно с любого устройства, имеющего доступ в интернет, по адресу \href{https://apaulau.shinyapps.io/batorino}{apaulau.shinyapps.io/batorino}
     \item Реализовано на языке программирования \textbf{R}
@@ -80,7 +80,6 @@
     \item Широкие графические возможности
     \item Проверка тестов и критериев
     \item Мгновенный отклик на изменение параметров
-    \item Быстрая проверка различных моделей
   \end{itemize}
 \end{frame}
 
@@ -126,7 +125,7 @@
   \frametitle{Модуль вариограммного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/4_variogram.png}
-    \caption{Возможности по подбору модели вариограммы}
+    \caption{Возможности по подбору модели семивариограммы}
   \end{figure}
 \end{frame}
 
@@ -134,7 +133,7 @@
   \frametitle{Модуль вариограммного анализа}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/5_fit.png}
-    \caption{Подбор параметров модели вариограммы}
+    \caption{Подбор параметров модели семивариограммы}
   \end{figure}
 \end{frame}
 
@@ -146,7 +145,7 @@
   \end{figure}
 \end{frame}
 
-\section{Детерминированный методы}
+\section{Детерминированные методы}
 
 \begin{frame}
   \frametitle{Исходные данные}
@@ -443,9 +442,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_1(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_2(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_1(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_2(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -470,7 +469,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma4}
-    \widehat{\gamma}_4(h) = 4 \cdot Lin(h, 2).
+    \widehat{\gamma}_3(h) = 4 \cdot Lin(h, 2).
   \end{equation}
 
   Показатели качества
@@ -482,9 +481,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_3(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_3(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -509,7 +508,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma5}
-    \widehat{\gamma}_5(h) = 0.9 + 4 Sph(h, 6.9),
+    \widehat{\gamma}_4(h) = 0.9 + 4 Sph(h, 6.9),
   \end{equation}
 
   Показатели качества
@@ -521,9 +520,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -543,7 +542,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma6}
-    \widehat{\gamma}_6(h) = 4 \cdot Per(h, 0.898),
+    \widehat{\gamma}_5(h) = 4 \cdot Per(h, 0.898),
   \end{equation}
 
   Показатели качества
@@ -555,9 +554,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_6(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_6(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -606,7 +605,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma9}
-    \widehat{\gamma}_9(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
+    \widehat{\gamma}_6(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
   \end{equation}
 
   Показатели качества
@@ -618,9 +617,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_9(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_6(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_9(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_6(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -629,14 +628,17 @@
   \frametitle{Автоматический подход. \small{Периодическая модель}}
   \begin{columns}[c]
   \column{3in}
-  Модель семивариограммы вида \eqref{eq:per}.
+  \begin{equation*}
+    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
+  \end{equation*}
+  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
 
   \vspace{0.5em}
 
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma10}
-    \widehat{\gamma}_{10}(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
+    \widehat{\gamma}_7(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
   \end{equation}
 
   Показатели качества
@@ -648,9 +650,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_{10}(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_7(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_{10}(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_7(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -661,17 +663,18 @@
     \item Проведён предварительный статистический анализ данных;
       \begin{itemize}
         \item показана близость выборочного распределения к нормальному \normaldistr
-        \item показана умеренная положительная зависимость температуры от времени
-        \item построена регрессионная модель и вычислен ряд остатков
+        \item выявлена умеренная положительная зависимость температуры от времени
+        \item построена линейная регрессионная модель
+        \item вычислен и исследован ряд остатков
       \end{itemize}
     \item Выполнен вариограммный анализ
       \begin{itemize}
-        \item Рассмотрены два подхода по подбору моделей семивариограмм
-        \item Визуальным подходом построены наилучшие модели: линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6}.
-        \item Автоматическим подходом построены модели: волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10}.
+        \item Рассмотрены два подхода по подбору моделей семивариограмм: \small{визуальный и автоматический}
+        \item Визуальным подходом показано, что линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6} являются наилучшими.
+        \item Автоматическим подходом показано, что волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10} являются наилучшими.
       \end{itemize}
-    \item По различным моделям построены прогнозные значения методом Кригинг. Проанализирована зависимость точности прогноза от оценки вариограммы и модели.
-    \item Исследованы статистические свойства оценки семивариограммы гауссовского случайного процесса. Показана несмещённость и состоятельность в среднеквадратическом смысле оценки вариограммы \eqref{eq:matheron}
+    \item По различным моделям построены прогнозные значения методом Кригинг. Исследована зависимость точности прогноза от оценки вариограммы и модели.
+    \item Исследованы статистические свойства оценки вариограммы гауссовского случайного процесса. Показана несмещённость и состоятельность в среднеквадратическом смысле оценки вариограммы \eqref{eq:matheron}
     \item Реализовано программное обеспечение, позволяющее решать класс задач, аналогичных исходной
   \end{enumerate}
 \end{frame}

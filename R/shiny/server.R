@@ -467,7 +467,7 @@ shinyServer(function(input, output, session) {
   
   output$predictions <- renderDataTable({
     k <- kriging()
-    data.frame("Прогноз"=sapply(k$var1.pred, signif, digits=4), "Дисперсия"=sapply(k$var1.var, signif, digits=4))
+    data.frame("Прогноз"=sapply(k$var1.pred, signif, digits=4), "Среднеквадратическое отклонение"=sapply(sapply(k$var1.var, sqrt), signif, digits=4))
   }, options=list(paging=FALSE, searching=FALSE, info=FALSE))
   
   output$analysis <- renderDataTable({
@@ -691,7 +691,7 @@ shinyServer(function(input, output, session) {
       geom_line() + 
       scale_x_continuous(breaks=obj$params[seq(1, length(obj$params), 4)]) +
       xlab(paste0(obj$caption, ", min=", obj$wmin, ", max=", obj$wmax)) + ylab(paste0(measureText(), ", min=", obj$min, ", max=", obj$max)) +
-      theme(axis.text.x = element_text(angle=90, hjust=1))
+      theme(axis.text.x = element_text(angle=90, hjust=1), axis.title = element_text(size=15))
   })
   nfold <- reactive({
     input$nfold
@@ -704,7 +704,7 @@ shinyServer(function(input, output, session) {
   }
   output$cv <- renderDataTable({
     obj <- cv()
-    data.frame("Прогноз"=sig(obj$var1.pred), "Дисперсия"=sig(obj$var1.var), "Наблюдение"=sig(obj$observed), "Остаток"=sig(obj$residual), "Zзначение"=sig(obj$zscore))
+    data.frame("Прогноз"=sig(obj$var1.pred), "Среднеквадратическое отклонение"=sig(sapply(obj$var1.var, sqrt)), "Наблюдение"=sig(obj$observed), "Остаток"=sig(obj$residual), "Zзначение"=sig(obj$zscore))
   },  options=list(searching=FALSE))
   
   output$cv_stats <- renderDataTable({

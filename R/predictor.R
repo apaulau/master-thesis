@@ -26,7 +26,7 @@ processPrediction <- function (data, year, variogram, cressie, cutoff, name, cap
     "Ошибка"=residual)
   colnames(prediction.compare) <- c("", "$X(t)$", "$X^{*}(t)$", "$y(t)$", "$ X(t) - X^{*}(t) $")
   print(xtable(prediction.compare, caption=caption, label=paste0("table:", name, "-prediction"), digits=c(0, 0, 3, 3, 3, 3), align="rr|cccc"),
-    file=paste0("out/variogram/", name, "-prediction.tex"), sanitize.text.function=function(x){x}, include.rownames=FALSE, table.placement=place)
+    file=paste0("out/variogram/", name, "-prediction.tex"), sanitize.text.function=function(x){x}, include.rownames=FALSE, table.placement=place, caption.placement = 'top')
   
   WriteCharacteristic(mse, type="variogram", name=paste0(name, "-mse"))
   
@@ -82,18 +82,18 @@ comp <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
   "auto-rob-5"=computePrediction(auto.rob.prediction$prediction, trend),
   "auto-class-18"=computePrediction(auto.class.adapt.prediction$prediction, trend))
 colnames(comp) <- c("Год", "X(t)", 
-  "$ X^{*}_1(h) $",
-  "$ X^{*}_2(h) $",
-  "$ X^{*}_3(h) $",
-  "$ X^{*}_4(h) $",
-  "$ X^{*}_5(h) $",
-  "$ X^{*}_6(h) $",
-  "$ X^{*}_7(h) $",
-  "$ X^{*}_8(h) $",
-  "$ X^{*}_9(h) $",
-  "$ X^{*}_{10}(h) $")
-print(xtable(comp, caption="Сводная таблица прогнозных значений", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
-  file="out/variogram/summary-prediction.tex", sanitize.text.function=function(x){x}, include.rownames=FALSE, size="footnotesize")
+  "$ X^{*}_1(t) $",
+  "$ X^{*}_2(t) $",
+  "$ X^{*}_3(t) $",
+  "$ X^{*}_4(t) $",
+  "$ X^{*}_5(t) $",
+  "$ X^{*}_6(t) $",
+  "$ X^{*}_7(t) $",
+  "$ X^{*}_8(t) $",
+  "$ X^{*}_9(t) $",
+  "$ X^{*}_{10}(t) $")
+print(xtable(comp, caption="Сводная таблица реальных $ X(t)$ и прогнозных $ X_i^{*}()t, i = \overline{1,10} $ значений ", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
+  file="out/variogram/summary-prediction1.tex", sanitize.text.function=function(x){x}, include.rownames=FALSE, size="footnotesize", caption.placement = 'top')
 
 comp.st <- data.frame(
   "lin"=computePlainStatistics(computeCV(sample.residuals, lin$var_model, kObservationNum, nfold=kObservationNum)),
@@ -104,8 +104,8 @@ comp.st <- data.frame(
   "per-fit-cv"=computePlainStatistics(computeCV(sample.residuals, per.fit.cv$var_model, kObservationNum, nfold=kObservationNum)),
   "auto-class-20"=computePlainStatistics(computeCV(sample.residuals, auto.class20$var_model, kObservationNum, nfold=kObservationNum)),
   "auto-class-26"=computePlainStatistics(computeCV(sample.residuals, auto.class26$var_model, kObservationNum, nfold=kObservationNum)),
-  "auto-rob-5"=computePlainStatistics(computeCV(sample.residuals, auto.rob$var_model, kObservationNum, nfold=kObservationNum)),
-  "auto-class-18"=computePlainStatistics(computeCV(sample.residuals, auto.class.prediction$var_model, kObservationNum, nfold=kObservationNum)))
+  "auto-rob-5"=computePlainStatistics(computeCV(sample.residuals, auto.rob.adapt$var_model, kObservationNum, nfold=kObservationNum)),
+  "auto-class-18"=computePlainStatistics(computeCV(sample.residuals, auto.class.adapt.prediction$var_model, kObservationNum, nfold=kObservationNum)))
 colnames(comp.st) <- c( 
   "$ \\widehat{\\gamma}_1(h) $",
   "$ \\widehat{\\gamma}_2(h) $",
@@ -121,7 +121,7 @@ rownames(comp.st) <- c(
   "$ S $", "$ E $", "$ MAE $", "$ MSE $", "$ r_{\\varepsilon\\varepsilon^{*}} $")
 
 print(xtable(comp.st, caption="Сводная таблица показателей качества моделей семивариограмм", label="table:summary-cv", digits=c(0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="r|cccccccccc"),
-  file="out/variogram/summary-cv.tex", sanitize.text.function=function(x){x}, size="footnotesize")
+  file="out/variogram/summary-cv1.tex", sanitize.text.function=function(x){x}, size="footnotesize", )
 
 plot.lin.range.cv <- RunThroughParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/parameter-comparison.png", observations=kObservationNum, nrows=nrows, cutoff=16, model="Lin", nugget=0.000001, sill=4, range=NA, max=10, cressie=F, adapt=F)
 ggsave(plot=plot.lin.range.cv, file="figures/variogram/lin-range-corr.png", width=7, height=3.3)

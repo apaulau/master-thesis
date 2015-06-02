@@ -1,8 +1,8 @@
 name: batorino
 account: apaulau
 server: shinyapps.io
-bundleId: 196331
+bundleId: 196762
 url: https://apaulau.shinyapps.io/batorino
-when: 1433179721.26328
+when: 1433254247.75047
 asMultiple: FALSE
 asStatic: FALSE

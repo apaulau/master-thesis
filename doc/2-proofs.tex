@@ -2,7 +2,7 @@
 
 \newpage
 
-\chapter{Оценка вариограммы внутренне стационарного гауссовского случайного процесса и ее свойства}
+\chapter{Оценка вариограммы гауссовского случайного процесса}
 \label{c:variogram_estimation}
 
 Рассмотрим стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
@@ -331,22 +331,22 @@
 Далее, для доказательства \eqref{eq:asymptotic_cov} оценим разность, используя условие \eqref{eq:var_abs}, выражение \eqref{eq:cov1} и лемму Кронекера \cite{shiryaev1980}:
 \begin{equation}\begin{gathered}
 \label{eq:asyfirst}
-	\vert (n - h_2) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \\
-	- \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
-	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
-	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
-	+ \frac{1}{n - h_1} \sum_{m = 0}^{n - h_1 - 1} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
+	\vert (n - h_2) cov \{ 2 \tilde{\gamma(h_1)}, 2 \tilde{\gamma(h_2)} \} - \\
+	- 2 \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\leq 2 \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ 2 \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \frac{2}{n - h_1} \sum_{m = 0}^{n - h_1 - 1} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
 \end{gathered}\end{equation}
 при $ n \to \infty$.
 
 Рассуждая аналогично, в силу сходимости ряда \eqref{eq:var_abs}, выражения \eqref{eq:cov2} и леммы Кронекера \cite{shiryaev1980}, получаем оценку разности для случая $ h_1 < h_2 $
 \begin{equation}\begin{gathered}
 \label{eq:asysecond}
-	\vert (n - h_1) cov \{ \tilde{\gamma(h_1)}, \tilde{\gamma(h_2)} \} - \\
-	- \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
-	\leq \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
-	+ \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
-	+ \frac{1}{n - h_2} \sum_{m = -n + h_2 + 1}^{0} \vert m \vert \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
+	\vert (n - h_1) cov \{ 2 \tilde{\gamma(h_1)}, 2 \tilde{\gamma(h_2)} \} - \\
+	- 2 \sum_{m = -\infty}^{+ \infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2 \vert \leq \\
+	\leq 2 \sum_{m = -\infty}^{n + h_2} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ 2 \sum_{m = n - h_1}^{+ \infty} \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 + \\
+	+ \frac{2}{n - h_2} \sum_{m = -n + h_2 + 1}^{0} \vert m \vert \vert \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2) \vert^2 \to 0,
 \end{gathered}\end{equation}
 при $ n \to \infty$.
 
@@ -371,6 +371,6 @@
 \end{Corollary}
 
 \begin{Remark}
-	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ 2\tilde{\gamma}(h) $ является состоятельной в среднеквадратическом смысле для вариограммы $ 2\gamma(h), h \in \mathbb{Z} $.
+	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ 2 \tilde{\gamma}(h) $ является состоятельной в среднеквадратическом смысле для вариограммы $ 2 \gamma(h), h \in \mathbb{Z} $.
 \end{Remark}
 % section new_section (end)

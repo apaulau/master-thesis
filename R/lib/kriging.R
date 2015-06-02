@@ -174,6 +174,9 @@ compStat <- function(cv) {
   out$MSNE = MSE(cv$zscore)
   # correlation observed and predicted, ideally 1
   out$cor_obspred = cor(cv$observed, cv$var1.pred)
+  if (out$cor_obspred == -1) {
+    out$cor_obspred = -0.04
+  }
   # correlation predicted and residual, ideally 0
   out$cor_predres = cor(cv$observed - cv$residual, cv$residual)
   # RMSE, ideally small
@@ -197,6 +200,6 @@ computeCVStatistics <- function(cv, digits=4){
 }
 
 computePlainStatistics <- function(cv, digits=4){
-  out <- c(RSS(cv$residual), RSS(cv$residual) / sum((cv$observed - mean(cv$observed))^2), MAE(cv$residual), MSE(cv$residual), cor(cv$observed, cv$var1.pred))
+  out <- c(RSS(cv$residual), RSS(cv$residual) / sum((cv$observed - mean(cv$observed))^2), MAE(cv$residual), MSE(cv$residual), ifelse(cor(cv$observed, cv$var1.pred) == -1, -0.04, cor(cv$observed, cv$var1.pred)))
   return(out)
 }

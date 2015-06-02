@@ -92,7 +92,7 @@ colnames(comp) <- c("Год", "X(t)",
   "$ X^{*}_8(t) $",
   "$ X^{*}_9(t) $",
   "$ X^{*}_{10}(t) $")
-print(xtable(comp, caption="Сводная таблица реальных $ X(t)$ и прогнозных $ X_i^{*}()t, i = \overline{1,10} $ значений ", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
+print(xtable(comp, caption="Сводная таблица реальных $ X(t)$ и прогнозных $ X_i^{*}()t, i = \overline{1,10} $ значений", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
   file="out/variogram/summary-prediction1.tex", sanitize.text.function=function(x){x}, include.rownames=FALSE, size="footnotesize", caption.placement = 'top')
 
 comp.st <- data.frame(

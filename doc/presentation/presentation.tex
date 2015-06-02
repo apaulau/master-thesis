@@ -58,7 +58,7 @@
     \item Вариограммный анализ временного ряда: построение оценок семивариограммы, подбор моделей семивариограммы.
     \item Исследование статистических свойств оценки семивариограммы гауссовского случайного процесса.
     \item Прогнозирование значений временного ряда с помощью интерполяционного метода Кригинг.
-    \item Исследование точности прогноза в зависимости от оценки вариограммы и модели семивариограммы, лежащих в основе метода Кригинг.
+    \item Исследование точности прогноза в зависимости от оценки вариограммы и модели вариограммы, лежащих в основе метода Кригинг.
   \end{enumerate}
 \end{frame}
 
@@ -146,7 +146,7 @@
   \end{figure}
 \end{frame}
 
-\section{Детерминированный подход}
+\section{Детерминированный методы}
 
 \begin{frame}
   \frametitle{Исходные данные}
@@ -171,11 +171,11 @@
   \frametitle{Проверка на нормальность}
   \begin{columns}[c]
   \column{2in}
-  По описательным статистикам выборочное распределение характеризуется небольшой скошенностью вправо (коэффициент асимметрии $ \descriptive{original}{skew} $) и пологостью пика кривой распределения (коэффициент эксцесса $ \descriptive{original}{kurtosis} $) относительного нормального.
+  Выборочное распределение характеризуется небольшой скошенностью вправо (коэффициент асимметрии $ \descriptive{original}{skew} $) и пологостью пика кривой распределения (коэффициент эксцесса $ \descriptive{original}{kurtosis} $) относительно нормального.
 
   \vspace{0.5em}
 
-  Визуально и проверкой критериев Шапиро-Уилка, $\chi^2$-Пирсона и Колмогороваа-Смирнова была показана близость выборочного распределения к нормальному с параметрами \normaldistr.
+  Визуально и проверкой критериев Шапиро-Уилка, $\chi^2$-Пирсона и Колмогорова-Смирнова была показана близость выборочного распределения к нормальному с параметрами \normaldistr.
   \column{4in}
   \begin{figure}[h]
     \includegraphics[width=1\linewidth]{../../figures/original/quantile.png}
@@ -268,7 +268,7 @@
   \end{columns}
 \end{frame}
 
-\section{Геостатистический подход}
+\section{Геостатистические методы}
 
 \subsection{Введение}
 
@@ -341,10 +341,10 @@
   \end{Corollary}
 \end{frame}
 
-\subsection{Вариограммный анализ}
+\subsection{Визуальный подход}%Вариограммный анализ}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{График экспериментальной вариограммы}}
+  \frametitle{Визуальный подход}
   \begin{columns}[c]
   \column{2.5in}
     Прогнозные значения $ X^{*}(t) $ вычисляются по формуле:
@@ -564,6 +564,33 @@
 
 \subsection{Автоматический подход}
 
+\begin{frame}\frametitle{Автоматический подход. \small{Максимальное расстояние}}
+    \begin{figure}[H]
+    \center{\includegraphics[width=0.7\linewidth]{../../figures/variogram/auto-mse-cutoff.png}}
+    \caption{Зависимость качества модели от максимального расстояния}
+    \label{img:auto-mse-cutoff}
+  \end{figure}
+  Робастная оценка семивариограммы Кресси-Хокинса:
+  \begin{equation}
+  \label{eq:cressie}
+    2 \tilde{\gamma}(h) = \frac{1}{n - h} (\sum_{t = 1}^{n - h} | X(t + h) - X(t) |^{\frac{1}{2}} )^4 / (0.457 + \frac{0.494}{n - h} + \frac{0.045}{(n - h)^2}), \quad h = \overline{0, n - 1}.
+  \end{equation}
+\end{frame}
+
+\begin{frame}\frametitle{Автоматический подход. \small{Оценки семивариограмм}}
+  \begin{figure}[h]
+  \begin{minipage}[h]{0.49\linewidth}
+    \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
+    \caption{Оценка Матерона}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[h]{0.49\linewidth}
+    \center{\includegraphics[width=1\linewidth]{../../figures/variogram/robust-variogram.png}}
+    \caption{Оценка Кресси-Хоккинса}
+  \end{minipage}
+\end{figure}
+\end{frame}
+
 \begin{frame}
   \frametitle{Автоматический подход. \small{Волновая модель}}
   \begin{columns}[c]
@@ -673,6 +700,11 @@
       Paul~Teetor
       \newblock {\em R Cookbook (O’Reilly Cookbooks)}.
       \newblock O’Reilly Media, 1 edition, 2011.
+    \beamertemplatearticlebibitems
+    \bibitem{dutter}
+      Dutter,~Rudolf
+      \newblock On Robust Estimation of Variograms in Geostatistics
+      \newblock {\em Robust Statistics, Data Analysis, and Computer Intensive Methods}, 109:153-171, 1996.
   \end{thebibliography}
 \end{scriptsize}
 \end{frame}

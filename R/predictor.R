@@ -121,7 +121,35 @@ rownames(comp.st) <- c(
   "$ S $", "$ E $", "$ MAE $", "$ MSE $", "$ r_{\\varepsilon\\varepsilon^{*}} $")
 
 print(xtable(comp.st, caption="Сводная таблица показателей качества моделей семивариограмм", label="table:summary-cv", digits=c(0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="r|cccccccccc"),
-  file="out/variogram/summary-cv1.tex", sanitize.text.function=function(x){x}, size="footnotesize", )
+      file="out/variogram/summary-cv1.tex", sanitize.text.function=function(x){x}, size="footnotesize", caption.placement = 'top')
+
+comp.st.ad <- data.frame(
+  "lin"=computeAdapt(sample.residuals, lin$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "lin-fit"=computeAdapt(sample.residuals, lin.fit$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "lin-fit-cv"=computeAdapt(sample.residuals, lin.fit.cv$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend), 
+  "lin-fit-adapt"=computeAdapt(sample.residuals, lin.fit.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "sph-fit-adapt"=computeAdapt(sample.residuals, sph.fit.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "per-fit-cv"=computeAdapt(sample.residuals, per.fit.cv$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "auto-class-20"=computeAdapt(sample.residuals, auto.class20$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "auto-class-26"=computeAdapt(sample.residuals, auto.class26$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "auto-rob-5"=computeAdapt(sample.residuals, auto.rob.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
+  "auto-class-18"=computeAdapt(sample.residuals, auto.class.adapt.prediction$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend))
+colnames(comp.st.ad) <- c( 
+  "$ \\widehat{\\gamma}_1(h) $",
+  "$ \\widehat{\\gamma}_2(h) $",
+  "$ \\widehat{\\gamma}_3(h) $",
+  "$ \\widehat{\\gamma}_4(h) $",
+  "$ \\widehat{\\gamma}_5(h) $",
+  "$ \\widehat{\\gamma}_6(h) $",
+  "$ \\widehat{\\gamma}_7(h) $",
+  "$ \\widehat{\\gamma}_8(h) $",
+  "$ \\widehat{\\gamma}_9(h) $",
+  "$ \\widehat{\\gamma}_{10}(h) $")
+rownames(comp.st.ad) <- c(
+  "$ S $", "$ E $", "$ MAE $", "$ MSE $", "$ r_{\\varepsilon\\varepsilon^{*}} $")
+
+print(xtable(comp.st.ad, caption="Сводная таблица адаптивных показателей качества моделей семивариограмм", label="table:summary-adapt", digits=c(0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="r|cccccccccc"),
+  file="out/variogram/summary-adapt.tex", sanitize.text.function=function(x){x}, size="footnotesize", caption.placement = 'top')
 
 plot.lin.range.cv <- RunThroughParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/parameter-comparison.png", observations=kObservationNum, nrows=nrows, cutoff=16, model="Lin", nugget=0.000001, sill=4, range=NA, max=10, cressie=F, adapt=F)
 ggsave(plot=plot.lin.range.cv, file="figures/variogram/lin-range-corr.png", width=7, height=3.3)

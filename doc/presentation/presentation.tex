@@ -1,33 +1,34 @@
-\documentclass[10pt,pdf,aspectratio=169,hyperref={unicode}]{beamer}
+%!TEX TS-program = xelatex
+\documentclass[10pt,pdf,aspectratio=169]{beamer}
 
-\usepackage[T2A]{fontenc}
+\usepackage{BSU-theme/beamerthemeBSU}
+
+\usepackage{fontspec}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
-\usepackage{amssymb,amsfonts,amsmath}
-\usepackage{graphicx}
+
+\defaultfontfeatures{Ligatures={TeX},Renderer=Basic}
+\setmainfont[Ligatures={TeX,Historic}]{Arial} %TODO: Helvetica Light Normal
+\setsansfont{Arial}  %TODO: Helvetica Light Normal
+\setmonofont{Courier New}
+\uselanguage{russian}
+\languagepath{russian}
+\deftranslation[to=russian]{Theorem}{Теорема}
+\deftranslation[to=russian]{Definition}{Определение}
+\deftranslation[to=russian]{Definitions}{Определения}
+\deftranslation[to=russian]{Corollary}{Следствие}
+
 \usepackage[font=small,skip=0pt]{caption}
 
-\captionsetup[table]{font=small,skip=5pt}
+\captionsetup[table]{font=small,skip=1pt}
+\setlength\abovecaptionskip{-5pt}
+\setlength\belowcaptionskip{0pt}
 
 \let\Tiny=\tiny
 
-\setbeamertemplate{caption}[numbered]
-\setbeamertemplate{theorems}[numbered]
-\setbeamertemplate{navigation symbols}{}
 \setbeamerfont{caption}{size=\footnotesize}
 
-\definecolor{links}{HTML}{2A1B81}
-\hypersetup{colorlinks,linkcolor=,urlcolor=links}
-
-\usetheme{Pittsburgh}
-\usecolortheme{whale}
-
-\let\Definition\relax
-\newtheorem{Definition}{Определение}
-\let\Theorem\relax
-\newtheorem{Theorem}{Теорема}
-\let\Corollary\relax
-\newtheorem{Corollary}{Следствие}
+\usepackage{multicol}
 
 \newcommand{\inp}[1]{\input{../../out/#1}}
 \newcommand{\characteristic}[2]{\inp{#1/characteristics/#2}}
@@ -36,14 +37,11 @@
 \newcommand{\normaldistr}{$\mathcal{N}(\descriptive{original}{mean}, \descriptive{original}{variance})$}
 \newcommand{\resnormaldistr}{$\mathcal{N}(\descriptive{residual}{mean}, \descriptive{residual}{variance})$}
 
-\logo{\includegraphics[width=1cm,height=1cm,keepaspectratio]{Logo_BSU.jpg}}
-
-\title{Анализ и прогнозирование гидрологических данных}
-\subtitle[]{}
-\author[Павлов Александр \hspace{0.2\textwidth} \insertframenumber\,/\,\inserttotalframenumber]{ Павлов Александр Сергеевич \\ \vspace{2em} \small{Научный руководитель: Цеховая Татьяна Вячеславовна} }
-
-\institute[]{Кафедра Теории Вероятностей и Математической Статистики \vspace{2pt} \\ Факультет Прикладной Математики и Информатики \vspace{2pt} \\ Белорусский Государственный Университет }
-\date{Минск, 2015}
+\title[Анализ и прогнозирование гидрологических данных]{Анализ и прогнозирование гидрологических данных}
+\subtitle{Дипломная работа}
+\author[Павлов А.С.]{Александр Сергеевич Павлов \\ \smallskip Научный руководитель: Цеховая Татьяна Вячеславовна}
+\institute[БГУ, ФПМИ]{Факультет прикладной математики и информатики \\ \smallskip Кафедра теории вероятностей и математической статистики}
+\date{Минск, \the\year}
 
 \begin{document}
 
@@ -71,7 +69,8 @@
 \section{Обзор реализованного программного обеспечения}
 
 \begin{frame}
-  \frametitle{Особенности приложения}
+  \frametitle{\large\secname}
+  \framesubtitle{Особенности}
   \begin{itemize}
     \item Доступно с любого устройства, имеющего доступ в интернет, по адресу \href{https://apaulau.shinyapps.io/batorino}{apaulau.shinyapps.io/batorino}
     \item Реализовано на языке программирования \textbf{R}
@@ -86,7 +85,8 @@
 \subsection{Модуль предварительного анализа}
 
 \begin{frame}
-  \frametitle{Модуль предварительного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/1_basis.png}
     \caption{Первичный анализ и описательные статистики}
@@ -94,7 +94,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Модуль предварительного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
   \begin{figure}[h]
     \center{\includegraphics[width=0.75\textwidth]{../../figures/static/p_corr.png}}
     \caption{Корреляционный анализ}
@@ -102,7 +103,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Модуль предварительного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/2_regr.png}
     \caption{Регрессионный анализ}
@@ -112,7 +114,8 @@
 \subsection{Модуль анализа остатков}
 
 \begin{frame}
-  \frametitle{Модуль анализа остатков}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/3_acf.png}
     \caption{Автокорреляционная функция}
@@ -122,7 +125,8 @@
 \subsection{Модуль вариограммного анализа}
 
 \begin{frame}
-  \frametitle{Модуль вариограммного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/4_variogram.png}
     \caption{Возможности по подбору модели семивариограммы}
@@ -130,7 +134,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Модуль вариограммного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/5_fit.png}
     \caption{Подбор параметров модели семивариограммы}
@@ -138,7 +143,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Модуль вариограммного анализа}
+  \frametitle{\large\secname}
+  \framesubtitle{\subsecname}
     \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{../../figures/static/6_krige.png}
     \caption{Сравнение прогнозных значений}
@@ -345,7 +351,7 @@
 \begin{frame}
   \frametitle{Визуальный подход}
   \begin{columns}[c]
-  \column{2.5in}
+  \column{3in}
     Прогнозные значения $ X^{*}(t) $ вычисляются по формуле:
     \begin{equation*}
       X^{*}(t) = y(t) + \varepsilon^{*}(t),
@@ -365,7 +371,7 @@
         где $ n $ --- объём выборки
     \end{itemize}
 
-  \column{3.5in}
+  \column{3in}
     \begin{figure}[h]
     \includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}
     \caption{Оценка семивариограммы Матерона}
@@ -374,7 +380,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{Линейная модель}}
+  \frametitle{\large\secname}
+  \framesubtitle{Линейная модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -412,7 +419,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{Чистый эффект самородков}}
+  \frametitle{\large\secname}
+  \framesubtitle{Чистый эффект самородков}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -450,7 +458,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{Линейная модель с порогом}}
+  \frametitle{\large\secname}
+  \framesubtitle{Линейная модель с порогом}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -489,7 +498,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{Сферическая модель}}
+  \frametitle{\large\secname}
+  \framesubtitle{Сферическая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}\begin{gathered}
@@ -528,7 +538,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Визуальный подход. \small{Периодическая модель}}
+  \frametitle{\large\secname}
+  \framesubtitle{Периодическая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}
@@ -563,8 +574,10 @@
 
 \subsection{Автоматический подход}
 
-\begin{frame}\frametitle{Автоматический подход. \small{Максимальное расстояние}}
-    \begin{figure}[H]
+\begin{frame}
+  \frametitle{\large\secname}
+  \framesubtitle{Максимальное расстояние}
+  \begin{figure}[H]
     \center{\includegraphics[width=0.7\linewidth]{../../figures/variogram/auto-mse-cutoff.png}}
     \caption{Зависимость качества модели от максимального расстояния}
     \label{img:auto-mse-cutoff}
@@ -576,7 +589,9 @@
   \end{equation}
 \end{frame}
 
-\begin{frame}\frametitle{Автоматический подход. \small{Оценки семивариограмм}}
+\begin{frame}
+  \frametitle{\large\secname}
+  \framesubtitle{Оценки семивариограмм}
   \begin{figure}[h]
   \begin{minipage}[h]{0.49\linewidth}
     \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
@@ -591,7 +606,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Автоматический подход. \small{Волновая модель}}
+  \frametitle{\large\secname}
+  \framesubtitle{Волновая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation}
@@ -625,7 +641,8 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Автоматический подход. \small{Периодическая модель}}
+  \frametitle{\large\secname}
+  \framesubtitle{Периодическая модель}
   \begin{columns}[c]
   \column{3in}
   \begin{equation*}
@@ -659,8 +676,12 @@
 
 \begin{frame}
   \frametitle{Заключение}
+  \setlength{\itemindent}{-.5in}
+  \begin{columns}
+  \column{6.2in}
+  \vspace{-9pt}
   \begin{enumerate}
-    \item Проведён предварительный статистический анализ данных;
+    \item Проведён предварительный статистический анализ данных
       \begin{itemize}
         \item показана близость выборочного распределения к нормальному \normaldistr
         \item выявлена умеренная положительная зависимость температуры от времени
@@ -673,10 +694,11 @@
         \item Визуальным подходом показано, что линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6} являются наилучшими.
         \item Автоматическим подходом показано, что волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10} являются наилучшими.
       \end{itemize}
-    \item По различным моделям построены прогнозные значения методом Кригинг. Исследована зависимость точности прогноза от оценки вариограммы и модели.
+    \item По различным моделям построены прогнозные значения методом кригинг. Исследована зависимость точности прогноза от оценки вариограммы и модели.
     \item Исследованы статистические свойства оценки вариограммы гауссовского случайного процесса. Показана несмещённость и состоятельность в среднеквадратическом смысле оценки вариограммы \eqref{eq:matheron}
-    \item Реализовано программное обеспечение, позволяющее решать класс задач, аналогичных исходной
+    \item Реализовано программное обеспечение для решения класса задач, аналогичных исходной
   \end{enumerate}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -712,11 +734,24 @@
 \end{scriptsize}
 \end{frame}
 
-\subsection{}
-\begin{frame}
-  \frametitle{}
-  \begin{center}
-    {\Huge Спасибо за внимание!}
-  \end{center}
+\begin{frame}[c]
+\begin{center}
+\frametitle{\LARGE Спасибо за внимание!}
+
+{\LARGE \inserttitle}
+
+\bigskip
+
+{\insertauthor} 
+
+\bigskip\bigskip
+
+{\insertinstitute}
+
+\bigskip\bigskip
+
+{\large \insertdate}
+\end{center}
 \end{frame}
+
 \end{document}

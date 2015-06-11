@@ -157,6 +157,19 @@ computeCV <- function (data, var_model, observations, nfold) {
   return(out)
 }
 
+computeAdapt <- function(data, x, trend, var_model, observations, nrows) {
+  out = list()
+  
+  krig <- PredictWithKriging(data = data, x = x, variogram_model = var_model, observations = observations, nrows = nrows)
+  
+  observed <- src$temperature[(kObservationNum+1):nrows]
+  residual <- observed - (krig$var1.pred + trend[(kObservationNum+1):nrows])
+  
+  out <- c(RSS(residual), RSS(residual) / sum((observed - mean(observed))^2), MAE(residual), MSE(residual), ifelse(cor(observed, (krig$var1.pred + trend[(kObservationNum+1):nrows])) == -1, -0.04, cor(observed, (krig$var1.pred + trend[(kObservationNum+1):nrows]))))
+  
+  return(out)
+}
+
 compStat <- function(cv) {
   out = list()
   # mean error, ideally 0:

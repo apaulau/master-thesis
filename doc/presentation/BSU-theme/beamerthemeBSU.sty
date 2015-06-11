@@ -8,7 +8,7 @@
 \usepackage{wrapfig}
 \usepackage{xcolor}
 \usepackage{etoolbox}
-\usepackage{hyperref} 
+\usepackage{hyperref}
 
 \ProvidesPackage{beamerthemeBSU}[2015/06/01] % Defines the theme BSU
 
@@ -17,8 +17,9 @@
 \setbeamertemplate{navigation symbols}{}    % Comment out to show nav. bar
 \setbeamertemplate{itemize items}[circle]   % Style of bullet points
 \setbeamertemplate{theorems}[numbered]     % Number objects such as theorems and definitions
+\setbeamertemplate{caption}[numbered]
 
-\definecolor{BSUblue}{cmyk}{1,0.81,0.07,0.32}
+\definecolor{BSUblue}{rgb}{0.04,0.2,0.44}
 \definecolor{BSUlightblue}{cmyk}{0.82,0.44,0.05,0}
 \definecolor{BSUlightlightblue}{cmyk}{0.44,0.06,0.2,0}
 \definecolor{BSUlightbrown}{cmyk}{0.09,0.13,0.35,0}
@@ -63,15 +64,15 @@
 \setbeamertemplate{frametitle} % Frametitle with logo
 {
     \nointerlineskip
-    \begin{beamercolorbox}[sep=0.3cm,wd=\paperwidth]{frametitle}
-		\vbox{}\vskip-0.7ex% 
-		\begin{wrapfigure}{r}{0.24\textwidth}
-			\vskip-3ex\includegraphics[width=0.22\textwidth]{BSU-theme/BSU-small-by}
- 		\end{wrapfigure}
- 		\strut\insertframetitle
+    \begin{beamercolorbox}[sep=0.15cm,wd=\paperwidth]{frametitle}
+    \vbox{}\vskip-0.7ex
+    \begin{wrapfigure}{r}{0.24\textwidth}
+      \vskip-3ex\includegraphics[width=0.22\textwidth]{BSU-theme/BSU-small-by}
+    \end{wrapfigure}
+    \strut\insertframetitle
 
- 		\small\strut\insertframesubtitle
-		\vskip-1ex%
+    \small\strut\insertframesubtitle
+    \vskip-1ex%
     \end{beamercolorbox}
 }
 
@@ -81,10 +82,10 @@
   \leavevmode%
   \hbox{%
   \begin{beamercolorbox}[wd=.25\paperwidth,ht=2ex,dp=1ex,center]{WhiteOnBlue}%
-    \usebeamerfont{author in head/foot}\insertshortauthor
+    \usebeamerfont{author in head/foot}\insertshortinstitute
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.5\paperwidth,ht=2ex,dp=1ex,center]{WhiteOnBlue}%
-    \usebeamerfont{title in head/foot}\inserttitle
+    \usebeamerfont{title in head/foot}\insertshortauthor
   \end{beamercolorbox}%
   \begin{beamercolorbox}[wd=.25\paperwidth,ht=2ex,dp=1ex,right]{WhiteOnBlue}%
     \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
@@ -98,9 +99,9 @@
   \leavevmode%
   \vspace{-.23cm}
   \hbox{%
-    \begin{beamercolorbox}[wd=\paperwidth,ht=0.3\paperheight]{frametitle}
+    \begin{beamercolorbox}[wd=\paperwidth,ht=0.25\paperheight]{BlueOnWhite}
       \begin{center}
-        \includegraphics[height=0.3\paperheight]{BSU-theme/BSU-small-by} 
+        \includegraphics[height=0.2\paperheight]{BSU-theme/BSU-main-by} 
         \vspace{-0.025\paperheight}
       \end{center}
    \end{beamercolorbox}}

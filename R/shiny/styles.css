@@ -1,7 +1,7 @@
 #rstudio_branding_bar {
-	display: none;
+	display: none !important; 
 }
 
 #rstudio_branding_bar_spacer {
-  display: none;
-}
+   display: none !important;
+} 

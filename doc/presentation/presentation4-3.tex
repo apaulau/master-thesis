@@ -256,15 +256,11 @@
 
 \begin{frame}
   \frametitle{Анализ остатков}
-    Визуально и проверкой тестов показана близость выборочного распределения к нормальному \resnormaldistr.
-
-    \vspace{0.5em}
-
-    По графику и тестом Льюнга-Бокса сделано заключение об отсутствии значимых автокорреляций.
-
-    \vspace{0.5em}
-
-    Также было отмечено, что значения имеют небольшую амплитуду и имеют тенденцию к затуханию. Это говорит о стационарности в широком смысле, что показал расширенный тест Дики-Фуллера.
+  \begin{itemize}
+    \item Визуально и проверкой тестов показана близость выборочного распределения к нормальному \resnormaldistr;
+    \item По графику и тестом Льюнга-Бокса сделано заключение об отсутствии значимых автокорреляций;
+    \item Значения имеют небольшую амплитуду и имеют тенденцию к затуханию. Это говорит о стационарности в широком смысле, что показал расширенный тест Дики-Фуллера.
+  \end{itemize}
 \end{frame}
 
 \subsection{Модуль вариограммного анализа}
@@ -272,32 +268,32 @@
 \begin{frame}
   \frametitle{Визуальный подход}
   \begin{columns}[c]
-  \column{3in}
+  \column{0.5\linewidth}
     Прогнозные значения $ X^{*}(t) $ вычисляются по формуле:
     \begin{equation*}
       X^{*}(t) = y(t) + \varepsilon^{*}(t),
     \end{equation*}
     где $ y(t) $ --- тренд, $ \varepsilon^{*}(t) $ --- значения, вычисленные с помощью кригинга.
 
-    \vspace{0.5em}
-
-    Для оценки качества модели используются
-    \begin{itemize}
-      \item коэффициент корреляции $ r_{\varepsilon\varepsilon^{*}} $
-      \item Среднеквадратическая ошибка
-        \begin{equation}
-        \label{eq:mse}
-          MSE = \frac{1}{n} \sum_{i=1}^{n} (\varepsilon(t_i) - \varepsilon^{*}(t_i))^2,
-        \end{equation}
-        где $ n $ --- объём выборки
-    \end{itemize}
-
-  \column{3in}
+  \column{0.5\linewidth}
     \begin{figure}[h]
     \includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}
     \caption{Оценка семивариограммы Матерона}
   \end{figure}
   \end{columns}
+  
+  \vspace{1em}
+  
+  Для оценки качества модели используются
+  \begin{itemize}
+    \item коэффициент корреляции $ r_{\varepsilon\varepsilon^{*}} $
+    \item Среднеквадратическая ошибка
+    \begin{equation}
+      \label{eq:mse}
+      MSE = \frac{1}{n} \sum_{i=1}^{n} (\varepsilon(t_i) - \varepsilon^{*}(t_i))^2,
+    \end{equation}
+    где $ n $ --- объём выборки
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -333,10 +329,12 @@
   \frametitle{\large\subsecname}
   \framesubtitle{Линейная модель}
   \begin{columns}[c]
-  \column{3in}
+  \column{0.42\linewidth}
+  {\footnotesize
   \begin{equation}\begin{gathered}
   \label{eq:lin}
-    \widehat{\gamma}(h) = c_0 + Lin(h) = \left\{
+    \widehat{\gamma}(h) = c_0 + Lin(h) = \\
+    = \left\{
    \begin{array}{l l}
      c_0 + b \cdot h, & h > 0, \\
      c_0, & h \leq 0,
@@ -356,8 +354,9 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = -0.09129, \quad MSE = 6.324
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.58\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-modeled.png} \\
@@ -410,7 +409,8 @@
   \frametitle{\large\subsecname}
   \framesubtitle{Линейная модель с порогом}
   \begin{columns}[c]
-  \column{3in}
+  \column{0.44\linewidth}
+  {\footnotesize
   \begin{equation}\begin{gathered}
   \label{eq:linsill}
     \widehat{\gamma}(h) = c_0 + c \cdot Lin(h, a) = \\
@@ -434,14 +434,15 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = 0.152, \quad MSE = 18.69
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.56\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_3(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_2(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_3(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_2(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -450,7 +451,8 @@
   \frametitle{\large\subsecname}
   \framesubtitle{Сферическая модель}
   \begin{columns}[c]
-  \column{3in}
+  \column{0.44\linewidth}
+  {\footnotesize
   \begin{equation}\begin{gathered}
   \label{eq:sph}
     \widehat{\gamma}(h) = c_0 + c \cdot Sph(h, a) = \\
@@ -474,14 +476,15 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = -0.009, \quad MSE = 5.396
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.56\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_3(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_3(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -490,11 +493,13 @@
   \frametitle{\large\subsecname}
   \framesubtitle{Периодическая модель}
   \begin{columns}[c]
-  \column{3in}
-  \begin{equation}
+  \column{0.44\linewidth}
+  {\footnotesize
+  \begin{eqnarray}
   \label{eq:per}
-    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
-  \end{equation}
+    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = \nonumber \\
+    = 1 - cos(\frac{2 \pi h}{a}),
+  \end{eqnarray}
   где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
 
   \vspace{0.5em}
@@ -509,50 +514,53 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = 0.404, \quad MSE = 4.369
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.56\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
 
 \subsection{Автоматический подход}
 
-\begin{frame}
-  \frametitle{\large\subsecname}
-  \framesubtitle{Оценки семивариограммы}
-  \begin{figure}[h]
-    \begin{minipage}[h]{0.49\linewidth}
-      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
-      \caption{Оценка Матерона}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[h]{0.49\linewidth}
-      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/robust-variogram.png}}
-      \caption{Оценка Кресси-Хоккинса}
-    \end{minipage}
-  \end{figure}
-  Робастная оценка семивариограммы Кресси-Хокинса:
-  \begin{equation}
-  \label{eq:cressie}
-    2 \tilde{\gamma}(h) = \frac{1}{n - h} (\sum_{t = 1}^{n - h} | X(t + h) - X(t) |^{\frac{1}{2}} )^4 / (0.457 + \frac{0.494}{n - h} + \frac{0.045}{(n - h)^2}), \quad h = \overline{0, n - 1}.
-  \end{equation}
-\end{frame}
+%\begin{frame}
+%  \frametitle{\large\subsecname}
+%  \framesubtitle{Оценки семивариограммы}
+%  \begin{figure}[h]
+%    \begin{minipage}[h]{0.49\linewidth}
+%      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
+%      \caption{Оценка Матерона}
+%    \end{minipage}
+%    \hfill
+%    \begin{minipage}[h]{0.49\linewidth}
+%      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/robust-variogram.png}}
+%      \caption{Оценка Кресси-Хоккинса}
+%    \end{minipage}
+%  \end{figure}
+%  Робастная оценка семивариограммы Кресси-Хокинса:
+%  \begin{equation}
+%  \label{eq:cressie}
+%    2 \tilde{\gamma}(h) = \frac{1}{n - h} (\sum_{t = 1}^{n - h} | X(t + h) - X(t) |^{\frac{1}{2}} )^4 / (0.457 + \frac{0.494}{n - h} + \frac{0.045}{(n - h)^2}), \quad h = \overline{0, n - 1}.
+%  \end{equation}
+%\end{frame}
 
 \begin{frame}
-  \frametitle{\large\secname}
+  \frametitle{\large\subsecname}
   \framesubtitle{Волновая модель}
   \begin{columns}[c]
-  \column{3in}
-  \begin{equation}
+  \column{0.44\linewidth}
+  {\footnotesize
+  \begin{eqnarray}
   \label{eq:wave}
-    \widehat{\gamma}(h) = c_0 + c \cdot Wav(h, a) = 1 - \frac{a}{h} \cdot sin(\frac{h}{a}),
-  \end{equation}
+    \widehat{\gamma}(h) = c_0 + c \cdot Wav(h, a) = \nonumber \\
+    = 1 - \frac{a}{h} \cdot sin(\frac{h}{a}),
+  \end{eqnarray}
   где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
 
   \vspace{0.5em}
@@ -567,23 +575,25 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = -0.03, \quad MSE = 4.20
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.56\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_6(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_6(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\large\secname}
+  \frametitle{\large\subsecname}
   \framesubtitle{Периодическая модель}
   \begin{columns}[c]
-  \column{3in}
+  \column{0.44\linewidth}
+  {\footnotesize
   \begin{equation*}
     \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
   \end{equation*}
@@ -601,21 +611,22 @@
   \begin{equation*}
     r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
   \end{equation*}
+  }
 
-  \column{3in}
+  \column{0.56\linewidth}
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_7(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_6(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_7(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_6(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
 
 \begin{frame}
+\begin{footnotesize}
   \frametitle{Оценка вариограммы}
-  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
   \begin{Definition}
     \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{Z} $, называется функция вида
     \begin{equation}
@@ -625,46 +636,58 @@
 
     При этом функция $ \gamma (h), h \in \mathbb{Z} $, называется \textit{семивариограммой}.
   \end{Definition}
+  
+  \vspace{0.5em}
+  
+  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
+\end{footnotesize}
+  
+  \vspace{0.5em}
+  
   В качестве оценки вариограммы рассматривается статистика, предложенная Матероном:
   \begin{equation}
-    2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
+    2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1}.
   \end{equation}
 \end{frame}
 
 \begin{frame}
   \frametitle{Первые два момента оценки вариограммы}
 \begin{Theorem}
+\begin{footnotesize}
   Для оценки $ 2 \tilde{\gamma}(h) $ имеют место следующие соотношения:
+\end{footnotesize}
   \begin{equation*}
     E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h), % DIRTY HACK
   \end{equation*}
-  \begin{equation*}
-    cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) =
-  \end{equation*}
-  \begin{equation*}
-    = \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
-  \end{equation*}
+  \begin{eqnarray*}
+    cov(2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2)) = \frac{2}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \\
+    + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
+  \end{eqnarray*}
   \begin{equation*}
     V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2,
   \end{equation*}
-  где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+\begin{footnotesize}
+  где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t) $, $ ~h,~ h_1,~ h_2 = \overline{0, n - 1} $.
+\end{footnotesize}
 \end{Theorem}
 \end{frame}
 
 \begin{frame}
   \frametitle{Асимптотическое поведение оценки вариограммы}
   \begin{Theorem}
-  Если имеет место соотношение
+  \begin{footnotesize}
+  Если имеет место соотношение $ \sum_{h = -\infty}^{+\infty} \vert \gamma(h) \vert < +\infty $, то
+  \end{footnotesize}
+  \begin{eqnarray*}
+    \lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \nonumber \\
+    = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2,
+  \end{eqnarray*}
   \begin{equation*}
-    \sum_{h = -\infty}^{+\infty} \vert \gamma(h) \vert < +\infty, \text{то}
+    \lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2,
   \end{equation*}
-  \begin{equation*}
-    \lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2,
-  \end{equation*}
-  \begin{equation*}
-    \lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
-  \end{equation*}
-  где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
+  \begin{footnotesize}
+  где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t) $, $ h, h_1, h_2 = \overline{0, n - 1} $.
+  \end{footnotesize}
 \end{Theorem}
 \end{frame}
 
@@ -686,25 +709,36 @@
   \frametitle{Заключение}
   \setlength{\itemindent}{-.5in}
   \begin{columns}
-  \column{6.2in}
+  \column{1.1\linewidth}
   \vspace{-9pt}
   \begin{enumerate}
-    \item Проведён предварительный статистический анализ данных
+    \item Проведён предварительный статистический анализ данных:
       \begin{itemize}
-        \item показана близость выборочного распределения к нормальному \normaldistr
-        \item выявлена умеренная положительная зависимость температуры от времени
-        \item построена линейная регрессионная модель
-        \item вычислен и исследован ряд остатков
+        \item показана близость выборочного распределения к нормальному \normaldistr ;
+        \item выявлена умеренная положительная зависимость температуры от времени;
+        \item построена линейная регрессионная модель;
+        \item вычислен и исследован ряд остатков;
       \end{itemize}
-    \item Выполнен вариограммный анализ
+    \item Выполнен вариограммный анализ:
       \begin{itemize}
-        \item Рассмотрены два подхода по подбору моделей семивариограмм: \small{визуальный и автоматический}
-        \item Визуальным подходом показано, что линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6} являются наилучшими.
-        \item Автоматическим подходом показано, что волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10} являются наилучшими.
+        \item Рассмотрены два подхода по подбору моделей семивариограмм: \small{визуальный и автоматический};
+        \item Визуальным подходом показано, что линейная модель с порогом \eqref{eq:gamma4} и периодическая \eqref{eq:gamma6} являются наилучшими;
+        \item Автоматическим подходом показано, что волновая \eqref{eq:gamma9} и периодическая \eqref{eq:gamma10} являются наилучшими;
       \end{itemize}
-    \item По различным моделям построены прогнозные значения методом кригинг. Исследована зависимость точности прогноза от оценки вариограммы и модели.
-    \item Исследованы статистические свойства оценки вариограммы гауссовского случайного процесса. Показана несмещённость и состоятельность в среднеквадратическом смысле оценки вариограммы \eqref{eq:matheron}
-    \item Реализовано программное обеспечение для решения класса задач, аналогичных исходной
+  \end{enumerate}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Заключение}
+  \setlength{\itemindent}{-.5in}
+  \begin{columns}
+  \column{1.1\linewidth}
+  \vspace{-9pt}
+  \begin{enumerate}
+    \item[3.] По различным моделям построены прогнозные значения методом кригинг. Исследована зависимость точности прогноза от оценки вариограммы и модели;
+    \item[4.] Исследованы статистические свойства оценки вариограммы гауссовского случайного процесса. Показана несмещённость и состоятельность в среднеквадратическом смысле оценки вариограммы \eqref{eq:matheron};
+    \item[5.] Реализовано программное обеспечение для решения класса задач, аналогичных исходной.
   \end{enumerate}
   \end{columns}
 \end{frame}
@@ -739,16 +773,10 @@
       \newblock {\em R Cookbook (O’Reilly Cookbooks)}.
       \newblock O’Reilly Media, 1 edition, 2011.
     \beamertemplatearticlebibitems
-    \bibitem{dutter}
-      Rudolf~Dutter
-      \newblock On Robust Estimation of Variograms in Geostatistics
-      \newblock {\em Robust Statistics, Data Analysis, and Computer Intensive Methods}, 109:153-171, 1996.
-    \beamertemplatearticlebibitems
     \bibitem{mingoti}
       Mingoti~Sueli~Aparecida, Rosa~Gilmar
       \newblock A note on robust and non-robust variogram estimators
       \newblock {\em Rem: Revista Escola de Minas.}, Vol. 61:87–95, 2008.
-    \beamertemplatebookbibitems
   \end{thebibliography}
 \end{scriptsize}
 \end{frame}

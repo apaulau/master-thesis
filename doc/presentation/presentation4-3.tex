@@ -266,7 +266,7 @@
 \subsection{Модуль вариограммного анализа}
 
 \begin{frame}
-  \frametitle{Визуальный подход}
+  \frametitle{Вариограммный анализ}
   \begin{columns}[c]
   \column{0.5\linewidth}
     Прогнозные значения $ X^{*}(t) $ вычисляются по формуле:
@@ -552,6 +552,42 @@
 
 \begin{frame}
   \frametitle{\large\subsecname}
+  \framesubtitle{Периодическая модель}
+  \begin{columns}[c]
+  \column{0.44\linewidth}
+  {\footnotesize
+  \begin{equation*}
+    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
+  \end{equation*}
+  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
+
+  \vspace{0.5em}
+
+  Подобранная модель:
+  \begin{equation}
+  \label{eq:gamma10}
+    \widehat{\gamma}_5(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
+  \end{equation}
+
+  Показатели качества
+  \begin{equation*}
+    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
+  \end{equation*}
+  }
+
+  \column{0.56\linewidth}
+  \vspace{-14.5pt}
+  \begin{figure}[H]
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
+    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
+    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
+  \end{figure}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{\large\subsecname}
   \framesubtitle{Волновая модель}
   \begin{columns}[c]
   \column{0.44\linewidth}
@@ -568,7 +604,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma9}
-    \widehat{\gamma}_5(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
+    \widehat{\gamma}_6(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
   \end{equation}
 
   Показатели качества
@@ -581,44 +617,8 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
-    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
-  \end{figure}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
-  \frametitle{\large\subsecname}
-  \framesubtitle{Периодическая модель}
-  \begin{columns}[c]
-  \column{0.44\linewidth}
-  {\footnotesize
-  \begin{equation*}
-    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
-  \end{equation*}
-  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
-
-  \vspace{0.5em}
-
-  Подобранная модель:
-  \begin{equation}
-  \label{eq:gamma10}
-    \widehat{\gamma}_6(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
-  \end{equation}
-
-  Показатели качества
-  \begin{equation*}
-    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
-  \end{equation*}
-  }
-
-  \column{0.56\linewidth}
-  \vspace{-14.5pt}
-  \begin{figure}[H]
-    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
     \caption{Модель семивариограммы $\widehat{\gamma}_6(h)$}
-    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-rob-5-cross-prediction.png}
     \caption{Прогноз по модели $\widehat{\gamma}_6(h)$}
   \end{figure}
   \end{columns}
@@ -781,24 +781,11 @@
 \end{scriptsize}
 \end{frame}
 
-\begin{frame}[c]
-\begin{center}
-\frametitle{\LARGE Спасибо за внимание!}
-
-{\LARGE \inserttitle}
-
-\bigskip
-
-{\insertauthor}
-
-\bigskip\bigskip
-
-{\insertinstitute}
-
-\bigskip\bigskip
-
-{\large \insertdate}
-\end{center}
+\begin{frame}
+  \frametitle{\null}
+  \begin{center}
+    {\Huge Спасибо за внимание!}
+  \end{center}
 \end{frame}
 
 \end{document}

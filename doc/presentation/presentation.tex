@@ -98,9 +98,9 @@
   \frametitle{Постановка задачи}
   \begin{enumerate}
     \item Предварительный статистический анализ гидроэкологических данных озера Баторино;
-    \item Вариограммный анализ временного ряда: построение оценок семивариограммы, подбор моделей семивариограммы.
-    \item Исследование статистических свойств оценки вариограммы гауссовского случайного процесса.
-    \item Прогнозирование значений временного ряда с помощью интерполяционного метода кригинг.
+    \item Вариограммный анализ временного ряда: построение оценок семивариограммы, подбор моделей семивариограммы;
+    \item Исследование статистических свойств оценки вариограммы гауссовского случайного процесса;
+    \item Прогнозирование значений временного ряда с помощью интерполяционного метода кригинг;
     \item Исследование точности прогноза в зависимости от оценки вариограммы и модели вариограммы, лежащих в основе метода кригинг.
   \end{enumerate}
 \end{frame}
@@ -249,15 +249,11 @@
 
 \begin{frame}
   \frametitle{Анализ остатков}
-    Визуально и проверкой тестов показана близость выборочного распределения к нормальному \resnormaldistr.
-
-    \vspace{0.5em}
-
-    По графику и тестом Льюнга-Бокса сделано заключение об отсутствии значимых автокорреляций.
-
-    \vspace{0.5em}
-
-    Также было отмечено, что значения имеют небольшую амплитуду и имеют тенденцию к затуханию. Это говорит о стационарности в широком смысле, что показал расширенный тест Дики-Фуллера.
+  \begin{itemize}
+    \item Визуально и проверкой тестов показана близость выборочного распределения к нормальному \resnormaldistr;
+    \item По графику и тестом Льюнга-Бокса сделано заключение об отсутствии значимых автокорреляций;
+    \item Значения имеют небольшую амплитуду и имеют тенденцию к затуханию. Это говорит о стационарности в широком смысле, что показал расширенный тест Дики-Фуллера.
+  \end{itemize}
 \end{frame}
 
 \subsection{Модуль вариограммного анализа}
@@ -432,9 +428,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_3(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_2(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/lin-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_3(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_2(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -472,9 +468,9 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_3(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/sph-fit-adapt-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_3(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
@@ -507,38 +503,72 @@
   \vspace{-14.5pt}
   \begin{figure}[H]
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
+    \caption{Модель семивариограммы $\widehat{\gamma}_4(h)$}
     \includegraphics[width=0.9\linewidth]{../../figures/variogram/per-fit-cv-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
+    \caption{Прогноз по модели $\widehat{\gamma}_4(h)$}
   \end{figure}
   \end{columns}
 \end{frame}
 
 \subsection{Автоматический подход}
 
+% \begin{frame}
+%   \frametitle{\large\subsecname}
+%   \framesubtitle{Оценки семивариограммы}
+%   \begin{figure}[h]
+%     \begin{minipage}[h]{0.49\linewidth}
+%       \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
+%       \caption{Оценка Матерона}
+%     \end{minipage}
+%     \hfill
+%     \begin{minipage}[h]{0.49\linewidth}
+%       \center{\includegraphics[width=1\linewidth]{../../figures/variogram/robust-variogram.png}}
+%       \caption{Оценка Кресси-Хоккинса}
+%     \end{minipage}
+%   \end{figure}
+%   Робастная оценка семивариограммы Кресси-Хокинса:
+%   \begin{equation}
+%   \label{eq:cressie}
+%     2 \tilde{\gamma}(h) = \frac{1}{n - h} (\sum_{t = 1}^{n - h} | X(t + h) - X(t) |^{\frac{1}{2}} )^4 / (0.457 + \frac{0.494}{n - h} + \frac{0.045}{(n - h)^2}), \quad h = \overline{0, n - 1}.
+%   \end{equation}
+% \end{frame}
+
 \begin{frame}
   \frametitle{\large\subsecname}
-  \framesubtitle{Оценки семивариограммы}
-  \begin{figure}[h]
-    \begin{minipage}[h]{0.49\linewidth}
-      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/lin-variogram.png}}
-      \caption{Оценка Матерона}
-    \end{minipage}
-    \hfill
-    \begin{minipage}[h]{0.49\linewidth}
-      \center{\includegraphics[width=1\linewidth]{../../figures/variogram/robust-variogram.png}}
-      \caption{Оценка Кресси-Хоккинса}
-    \end{minipage}
-  \end{figure}
-  Робастная оценка семивариограммы Кресси-Хокинса:
+  \framesubtitle{Периодическая модель}
+  \begin{columns}[c]
+  \column{3in}
+  \begin{equation*}
+    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
+  \end{equation*}
+  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
+
+  \vspace{0.5em}
+
+  Подобранная модель:
   \begin{equation}
-  \label{eq:cressie}
-    2 \tilde{\gamma}(h) = \frac{1}{n - h} (\sum_{t = 1}^{n - h} | X(t + h) - X(t) |^{\frac{1}{2}} )^4 / (0.457 + \frac{0.494}{n - h} + \frac{0.045}{(n - h)^2}), \quad h = \overline{0, n - 1}.
+  \label{eq:gamma10}
+    \widehat{\gamma}_5(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
   \end{equation}
+
+  Показатели качества
+  \begin{equation*}
+    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
+  \end{equation*}
+
+  \column{3in}
+  \vspace{-14.5pt}
+  \begin{figure}[H]
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
+    \caption{Модель семивариограммы $\widehat{\gamma}_5(h)$}
+    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
+    \caption{Прогноз по модели $\widehat{\gamma}_5(h)$}
+  \end{figure}
+  \end{columns}
 \end{frame}
 
 \begin{frame}
-  \frametitle{\large\secname}
+  \frametitle{\large\subsecname}
   \framesubtitle{Волновая модель}
   \begin{columns}[c]
   \column{3in}
@@ -553,7 +583,7 @@
   Подобранная модель:
   \begin{equation}
   \label{eq:gamma9}
-    \widehat{\gamma}_5(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
+    \widehat{\gamma}_6(h) = 4.11 + 1.65 \cdot Wav(h, 3.59),
   \end{equation}
 
   Показатели качества
@@ -573,42 +603,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{\large\secname}
-  \framesubtitle{Периодическая модель}
-  \begin{columns}[c]
-  \column{3in}
-  \begin{equation*}
-    \widehat{\gamma}(h) = c_0 + c \cdot Per(h, a) = 1 - cos(\frac{2 \pi h}{a}),
-  \end{equation*}
-  где $ c_0 $ -- эффект самородков, $ c $ -- порог, $ a $ -- ранг.
-
-  \vspace{0.5em}
-
-  Подобранная модель:
-  \begin{equation}
-  \label{eq:gamma10}
-    \widehat{\gamma}_6(h) = 3.8 + 0.32 \cdot Per(h, 1.3)
-  \end{equation}
-
-  Показатели качества
-  \begin{equation*}
-    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
-  \end{equation*}
-
-  \column{3in}
-  \vspace{-14.5pt}
-  \begin{figure}[H]
-    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-modeled.png} \\
-    \caption{Модель семивариограммы $\widehat{\gamma}_7(h)$}
-    \includegraphics[width=0.9\linewidth]{../../figures/variogram/auto-class-18-cross-prediction.png}
-    \caption{Прогноз по модели $\widehat{\gamma}_7(h)$}
-  \end{figure}
-  \end{columns}
-\end{frame}
-
-\begin{frame}
   \frametitle{Оценка вариограммы}
-  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
   \begin{Definition}
     \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{Z} $, называется функция вида
     \begin{equation}
@@ -618,6 +613,13 @@
 
     При этом функция $ \gamma (h), h \in \mathbb{Z} $, называется \textit{семивариограммой}.
   \end{Definition}
+
+  \vspace{0.5em}
+
+  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
+
+  \vspace{0.5em}
+
   В качестве оценки вариограммы рассматривается статистика, предложенная Матероном:
   \begin{equation}
     2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
@@ -746,24 +748,11 @@
 \end{scriptsize}
 \end{frame}
 
-\begin{frame}[c]
-\begin{center}
-\frametitle{\LARGE Спасибо за внимание!}
-
-{\LARGE \inserttitle}
-
-\bigskip
-
-{\insertauthor}
-
-\bigskip\bigskip
-
-{\insertinstitute}
-
-\bigskip\bigskip
-
-{\large \insertdate}
-\end{center}
+\begin{frame}
+  \frametitle{\null}
+  \begin{center}
+    {\Huge Спасибо за внимание!}
+  \end{center}
 \end{frame}
 
 \end{document}

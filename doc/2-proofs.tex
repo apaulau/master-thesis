@@ -9,19 +9,19 @@
 
 Наблюдается процесс $ X(t),~ t \in \mathbb{Z} $, и регистрируются наблюдения $ X(1), X(2), \dots, X(n) $ в последовательные моменты времени $ 1, 2, \dots, n $.
 
-В качестве оценки вариограммы рассмотрим статистику, предложенную Матероном \cite{matheron1980}:
+В качестве оценки вариограммы рассмотрим статистику, предложенную Матероном~\cite{matheron1980}:
 \begin{equation}
 \label{eq:var_estimation}
-	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
+	2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}{(X(t + h) - X(t))}^2, \quad h = \overline{0, n - 1},
 \end{equation}
 при этом положим $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}$; $ \tilde{\gamma}(h) = 0, \vert h \vert \ge n $.
 
 \section{Первые два момента оценки вариограммы} % (fold)
 \label{sec:variogram_moments}
 
-Найдем выражения для первых двух моментов оценки вариограммы \eqref{eq:var_estimation}.
+Найдем выражения для первых двух моментов оценки вариограммы~\eqref{eq:var_estimation}.
 \begin{Theorem}
-	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством \eqref{eq:var_estimation}, имеют место следующие соотношения:
+	Для оценки $ 2 \tilde{\gamma}(h) $, представленной равенством~\eqref{eq:var_estimation}, имеют место следующие соотношения:
 	\begin{equation}
 	\label{eq:est_ex}
 		E \{2 \tilde{\gamma}(h) \} = 2 \gamma(h), % DIRTY HACK
@@ -31,66 +31,66 @@
 	\end{equation*}
 	\begin{equation}
 	\label{eq:est_cov}
-		 \times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
+		 \times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} {(\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))}^2,
 	\end{equation}
 	\begin{equation}
 	\label{eq:est_var}
-		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{(n-h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )^2,
+		V \{ 2 \tilde{\gamma}(h) \} = \frac{2}{{(n - h)}^2}\sum_{t,s = 1}^{n - h} {( \gamma(t - h - s) + \gamma(t + h - s) - 2\gamma(t - s) )}^2,
 	\end{equation}
 	где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
 \end{Theorem}
 \begin{proof}
 
-Вычислим первый момент оценки \eqref{eq:var_estimation}, используя свойства математического ожидания:
+Вычислим первый момент оценки~\eqref{eq:var_estimation}, используя свойства математического ожидания:
 \begin{equation*}
-	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ (X(t + h) - X(t))^2 \}.
+	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h} {(X(t + h) - X(t))}^2 \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ { (X(t + h) - X(t)) }^2 \}.
 \end{equation*}
 
-Из равенства \eqref{eq:E_diff_inc} получаем, что
+Из равенства~\eqref{eq:E_diff_inc} получаем, что
 \begin{equation*}
 	E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} 2 \gamma(h) = 2 \gamma(h).
 \end{equation*}
 
-Таким образом, оценка \eqref{eq:var_estimation} является \textbf{несмещённой} оценкой вариограммы.
+Таким образом, оценка~\eqref{eq:var_estimation} является \textbf{несмещённой} оценкой вариограммы.
 
 Найдём второй момент оценки вариограммы.
 \begin{equation}\begin{gathered}
 \label{eq:cov_support}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = E\{ (2 \tilde{\gamma}(h_1) - E\{ 2 \tilde{\gamma}(h_1) \}) (2 \tilde{\gamma}(h_2) - E\{ 2 \tilde{\gamma}(h_2) \}) \} = \\
-	= E\{ \frac{1}{n - h_1} \sum_{t = 1}^{n - h_1}((X(t + h_1) - X(t))^2 - E\{ (X(t + h_1) - X(t))^2 \}) \times \\
-	\times \frac{1}{n - h_2} \sum_{s = 1}^{n - h_2}((X(s + h_2) - X(s))^2 - E\{ (X(s + h_2) - X(s))^2 \}) \} = \\
-	= \frac{1}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
+	= E\{ \frac{1}{n - h_1} \sum_{t = 1}^{n - h_1}({(X(t + h_1) - X(t))}^2 - E\{ {(X(t + h_1) - X(t))}^2 \}) \times \\
+	\times \frac{1}{n - h_2} \sum_{s = 1}^{n - h_2}({(X(s + h_2) - X(s))}^2 - E\{ {(X(s + h_2) - X(s))}^2 \}) \} = \\
+	= \frac{1}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} cov\{ {(X(t + h_1) - X(t))}^2, {(X(s + h_2) - X(s))}^2 \}
 \end{gathered}\end{equation}
 % Здесь переход можно делать потому (и это очень легко!), что произведение сумм равняется сумме от произведений!
 
-Из определения \ref{def:corr_cov} нормированной ковариационной функции получаем, что
+Из определения~\ref{def:corr_cov} нормированной ковариационной функции получаем, что
 \begin{equation*}\begin{gathered}
 	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} =  \\
 	= corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} \times \\
 	\times \sqrt{V\{ (X( t + h_1) - X(t))^2 \} V\{ (X(s + h_2) - X(s))^2 \}}
 \end{gathered}\end{equation*}
 
-Принимая во внимание \eqref{eq:V_diff_inc} и предыдущее соотношение, из \eqref{eq:cov_support} получаем:
+Принимая во внимание~\eqref{eq:V_diff_inc} и предыдущее соотношение, из~\eqref{eq:cov_support} получаем:
 \begin{equation*}\begin{gathered}
 	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}
 \end{gathered}\end{equation*}
 
-Далее воспользуемся леммой 1 из \cite{tsekhavaya-brest}:
+Далее воспользуемся леммой 1 из~\cite{tsekhavaya-brest}:
 \begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)} \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \})^2 = \\
 	= \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)}\sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} ( \frac{cov\{ X(t + h_1) - X(t), X(s + h_2) - X(s) \}}{\sqrt{V\{ X( t + h_1) - X(t) \} V\{ X(s + h_2) - X(s) \}}} )^2
 \end{gathered}\end{equation*}
 
-Воспользовавшись леммой 3 из \cite{tsekhavaya-brest}, получаем соотношение \eqref{eq:est_cov}:
+Воспользовавшись леммой 3 из~\cite{tsekhavaya-brest}, получаем соотношение~\eqref{eq:est_cov}:
 \begin{gather*}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} (\gamma(t - h_2 - s) + \gamma(t + h_1 - s) - \gamma(t - s) - \gamma(t + h_1 - s - h_2))^2,
 \end{gather*}
 что и требовалось показать.
 
-Отсюда нетрудно получить соотношение \eqref{eq:est_var} для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
+Отсюда нетрудно получить соотношение~\eqref{eq:est_var} для дисперсии оценки вариограммы $ 2 \tilde{\gamma}(h) $, если положить $ h_1 = h_2 = h $:
 \begin{equation*}\begin{gathered}
 	V \{ 2 \tilde{\gamma}(h) \} = \\
 	= \frac{2}{(n - h)^2}\sum_{t,s = 1}^{n - h} ( \gamma(t - h - s) + \gamma(t + h - s) - \gamma(t - s) - \gamma(t + h - s - h) )^2 = \\
@@ -105,7 +105,7 @@
 \section{Асимптотическое поведение моментов второго порядка оценки вариограммы} % (fold)
 \label{sec:new_section}
 
-Исследуем асимптотическое поведение моментов второго порядка оценки \eqref{eq:var_estimation}.
+Исследуем асимптотическое поведение моментов второго порядка оценки~\eqref{eq:var_estimation}.
 
 \begin{Theorem}
 	Если имеет место соотношение
@@ -119,17 +119,17 @@
 	\end{equation*}
 	\begin{equation}
 	\label{eq:asymptotic_cov}
-		= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2,
+		= 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2,
 	\end{equation}
 	\begin{equation}
 	\label{eq:asymptotic_var}
-		\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
+		\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
 	\end{equation}
 	где $ \gamma(h), h \in \mathbb{Z} $, --- семивариограмма процесса $ X(t), t \in \mathbb{Z}$, $ h, h_1, h_2 = \overline{0, n - 1} $.
 \end{Theorem}
 \begin{proof}
 
-В \eqref{eq:est_cov} сделаем следующую замену переменных
+В~\eqref{eq:est_cov} сделаем следующую замену переменных
 \begin{equation*}
 	t = t, \quad m = t - s.
 \end{equation*}
@@ -199,10 +199,10 @@
 	\end{tikzpicture}
 
 	\caption{Области суммирования после замены переменных}
-	\label{fig:label}
+\label{fig:label}
 \end{figure}
 
-Рассмотрим первый случай: $h_1 > h_2$. Поменяем порядок суммирования в \eqref{eq:cov_split}.
+Рассмотрим первый случай: $h_1 > h_2$. Поменяем порядок суммирования в~\eqref{eq:cov_split}.
 
 \begin{equation*}\begin{gathered}
 	cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \frac{2}{(n - h_1) (n - h_2)} \times \\
@@ -328,7 +328,7 @@
 	- \frac{2}{n - h_2} \sum_{m = 1}^{n - h_2 - 1} m (\gamma(m + h_2) + \gamma(m - h_1) - \gamma(m) - \gamma(m - h_1 + h_2))^2).
 \end{gathered}\end{equation}
 
-Далее, для доказательства \eqref{eq:asymptotic_cov} оценим разность, используя условие \eqref{eq:var_abs}, выражение \eqref{eq:cov1} и лемму Кронекера \cite{shiryaev1980}:
+Далее, для доказательства~\eqref{eq:asymptotic_cov} оценим разность, используя условие~\eqref{eq:var_abs}, выражение~\eqref{eq:cov1} и лемму Кронекера~\cite{shiryaev1980}:
 \begin{equation}\begin{gathered}
 \label{eq:asyfirst}
 	\vert (n - h_2) cov \{ 2 \tilde{\gamma(h_1)}, 2 \tilde{\gamma(h_2)} \} - \\
@@ -339,7 +339,7 @@
 \end{gathered}\end{equation}
 при $ n \to \infty$.
 
-Рассуждая аналогично, в силу сходимости ряда \eqref{eq:var_abs}, выражения \eqref{eq:cov2} и леммы Кронекера \cite{shiryaev1980}, получаем оценку разности для случая $ h_1 < h_2 $
+Рассуждая аналогично, в силу сходимости ряда~\eqref{eq:var_abs}, выражения~\eqref{eq:cov2} и леммы Кронекера~\cite{shiryaev1980}, получаем оценку разности для случая $ h_1 < h_2 $
 \begin{equation}\begin{gathered}
 \label{eq:asysecond}
 	\vert (n - h_1) cov \{ 2 \tilde{\gamma(h_1)}, 2 \tilde{\gamma(h_2)} \} - \\
@@ -350,15 +350,15 @@
 \end{gathered}\end{equation}
 при $ n \to \infty$.
 
-Тогда, объединяя вместе полученные в \eqref{eq:asyfirst} и \eqref{eq:asysecond} результаты, получаем требуемое предельное соотношение \eqref{eq:asymptotic_cov}:
+Тогда, объединяя вместе полученные в~\eqref{eq:asyfirst} и~\eqref{eq:asysecond} результаты, получаем требуемое предельное соотношение~\eqref{eq:asymptotic_cov}:
 \begin{equation*}\begin{gathered}
 	\lim_{n \to \infty} (n - \min\{ h_1, h_2 \}) cov\{ 2 \tilde{\gamma}(h_1), 2 \tilde{\gamma}(h_2) \} = \\
-	= 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
+	= 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h_2) + \gamma(m + h_1) - \gamma(m) - \gamma(m + h_1 - h_2))^2.
 \end{gathered}\end{equation*}
 
-Нетрудно видеть, что если в \eqref{eq:asymptotic_cov} положить $ h_1 = h_2 = h $, то получаем равенство для дисперсии оценки вариограммы \eqref{eq:asymptotic_var}. Действительно,
+Нетрудно видеть, что если в~\eqref{eq:asymptotic_cov} положить $ h_1 = h_2 = h $, то получаем равенство для дисперсии оценки вариограммы~\eqref{eq:asymptotic_var}. Действительно,
 \begin{equation*}
-	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} \gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
+	\lim_{n \to \infty} (n - h) V\{ 2 \tilde{\gamma}(h) \} = 2 \sum_{m = -\infty}^{+\infty} (\gamma(m - h) + \gamma(m + h) - 2 \gamma(m))^2.
 \end{equation*}
 
 \end{proof}
@@ -373,4 +373,3 @@
 \begin{Remark}
 	В силу показанной в теореме 2.1 несмещённости оценки и вышеприведённого следствия получаем, что оценка вариограммы $ 2 \tilde{\gamma}(h) $ является состоятельной в среднеквадратическом смысле для вариограммы $ 2 \gamma(h), h \in \mathbb{Z} $.
 \end{Remark}
-% section new_section (end)

@@ -6,7 +6,7 @@
 
 \section{Случайный процесс и его основные характеристики}
 
-Для введения следующих понятий воспользуемся \cite{brillinjer-ts, trush-ts}.
+Для введения следующих понятий воспользуемся~\cite{brillinjer-ts, trush-ts}.
 
 Пусть $ (\Omega, \mathcal{F}, P) $ --- вероятностное пространство, где $\Omega$ является произвольным множеством элементарных событий, $\mathcal{F}$ --- сигма-алгеброй подмножеств $\Omega$, и $P$ --- вероятностной мерой.
 
@@ -46,7 +46,7 @@
 \begin{Definition}
 	\textit{Дисперсией} случайного процесса $ X(t), t \in \mathbb{T} $ называется функция вида:
 	\begin{equation*}
-		V(t) = V \{ X(t) \} = E \{ X(t) - m(t) \}^2 = \int \limits_{\mathbb{R}} (x - m(t))^2 \, dF_1(x; t).
+		V(t) = {V \{ X(t) \} = E \{ X(t) - m(t) \}}^2 = \int \limits_{\mathbb{R}} {(x - m(t))}^2 \, dF_1(x; t).
 	\end{equation*}
 \end{Definition}
 
@@ -130,7 +130,7 @@
 	Пусть случайный процесс $ X(t), t \in \mathbb{T} $, является внутренне стационарным и $ \exists E \{ X^2(t) \} < \infty, t \in \mathbb{T} $, тогда он будет стационарным и в широком смысле.
 \end{Theorem}
 \begin{proof}
-	По определению \eqref{eq:innerstat} внутренне стационарного процесса
+По определению~\eqref{eq:innerstat} внутренне стационарного процесса
 	\begin{equation}
 		E \{ X(t_1) - X(t_2) \} = 0,
 	\end{equation}
@@ -140,7 +140,7 @@
 \begin{Remark}
 	Если $ X(t), t \in \mathbb{T} $, --- гауссовский случайный процесс, то
 	\begin{equation*}
-		( X(t + h) - X(t) )^2 = 2 \gamma(h)\chi_1^2,
+		{( X(t + h) - X(t) )}^2 = 2 \gamma(h)\chi_1^2,
 	\end{equation*}
 	где $\chi_1^2$ --- случайная величина, распределенная по закону \textit{хи-квадрат} с одной степенью свободы.
 \end{Remark}
@@ -148,11 +148,11 @@
 При этом
 \begin{equation}
 \label{eq:E_diff_inc}
-	E \{ X(t + h) - X(t) \}^2 = 2 \gamma(h),
+	{E \{ X(t + h) - X(t) \}}^2 = 2 \gamma(h),
 \end{equation}
 \begin{equation}
 \label{eq:V_diff_inc}
-	V \{ X(t + h) - X(t) \}^2 = 2 (2 \gamma(h))^2.
+	{V \{ X(t + h) - X(t) \}}^2 = 2 {(2 \gamma(h))}^2.
 \end{equation}
 
 В дальнейшем в данной работе будем рассматривать случайные процессы с дискретным временем.

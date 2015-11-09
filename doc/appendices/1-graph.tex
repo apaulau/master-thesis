@@ -1,14 +1,6 @@
 %!TEX root = ../thesis.tex
 
 \newpage
-
-\appendix
-
-\section{ Исходные данные}
-\label{c:source_data}
-\input{../out/original/data.tex}
-
-\newpage
 \section{ Графические материалы}
 \label{c:graphs}
 
@@ -115,26 +107,3 @@
 \caption{Прогноз (модель $ \widehat{\gamma}_{10}(h) $)}
 \label{img:auto-class-18-pred}
 \end{figure}
-
-\newpage
-\section{ Результаты вычислений}
-\label{c:app_results}
-
-\input{../out/residual/data.tex}
-\input{../out/variogram/lin-fit-prediction.tex}
-\input{../out/variogram/lin-fit-adapt-prediction.tex}
-\input{../out/variogram/per-fit-cv-prediction.tex}
-\input{../out/variogram/auto-rob-5-prediction.tex}
-
-\newpage
-\section{ Код программы}
-\label{c:listings}
-
-\renewcommand{\thelstlisting}{Г.1}
-\lstinputlisting[language=R, caption=Описательные статистики, label=lst:dstats]{../R/lib/dstats.R}
-% \renewcommand{\thelstlisting}{Г.2}
-% \lstinputlisting[language=R, caption=Основной код программы, label=lst:main]{../R/master.R}
-\renewcommand{\thelstlisting}{Г.2}
-% \lstinputlisting[language=R, caption=Вариограммный анализ, label=lst:variogram]{../R/predictor.R}
-% \renewcommand{\thelstlisting}{Г.3}
-% \lstinputlisting[language=R, caption=Автоматический подбор моделей, label=lst:afv]{../R/lib/afv.R}

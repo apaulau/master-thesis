@@ -43,4 +43,37 @@ batorino.h3 <- df[df$horizont == 3, ]
 ## Because of data absence in period from start till 1972 extract the rest
 batorino.h3 <- batorino.h3[year(batorino.h3$date) > 1972, ]
 
-#$ Дэвис с.110
+## As we extracted data with horizont=3 there's no need in this variable
+batorino.h3$horizont <- NULL
+
+## Also maybe there is no sense in point variable as it could the same sensor but with different name
+batorino.h3$point <- NULL
+
+## Rounding dates down to the nearest month for further aggregating (because we wanna study data by months)
+batorino.h3$date <- floor_date(batorino.h3$date, "month")
+batorino.aggregated <- aggregate(batorino.h3, by = list(group = batorino.h3$date), mean)
+batorino.aggregated$group <- NULL
+
+## Count nums of observation each month
+obsByNums <- sapply(1:12, function(x) dim(batorino.aggregated[month(batorino.aggregated$date) == x, ])[1])
+
+mostVoluminousMonth <- which.max(obsByNums)
+
+dataset <- batorino.aggregated[month(batorino.aggregated$date) == mostVoluminousMonth, ]
+
+## I found that there is gap between 73 and 75 years. So it seems we can have mean mean of neighborhood months for this year
+
+## Get observations in 1974
+batorino.aggregated.1974 <- batorino.aggregated[year(batorino.aggregated$date) == 1974, ]
+
+## Get mean between june and august
+batorino.aggregated.1974.july <- data.frame(rbind(colMeans(batorino.aggregated.1974[(month(batorino.aggregated.1974$date) == 06 | month(batorino.aggregated.1974$date) == 08), -1])))
+batorino.aggregated.1974.july$date <- date('1974-07-01')
+## Add result row to dataset
+dataset <- data.frame(rbind(dataset, batorino.aggregated.1974.july))
+
+## Sort it by date
+dataset <- dataset[order(dataset$date),]
+
+
+ggplot(dataset) + geom_line(aes(date, temperature, col = saturation))

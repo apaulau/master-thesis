@@ -1,0 +1,1347 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"puls",
+				"pulseBar"
+			],
+			[
+				"rende",
+				"renderToMarkup〔function〕"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/home/apaulau/.Xresources",
+			"settings":
+			{
+				"buffer_size": 2592,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "misc/bibliography.tex",
+			"settings":
+			{
+				"buffer_size": 202,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "bibdb.bib",
+			"settings":
+			{
+				"buffer_size": 11421,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "chapters/0-introduction.tex",
+			"settings":
+			{
+				"buffer_size": 5340,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "thesis.sublime-project",
+			"settings":
+			{
+				"buffer_size": 153,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "thesis.tex",
+			"settings":
+			{
+				"buffer_size": 1208,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nMaterial Theme\n--------------\n\n  Material Theme for Sublime Text 3\n  https://github.com/equinusocio/material-theme\n  \n  👉 Version 2.1.3 👈\n  ********************************************************************************\n  \n  🏮 UI THEME\n  \n    ➼ New .pug file icon (Jade will be renamed Pug, more info here https://github.com/pugjs/pug/issues/2184)\n    ➼ Fix some filetype icons.\n  \n  \n  🏮 COLOR SCHEMES\n  \n    ➼ Fix italic comments for the dark scheme\n    ➼ Fix/add italic html tag attributes\n    ➼ Remove italic style from css classnames\n",
+			"settings":
+			{
+				"buffer_size": 591,
+				"line_ending": "Unix",
+				"name": "Package Control Messages",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"file": "/home/apaulau/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 272,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "! Holo\n\n!*background: #242424\n!*background: #1A3E53\n*background: #3F3F3F\n*foreground: #FFFFFF\n!*foreground: #CCCCCC\n\n!*fading: 40\n!*fadeColor: #242424\n\n! black\n*color0: #444444 \n*color8: #888888\n\n! red\n*color1: #BF3E3E\n*color9: #FF5353\n\n! green\n*color2: #98AB60\n*color10: #CBE580\n\n! yellow\n*color3: #AB7260\n*color11: #E59980 \n\n! blue\n*color4: #6099AC\n*color12: #80CCE6\n\n! magenta\n*color5: #AB6099\n*color13: #E580CC\n\n! cyan\n*color6: #80bab0\n*color14: #add9d1\n\n! white\n*color7: #F1F2F0\n*color15: #FFFFFF\n",
+			"settings":
+			{
+				"buffer_size": 502,
+				"line_ending": "Unix",
+				"name": "! Holo"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "instal",
+		"selected_items":
+		[
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"snippet",
+				"Snippet: titlepage"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"latex",
+				"LaTexTools: Delete temporary files"
+			],
+			[
+				"latex ",
+				"LaTexTools: Delete temporary files"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"isnta",
+				"Package Control: Install Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"remove pac",
+				"Package Control: Remove Package"
+			],
+			[
+				"latexing",
+				"LaTeXing: Jump To PDF"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"disabl",
+				"Package Control: Disable Package"
+			],
+			[
+				"latextoo",
+				"LaTeXTools: View PDF"
+			],
+			[
+				"reconfi",
+				"LaTeXTools: Reconfigure and migrate settings"
+			],
+			[
+				"themr",
+				"Themr: List themes"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"cool",
+				"ColorSchemeSelector: Select Color Scheme"
+			],
+			[
+				"color",
+				"ColorSchemeSelector: Select Color Scheme"
+			],
+			[
+				"isnt",
+				"Package Control: Install Package"
+			],
+			[
+				"isntal",
+				"Package Control: Install Package"
+			],
+			[
+				"isntall",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 529.0
+	},
+	"console":
+	{
+		"height": 132.0,
+		"history":
+		[
+			"node -v",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/apaulau/uni/master-thesis/doc"
+	],
+	"file_history":
+	[
+		"/home/apaulau/.i3/i3status.conf",
+		"/home/apaulau/.config/i3/config",
+		"/home/apaulau/uni/master-thesis/doc/thesis.tex",
+		"/home/apaulau/uni/master-thesis/doc/chapters/1-definitions.tex",
+		"/home/apaulau/.config/ranger/colorschemes/zenburn.py",
+		"/home/apaulau/uni/master-thesis/doc/bsu/style/bsudiplomatitle14.sty",
+		"/home/apaulau/uni/master-thesis/out/original/dstats.tex",
+		"/home/apaulau/uni/master-thesis/doc/bsu/style/bsureport.sty",
+		"/home/apaulau/.Xresources",
+		"/home/apaulau/.config/ranger/rc.conf",
+		"/home/apaulau/uni/master-thesis/doc/trush.tex",
+		"/home/apaulau/.config/sublime-text-3/Packages/LaTeXTools/Default (Linux).sublime-keymap",
+		"/home/apaulau/.config/sublime-text-3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
+		"/home/apaulau/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/tmp/sellpo/logs/sellpo-webapp.log",
+		"/home/apaulau/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/apaulau/.config/awesome/rc.lua",
+		"/home/apaulau/.zshenv",
+		"/home/apaulau/.zshrc",
+		"/home/apaulau/.xsession",
+		"/home/apaulau/.screenlayout/work.sh",
+		"/home/apaulau/.xinitrc",
+		"/home/apaulau/.zsh_history",
+		"/home/apaulau/.xsession-errors",
+		"/home/apaulau/tmp/cv2.tex",
+		"/home/apaulau/tmp/cv.tex",
+		"/tmp/spin/logs/spin-webapp.log",
+		"/tmp/spin/logs/spin-webapp.log.2016-03-13-22",
+		"/tmp/spin/logs/spin-webapp.log.2016-03-02-01",
+		"/home/apaulau/Downloads/Snatch._2000_advanced_ru.srt",
+		"/home/apaulau/.oh-my-zsh/oh-my-zsh.sh",
+		"/home/apaulau/.config/pulse/default.pa",
+		"/home/apaulau/.config/pulse/client.conf",
+		"/home/apaulau/.config/pulse/system.pa",
+		"/home/apaulau/.oh-my-zsh/plugins/archlinux/archlinux.plugin.zsh",
+		"/home/apaulau/.oh-my-zsh/themes/robbyrussell.zsh-theme",
+		"/home/apaulau/.oh-my-zsh/plugins/mvn/mvn.plugin.zsh",
+		"/home/apaulau/.ncmpcpp/config",
+		"/home/apaulau/Dropbox/Магистратура ПКАД 2015/ПКАД Фалейчик/ММиО/Лабораторные работы/ЛР1. Варианты.txt",
+		"/home/apaulau/.config/awesome/themes/multicolor/theme.lua",
+		"/home/apaulau/uni/master-thesis/doc/bibdb.bib",
+		"/home/apaulau/.colors/holo",
+		"/home/apaulau/.config/awesome/apw/widget.lua",
+		"/home/apaulau/Dropbox/Магистратура ПКАД 2015/ПКАД Фалейчик/ЧМиПС/Лабораторные/ЛР2. Варианты.txt",
+		"/home/apaulau/uni/math-acda/nmca/lab01.nb",
+		"/home/apaulau/uni/math-acda/mmocs/lab3_diffev.nb",
+		"/home/apaulau/uni/math-acda/mmocs/2. Хищник-Жертва.nb",
+		"/home/apaulau/.mpd/mpd.conf",
+		"/home/apaulau/.config/mpd/mpd.conf",
+		"/home/apaulau/Dropbox/Магистратура ПКАД 2015/ПКАД Фалейчик/ЧМиПС/Лабораторные/ЛР1. Варианты.txt",
+		"/home/apaulau/uni/math-acda/ЛР0. Варианты.txt",
+		"/home/apaulau/.Xdefaults",
+		"/home/apaulau/uni/math-acda/ЛР0. Основы Wolfram Language.nb",
+		"/home/apaulau/R/x86_64-pc-linux-gnu-library/3.2/stringi/libs/stringi.so",
+		"/home/apaulau/uni/master-thesis/doc/0-introduction.tex",
+		"/home/apaulau/uni/math-acda/mmocs/lab1.nb",
+		"/home/apaulau/uni/master-thesis/doc/doc.sublime-project",
+		"/home/apaulau/.config/sublime-text-3/Packages/User/LaTeXing.sublime-settings",
+		"/home/apaulau/uni/master-thesis/doc/misc/appendices.tex",
+		"/home/apaulau/uni/master-thesis/doc/3-analysis.tex",
+		"/home/apaulau/.config/sublime-text-3/Packages/LaTeXing/LaTeXing.sublime-settings",
+		"/home/apaulau/uni/master-thesis/doc/misc/bibliography.aux",
+		"/home/apaulau/tmp/test.tex",
+		"/home/apaulau/Downloads/Mathematica_10.2.0_Keygen/readme.txt",
+		"/home/apaulau/Downloads/Mathematica_10.2.0_Keygen/Mathematica_10.2.0_Keygen.exe",
+		"/home/apaulau/.config/sublime-text-3/Packages/User/SublimeLinter.sublime-settings",
+		"/home/apaulau/experiments/hexuality/pyxis/app/scss/main.scss",
+		"/home/apaulau/.fonts.conf",
+		"/home/apaulau/.config/compton.conf",
+		"/home/apaulau/tmp/awesome/rc.lua",
+		"/home/apaulau/.xprofile",
+		"/home/apaulau/.config/user-dirs.locale",
+		"/home/apaulau/.config/user-dirs.dirs",
+		"/home/apaulau/.colors/copland",
+		"/home/apaulau/experiments/react-learning/views/index.jsx",
+		"/home/apaulau/experiments/react-learning/program.js",
+		"/home/apaulau/experiments/exdata/ExData_Plotting1/data/child-deaths-koeff.csv",
+		"/home/apaulau/experiments/exdata/ExData_Plotting1/data/household_power_consumption.txt"
+	],
+	"find":
+	{
+		"height": 38.0
+	},
+	"find_in_files":
+	{
+		"height": 104.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"FFFFFF",
+			"191919",
+			"cap",
+			"\n\\begin{equation}\n	G_R(u; \\alpha, C, \\lambda_{+}, \\lambda_{-})\n\\end{equation}",
+			"solr",
+			"--no-startup-id",
+			"DP1",
+			"М",
+			"modify_content_item_att",
+			"modify",
+			"attribute_val",
+			"content_item",
+			"get_content_item_attribute_value(",
+			"get_content_item_attribute_value",
+			"781210",
+			"78201",
+			"get_value_by_attribute_id",
+			"attribute_value",
+			"attri",
+			"781210",
+			"1461287",
+			"146187",
+			"permission",
+			"+f",
+			"+w",
+			"bindsym",
+			"enter",
+			"kbdd",
+			"de_DE",
+			"solr/cata",
+			"health",
+			"sp_stor",
+			"workspace",
+			"set $bg-color            #222222\nset $fg-color            #888888",
+			"mod+h",
+			"popup",
+			"mpd",
+			"ong_list_format",
+			"layout",
+			"magnifi",
+			"pandoc",
+			"fit",
+			"height",
+			"layout",
+			"pop-up",
+			"\n    awful.key({ }, \"XF86MonBrightnessDown\",\n        function ()\n            awful.util.spawn_with_shell(\"xbacklight -dec 10\")\n        end),",
+			"delay_raise",
+			"double",
+			"if client.focus then client.focus:raise()",
+			"if client.focus then client",
+			"size=14",
+			"double",
+			"get_",
+			"update",
+			"modify",
+			"afv",
+			"avf",
+			"href",
+			"<img ",
+			"location_error",
+			"addClas",
+			"addClass",
+			"upload_container",
+			"uploader-wrap",
+			"PickUP",
+			"showLocat",
+			"myweather",
+			"altkey",
+			"global",
+			"sys.",
+			"wall",
+			"Google-chrom",
+			"batwi",
+			"tags[1]",
+			"free",
+			"mymainmenu",
+			"volumewidget",
+			"volumewidget.channel",
+			"pop",
+			"get_item_rela",
+			"get_att",
+			"att",
+			"1/2/2007",
+			"<td></td>"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"3F3F3F",
+			"$nsi",
+			"Ж",
+			"en_US",
+			"raise",
+			"if client.focus then client.focus:delay_raise()",
+			"size=10",
+			"uploader-wrap",
+			"uploader-container",
+			"tags[mouse.screen]"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 6,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/apaulau/.Xresources",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2592,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tabs_extra_last_activated": 1462184997.14,
+							"tabs_extra_last_activated_sheet_index": 0,
+							"tabs_extra_spawned": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "misc/bibliography.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 202,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								86,
+								86
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/LaTeX/LaTeX.sublime-syntax",
+							"tabs_extra_last_activated": 1462185409.17,
+							"tabs_extra_last_activated_sheet_index": 1
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "bibdb.bib",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11421,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11421,
+								11421
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/LaTeX/Bibtex.sublime-syntax",
+							"tabs_extra_last_activated": 1462185173.88,
+							"tabs_extra_last_activated_sheet_index": 2,
+							"tabs_extra_spawned": true,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4997.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "chapters/0-introduction.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5340,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4019,
+								4019
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/LaTeX/LaTeX.sublime-syntax",
+							"tabs_extra_last_activated": 1462185526.22,
+							"tabs_extra_last_activated_sheet_index": 3
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "thesis.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 153,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								141,
+								141
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tabs_extra_last_activated": 1462185349.02,
+							"tabs_extra_last_activated_sheet_index": 4,
+							"tabs_extra_spawned": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "thesis.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1208,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content"
+							],
+							"syntax": "Packages/LaTeX/LaTeX.sublime-syntax",
+							"tab_size": 2,
+							"tabs_extra_last_activated": 1462218738.44,
+							"tabs_extra_last_activated_sheet_index": 5,
+							"tabs_extra_spawned": true,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 591,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								591,
+								591
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_indent": false,
+							"default_dir": "/home/apaulau/uni/master-thesis/doc",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_width": 2,
+							"tabs_extra_last_activated": 1462220350.88,
+							"tabs_extra_last_activated_sheet_index": 6,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/home/apaulau/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 272,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax",
+							"tabs_extra_last_activated": 1462185009.14,
+							"tabs_extra_last_activated_sheet_index": 2,
+							"tabs_extra_spawned": true,
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 502,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								502,
+								502
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"auto_name": "! Holo",
+							"bh_regions":
+							[
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"default_dir": "/home/apaulau/uni/master-thesis/doc",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tabs_extra_last_activated": 1462185009.17,
+							"tabs_extra_last_activated_sheet_index": 3
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 250.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "thesis.sublime-project",
+	"replace":
+	{
+		"height": 72.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"inte",
+				"chapters/0-introduction.tex"
+			],
+			[
+				"bi",
+				"misc/bibliography.tex"
+			],
+			[
+				"into",
+				"chapters/0-introduction.tex"
+			],
+			[
+				"bibl",
+				"misc/bibliography.tex"
+			],
+			[
+				"conf",
+				"~/.config/i3/config"
+			],
+			[
+				"sell",
+				"/tmp/sellpo/logs/sellpo-webapp.log"
+			],
+			[
+				"defi",
+				"chapters/1-definitions.tex"
+			],
+			[
+				"intro",
+				"0-introduction.tex"
+			],
+			[
+				"fulfilment_l",
+				"sellpo/apps/modules/portal-webapp/src/main/webapp/d/account/fbm/fulfillment_locations.jsp"
+			],
+			[
+				"fulfilment_lo",
+				"sellpo/apps/modules/portal-webapp/target/SellerPortal/d/account/fbm/fulfillment_locations.jsp"
+			],
+			[
+				"product_offer",
+				"sellpo/apps/modules/portal-webapp/target/SellerPortal/d/catalog/item/product_offers.jsp"
+			],
+			[
+				"product_off",
+				"sellpo/apps/modules/portal-webapp/src/main/webapp/d/catalog/item/product_offers.jsp"
+			],
+			[
+				"liq",
+				"sellpo/apps/modules/portal-webapp/src/main/webapp/d/inventory/fbs/inventory_liquidate.jsp"
+			],
+			[
+				"liquid",
+				"sellpo/apps/modules/portal-webapp/target/SellerPortal/d/inventory/fbs/inventory_liquidate.jsp"
+			],
+			[
+				"product_offers",
+				"sellpo/apps/modules/portal-webapp/src/main/webapp/d/catalog/item/product_offers.jsp"
+			],
+			[
+				"product_ofer",
+				"sellpo/apps/modules/portal-webapp/target/SellerPortal/d/catalog/item/product_offers.jsp"
+			],
+			[
+				"fulfilm",
+				"sellpo/apps/modules/portal-webapp/src/main/java/com/shc/obu/mp/sellpo/mvc/model/account/fbm/FulfillmentLocationsModel.java"
+			],
+			[
+				"fulfi",
+				"sellpo/apps/modules/portal-webapp/target/SellerPortal/d/account/fbm/fulfillment_locations.jsp"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 528.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 1918.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 247.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

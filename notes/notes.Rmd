@@ -8,3 +8,7 @@ output: html_document
 ### Some notes you want to save and review after some time
 
 * removed bagplot functionality
+
+### Notes with information from T.V.
+
+* Дэвис с.110

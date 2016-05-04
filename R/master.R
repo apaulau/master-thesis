@@ -1,5 +1,5 @@
 ## Cleaning up the workspace
-rm(list = ls(all = TRUE))
+rm(list = ls(all.names = TRUE))
 
 ## Dependencies
 library(ggplot2)  # eye-candy graphs
@@ -12,6 +12,7 @@ library(gstat)    # geostatistics
 library(reshape2) # will see
 
 ## Import local modules
+source("R/getdata.R")
 source("R/lib/plot.R")       # useful functions for more comfortable plotting
 source("R/lib/dstats.R")     # descriptive statistics module
 source("R/lib/misc.R")       # some useful global-use functions
@@ -21,31 +22,25 @@ source("R/lib/ntest.R")      # tests for normality
 source("R/lib/regr.R")
 source("R/lib/measures.R")
 
-## Read the data / pattern: year;temperature
-path.data <-
-  "data/batorino_july.csv" # this for future shiny support and may be choosing multiple data sources
-nrows <- 38
-src  <-
-  read.csv(file = path.data, header = TRUE, sep = ";", nrows = nrows, colClasses = c("numeric", "numeric"), 
-           stringsAsFactors = FALSE)
+## Read the data
+src  <- read()
 
 ## Global use constants
 kDateBreaks <- seq(min(src$year) - 5, max(src$year) + 5, by = 2) # date points for graphs
 
 ## For the reason of prediction estimation and comparison, let cut observations number by 3
-kObservationNum <- length(src[, 1]) - 6
+nrows <- length(src[, 1])
+kObservationNum <- nrows - 6
 WriteCharacteristic(expression = kObservationNum, type = "original", name = "n")
 
 ## Source data as basic time series plot: points connected with line
 plot.source <- DrawDataRepresentation(data = src, filename = "source.png", datebreaks = kDateBreaks)
 
 tmp <- src
-colnames(tmp) <- c("Год", "Температура, ºС")
+colnames(tmp) <- c("Год", "Температура, ºС", "Растворимость кислорода, мг/л", 'Насыщенность, %')
 print(
-  xtable(
-    tmp, caption = "Исходные данные.", label = "table:source", digits = c(0, 0, 2), align = "r|rc|"
-  ),  table.placement = "H", caption.placement = 'top',
-  file = "out/original/data.tex", include.rownames = FALSE
+  xtable(tmp, caption = "Исходные данные.", label = "table:source", digits = c(0, 0, 2, 2, 2), align = "r|rccc|"),
+  table.placement = "H", caption.placement = 'top', file = "out/original/data.tex", include.rownames = FALSE
 )
 
 ## Form the data for research
@@ -83,7 +78,7 @@ WriteTest(sample.grubbs$statistic[1], sample.grubbs$p.value, type = "original", 
 sample.correlation <- cor(x = sample$year, y = sample$temperature)
 WriteCharacteristic(sample.correlation, type = "original", name = "correlation")
 
-WriteTest(sample.correlation * sqrt(kObservationNum - 2) / (1 - sample.correlation ^2), 0, qt(1 - 0.05, kObservationNum - 2), type = "original", name = "student")
+WriteTest(sample.correlation * sqrt(kObservationNum - 2) / (1 - sample.correlation^2), 0, qt(1 - 0.05, kObservationNum - 2), type = "original", name = "student")
 
 ## Pearson's product-moment correlation test. Use time for y as numerical
 sample.ctest <- cor.test(sample$temperature, c(1:kObservationNum), method = "pearson")
@@ -97,7 +92,7 @@ sample.fit <- lm(sample$temperature ~ c(1:kObservationNum))
 linear <- function(x, a, b) a * x + b
 pr.trend <-
   sapply(
-    X = ConvertYearsToNum(src$year[(kObservationNum + 1):nrows]), FUN = linear, 
+    X = ConvertYearsToNum(src$year[(kObservationNum + 1):nrows]), FUN = linear,
     a = sample.fit$coefficients[[2]], b = sample.fit$coefficients[[1]]
   )
 sample.residuals.prediction.trend <-
@@ -111,10 +106,10 @@ pr.mse <- MSE(src$temperature[(kObservationNum + 1):nrows] - pr.trend)
 colnames(sample.residuals.prediction.trend) <- c("", "$X(t)$", "$y(t)$", "$ X(t) - y(t) $")
 print(
   xtable(
-    sample.residuals.prediction.trend, caption = "Сравнение прогнозных значений (модель $ y(t) $)", 
+    sample.residuals.prediction.trend, caption = "Сравнение прогнозных значений (модель $ y(t) $)",
     label = "table:prediction_trend", digits = c(0, 0, 3, 3, 3), align = "rr|ccc"
-  ), 
-  caption.placement = 'top', file = "out/residual/prediction-trend.tex", 
+  ),
+  caption.placement = 'top', file = "out/residual/prediction-trend.tex",
   sanitize.text.function = function(x) {
     x
   }, include.rownames = FALSE

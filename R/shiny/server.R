@@ -30,6 +30,14 @@ nrows <- length(src[, 1])
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
 
+    updateSliderInput(
+        session,
+        "range",
+        min = 1,
+        max = nrows,
+        step = 1
+    )
+
     minRange <- reactive({
         input$range[1]
     })
@@ -78,8 +86,7 @@ shinyServer(function(input, output, session) {
         add_axis(
             "x",
             title = "Год наблюдения",
-            format = "d",
-            properties = axis_props(labels = list(angle = 45, align = "left"))
+            format = "d"
         ) %>%
         add_axis("y", title = "Температура, ºС") %>%
         add_tooltip(function(df)
@@ -88,35 +95,36 @@ shinyServer(function(input, output, session) {
         set_options(width = "auto") %>%
         bind_shiny("overview", "overview_ui")
 
-    output$base_plot <- renderPlot({
+    output$histSource <- renderPlot({
         plot <- NA
 
-        if (input$base_plot_trigger == "histogram") {
-            width <- binwidth()
+        width <- binwidth()
 
-            if (width > 0) {
-                plot <-
-                    DrawHistogram(
-                        data = series(),
-                        binwidth = width,
-                        fit = input$dnorm
-                    )
-            } else {
-                plot <- DrawHistogram(data = series(), fit = input$dnorm)
-            }
-
-            if (input$density) {
-                plot <-
-                    plot + geom_density(colour = "#999999",
-                                        fill = "#009E73",
-                                        alpha = .5)
-            }
+        if (width > 0) {
+            plot <-
+                DrawHistogram(
+                    data = series(),
+                    binwidth = width,
+                    fit = input$dnorm
+                )
         } else {
-            plot <- DrawQuantileQuantile(data = series()$temperature)
+            plot <- DrawHistogram(data = series(), fit = input$dnorm)
+        }
+
+        if (input$density) {
+            plot <-
+                plot + geom_density(colour = "#999999",
+                                    fill = "#009E73",
+                                    alpha = .5)
         }
 
         plot
     })
+
+    output$qqSource <- renderPlot({
+        DrawQuantileQuantile(data = series()$temperature)
+    })
+
 
     output$rule <- renderText({
         rule <- switch(input$rule,
@@ -124,7 +132,7 @@ shinyServer(function(input, output, session) {
                        scott = scott,
                        fd = fd)
 
-        format(rule(), digits = 3)
+        paste("Рекомендуемая ширина столбца:", format(rule(), digits = 3))
     })
 
     output$dstats <- renderDataTable({
@@ -166,8 +174,7 @@ shinyServer(function(input, output, session) {
         layer_points() %>% # could be customizable, e.g. by size, fill
         layer_model_predictions(model = "lm", se = FALSE, stroke := "#0072B2") %>%
         add_axis("x",
-                 format = "d",
-                 properties = axis_props(labels = list(angle = 45, align = "left"))) %>%
+                 format = "d") %>%
         add_tooltip(function(df)
             paste(df$year, ":", df$temperature)) %>%
         scale_numeric("x", nice = FALSE) %>%
@@ -175,9 +182,9 @@ shinyServer(function(input, output, session) {
         bind_shiny("scatterplot", "scatter_ui")
 
     output$correlation <- renderText({
-        format(cor(series()$temperature, c(1:(
+        paste("r(x, t) = ", format(cor(series()$temperature, c(1:(
             maxRange() - minRange() + 1
-        ))), digits = 5)
+        ))), digits = 5))
     })
 
     output$ctest <- renderUI({
@@ -244,8 +251,7 @@ shinyServer(function(input, output, session) {
         add_axis(
             "x",
             title = "Год наблюдения",
-            format = "d",
-            properties = axis_props(labels = list(angle = 45, align = "left"))
+            format = "d"
         ) %>%
         add_axis("y", title = "Температура, ºС") %>%
         add_tooltip(function(df)
@@ -256,10 +262,10 @@ shinyServer(function(input, output, session) {
 
     output$lm <- renderUI({
         m <- model()
-        HTML(sprintf("y = %.03ft + %.03f", coef(model())[2], coef(model())[1]))
-        #     withMathJax(
-        #       helpText(paste("$$ y = ", format(coef(model())[2], digits=4), "x +", format(coef(model())[2], digits=4), "$$"))
-        #     )
+        # HTML(sprintf("y = %.03ft + %.03f", coef(model())[2], coef(model())[1]))
+            withMathJax(
+              paste("$$ y = ", format(coef(m)[2], digits=3), "t +", format(coef(m)[1], digits=3), "$$")
+            )
     })
 
     output$signif <- renderUI({
@@ -319,15 +325,6 @@ shinyServer(function(input, output, session) {
         ))
     })
 
-    updateSliderInput(
-        session,
-        "range",
-        min = 1,
-        max = nrows,
-        step = 1
-    )
-
-
     output$residual_source <- renderDataTable({
         df <- residuals()
         colnames(df) <- c("Год наблюдения", "Температура")
@@ -338,8 +335,7 @@ shinyServer(function(input, output, session) {
         add_axis(
             "x",
             title = "Год наблюдения",
-            format = "d",
-            properties = axis_props(labels = list(angle = 45, align = "left"))
+            format = "d"
         ) %>%
         add_axis("y", title = "Температура, ºС", title_offset = 60) %>%
         add_tooltip(function(df)
@@ -352,35 +348,35 @@ shinyServer(function(input, output, session) {
         input$residual_binwidth
     })
 
-    output$residual_plot <- renderPlot({
+    output$histResiduals <- renderPlot({
         plot <- NA
 
-        if (input$residual_base_plot_trigger == "histogram") {
-            width <- residual_binwidth()
+        width <- residual_binwidth()
 
-            if (width > 0) {
-                plot <-
-                    DrawHistogram(
-                        data = residuals(),
-                        binwidth = width,
-                        fit = input$residual_dnorm
-                    )
-            } else {
-                plot <- DrawHistogram(data = residuals(),
-                                      fit = input$residual_dnorm)
-            }
-
-            if (input$residual_density) {
-                plot <-
-                    plot + geom_density(colour = "#999999",
-                                        fill = "#009E73",
-                                        alpha = .5)
-            }
+        if (width > 0) {
+            plot <-
+                DrawHistogram(
+                    data = residuals(),
+                    binwidth = width,
+                    fit = input$residual_dnorm
+                )
         } else {
-            plot <- DrawQuantileQuantile(data = residuals()$temperature)
+            plot <- DrawHistogram(data = residuals(),
+                                  fit = input$residual_dnorm)
+        }
+
+        if (input$residual_density) {
+            plot <-
+                plot + geom_density(colour = "#999999",
+                                    fill = "#009E73",
+                                    alpha = .5)
         }
 
         plot
+    })
+
+    output$qqResiduals <- renderPlot({
+        DrawQuantileQuantile(data = residuals()$temperature)
     })
 
     output$residual_rule <- renderText({
@@ -391,7 +387,7 @@ shinyServer(function(input, output, session) {
             fd = fd
         )
 
-        format(rule(), digits = 3)
+        paste("Рекомендуемая ширина столбца:", format(rule(), digits = 3))
     })
 
     output$residual_dstats <- renderDataTable({

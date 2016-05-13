@@ -4,47 +4,73 @@ library(shinydashboard)
 library(ggvis)
 require(markdown)
 
-shinyUI(dashboardPage(
-    dashboardHeader(title = "Анализ Баторино"),
-    dashboardSidebar(
-        sidebarMenu(
-            sliderInput(
-                "range",
-                label = "Диапазон",
-                min = 1,
-                max = 100,
-                value = c(1, 32)
-            ),
-            menuItem("Исходные данные", tabName = "source"),
-            menuItem("Разведывательный анализ", tabName = "exploratory"),
-            menuItem("Остатки", tabName = "residuals"),
-            menuItem("Анализ остатков", tabName = "residuals_analysis"),
-            menuItem("Вариограммный анализ", tabName = "variogram_analysis")
-        )
+header <- dashboardHeader(title = "Анализ о.Баторино")
+sidebar <- dashboardSidebar(sidebarMenu(
+    sliderInput(
+        "range",
+        label = "Диапазон",
+        min = 1,
+        max = 100,
+        value = c(1, 32)
     ),
-    dashboardBody(tabItems(
+    menuItem(
+        "Исходные данные",
+        tabName = "source",
+        icon = icon("database")
+    ),
+    menuItem(
+        "Разведочный анализ",
+        icon = icon("line-chart"),
+        menuSubItem("Первичный анализ", tabName = "initialSource"),
+        menuSubItem("Корреляционный анализ", tabName = "corrSource"),
+        menuSubItem("Регрессионный анализ", tabName = "regrSource")
+    ),
+    menuItem("Остатки", tabName = "residuals", icon = icon("table")),
+    menuItem(
+        "Анализ остатков",
+        icon = icon("bar-chart"),
+        menuSubItem("Первичный анализ", tabName = "initialResiduals"),
+        menuSubItem("Автокорреляционная функция", tabName = "acfResiduals")
+    ),
+    menuItem(
+        "Вариограммный анализ",
+        tabName = "variogram_analysis",
+        icon = icon("area-chart")
+    )
+))
+
+body <- dashboardBody(
+    tabItems(
         tabItem(tabName = "source",
                 fluidRow(
-                    box(dataTableOutput("datasource")),
-                    box(ggvisOutput("overview"))
-                )),
-        tabItem(tabName = "exploratory",
-                fluidRow(
                     box(
-                        title = "Параметры",
-                        width = 3,
+                        title = "Данные",
+                        status = "primary",
+                        solidHeader = TRUE,
+                        width = 5,
 
-                        conditionalPanel(
-                            condition = "input.source_panel == 'Первичный анализ'",
-                            radioButtons(
-                                "base_plot_trigger",
-                                "График:",
-                                c("Гистограмма" = "histogram",
-                                  "Квантиль-Квантиль" = "quantile"),
-                                inline = TRUE
-                            ),
+                        dataTableOutput("datasource")
+                    ),
+                    box(
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 7,
+
+                        ggvisOutput("overview")
+                    )
+                )),
+        tabItem(tabName = "initialSource",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Параметры",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
                             conditionalPanel(
-                                condition = "input.base_plot_trigger == 'histogram'",
+                                condition = "input.base_plot == 'Гистограмма'",
                                 sliderInput(
                                     "binwidth",
                                     label = "Ширина столбца",
@@ -65,18 +91,94 @@ shinyUI(dashboardPage(
                                     )
                                 )
                             ),
+                            textOutput("rule")
+                        ),
+                        box(
+                            title = "Проверка на нормальность",
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
+                            width = 12,
+
                             selectInput(
                                 "ntest",
-                                label = "Критерий нормальности",
+                                label = "Критерий",
                                 c(
                                     "Шапиро-Уилка" = "shapiro",
                                     "Пирсона Хи-квадрат" = "pearson",
                                     "Колмогорова Смирнова" = "ks"
                                 )
-                            )
+                            ),
+                            htmlOutput("normality")
+                        )
+                    ),
+                    column(
+                        6,
+                        tabBox(
+                            title = "График",
+                            id = "base_plot",
+                            width = 12,
+                            tabPanel("Гистограмма",
+                                     plotOutput("histSource")),
+                            tabPanel("Квантиль-Квантиль",
+                                     plotOutput("qqSource"))
+                        )
+                    ),
+                    column(
+                        3,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Описательные статистики",
+                            width = 12,
+
+                            dataTableOutput("dstats")
+                        )
+                    )
+
+                )),
+        tabItem(tabName = "corrSource",
+                fluidRow(
+                    column(
+                        width = 7,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Корреляционный анализ",
+                            width = 12,
+                            ggvisOutput("scatterplot")
+                        )
+                    ),
+                    column(
+                        width = 5,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Коэффициент корреляции",
+                            width = 12,
+                            textOutput("correlation")
                         ),
-                        conditionalPanel(
-                            condition = "input.source_panel == 'Регрессионный анализ'",
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Значимость коэффициента корреляции",
+                            width = 12,
+                            htmlOutput("ctest")
+                        )
+                    )
+                )),
+        tabItem(tabName = "regrSource",
+                fluidRow(
+                    column(
+                        7,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "График",
+                            width = 12,
+
+                            ggvisOutput("regression"),
+                            hr(),
                             radioButtons(
                                 "residuals_trigger",
                                 "Удалить тренд:",
@@ -86,90 +188,63 @@ shinyUI(dashboardPage(
                             )
                         )
                     ),
-                    tabBox(
-                        title = "Посмотрим",
-                        id = "source_panel",
-                        width = 9,
+                    column(
+                        5,
+                        box(
+                            title = "Модель",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
 
-                        tabPanel(
-                            "Первичный анализ",
-                            plotOutput("base_plot"),
-                            fluidRow(
-                                column(
-                                    5,
-                                    conditionalPanel(
-                                        condition = "input.base_plot_trigger == 'histogram'",
-                                        h4("Рекомендуемая ширина столбца"),
-                                        textOutput("rule")
-                                    ),
-
-                                    h4("Критерий нормальности"),
-                                    htmlOutput("normality")
-                                ),
-                                column(1),
-                                column(6,
-                                       dataTableOutput("dstats"))
-                            )
+                            uiOutput("lm")
                         ),
-
-                        tabPanel(
-                            "Корреляционный анализ",
-                            ggvisOutput("scatterplot"),
-                            fluidRow(
-                                column(4,
-                                       h4("Коэффициент корреляции"),
-                                       textOutput("correlation")),
-                                column(1),
-                                column(
-                                    7,
-                                    h4("Значимость коэффициента корреляции"),
-                                    htmlOutput("ctest")
-                                )
-                            )
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            "Адекватность модели",
+                            width = 12,
+                            htmlOutput("adequacy")
                         ),
-
-                        tabPanel(
-                            "Регрессионный анализ",
-                            ggvisOutput("regression"),
-                            fluidRow(
-                                column(
-                                    4,
-                                    h4("Модель"),
-                                    uiOutput("lm"),
-                                    hr(),
-                                    h4("Адекватность модели"),
-                                    htmlOutput("adequacy")
-                                ),
-                                column(1),
-                                column(7,
-                                       h4("Значимость модели"),
-                                       htmlOutput("signif"))
-                            )
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            "Значимость модели",
+                            width = 12,
+                            htmlOutput("signif")
                         )
                     )
+
                 )),
         tabItem(tabName = "residuals",
                 fluidRow(
-                    box(dataTableOutput("residual_source")),
-                    box(ggvisOutput("residual_overview"))
-                )),
-        tabItem(tabName = "residuals_analysis",
-                fluidRow(
                     box(
-                        title = "Параметры",
-                        width = 3,
+                        title = "Данные",
+                        status = "primary",
+                        solidHeader = TRUE,
+                        width = 5,
 
-                        conditionalPanel(
-                            condition = "input.residual_panel == 'Первичный анализ'",
-                            radioButtons(
-                                "residual_base_plot_trigger",
-                                "График:",
-                                c("Гистограмма" = "histogram",
-                                  "Квантиль-Квантиль" = "quantile"),
-                                inline = TRUE
-                            ),
+                        dataTableOutput("residual_source")
+                    ),
+                    box(
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 7,
+
+                        ggvisOutput("residual_overview")
+                    )
+                )),
+        tabItem(tabName = "initialResiduals",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Параметры",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
                             conditionalPanel(
-                                condition = "input.residual_base_plot_trigger == 'histogram'",
+                                condition = "input.residual_plot == 'Гистограмма'",
                                 sliderInput(
                                     "residual_binwidth",
                                     label = "Ширина столбца",
@@ -191,57 +266,80 @@ shinyUI(dashboardPage(
                                         "Скотта" = "scott",
                                         "Фридмана-Дьякона" = "fd"
                                     )
-                                )
-                            ),
+                                ),
+                                textOutput("residual_rule")
+                            )
+                        ),
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Проверка на нормальность",
+                            width = 12,
+
                             selectInput(
                                 "residual_ntest",
-                                label = "Критерий нормальности",
+                                label = "Критерий",
                                 c(
                                     "Шапиро-Уилка" = "shapiro",
                                     "Пирсона Хи-квадрат" = "pearson",
                                     "Колмогорова Смирнова" = "ks"
                                 )
-                            )
+                            ),
+                            htmlOutput("residual_normality")
                         )
                     ),
-                    tabBox(
-                        title = "Остатки",
-                        id = "residual_panel",
-                        width = 3,
-
-                        tabPanel(
-                            "Первичный анализ",
-                            plotOutput("residual_plot"),
-                            fluidRow(
-                                column(
-                                    5,
-                                    conditionalPanel(
-                                        condition = "input.residual_base_plot_trigger == 'histogram'",
-                                        h4("Рекомендуемая ширина столбца"),
-                                        textOutput("residual_rule")
-                                    ),
-
-                                    h4("Критерий нормальности"),
-                                    htmlOutput("residual_normality")
-                                ),
-                                column(1),
-                                column(6,
-                                       dataTableOutput("residual_dstats"))
-                            )
-                        ),
-                        tabPanel(
-                            "Автокорреляционная функция",
-                            plotOutput("acf", height = 600),
-                            fluidRow(
-                                column(5,
-                                       h4("Тест Льюнга-Бокса"),
-                                       htmlOutput("ljung")),
-                                column(2),
-                                column(5,
-                                       h4("Расширенный тест Дики-Фуллера"),
-                                       htmlOutput("adf"))
-                            )
+                    column(
+                        6,
+                        tabBox(
+                            title = "График",
+                            id = "residual_plot",
+                            width = 12,
+                            tabPanel("Гистограмма",
+                                     plotOutput("histResiduals")),
+                            tabPanel("Квантиль-Квантиль",
+                                     plotOutput("qqResiduals"))
                         )
+                    ),
+                    column(
+                        3,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Описательные статистики",
+                            width = 12,
+
+                            dataTableOutput("residual_dstats")
+                        )
+                    )
+
+                )),
+        tabItem(tabName = "acfResiduals",
+                fluidRow(
+
+                    column(8,
+                           box(title = "Автокорреляционная функция",
+                               solidHeader = TRUE,
+                               collapsible = TRUE,
+                               width = 12,
+
+                               plotOutput("acf", height = 600))
+                    ),
+                    column(4,
+                           box(
+                               title = "Тест Льюнга-Бокса",
+                               solidHeader = TRUE,
+                               collapsible = TRUE,
+                               width = 12,
+
+                               htmlOutput("ljung")
+                           ),
+                           box(
+                               title = "Расширенный тест Дики-Фуллера",
+                               solidHeader = TRUE,
+                               collapsible = TRUE,
+                               width = 12,
+                               htmlOutput("adf")
+                           )
                     )
                 )),
         tabItem(tabName = "variogram_analysis",
@@ -249,6 +347,8 @@ shinyUI(dashboardPage(
                     box(
                         title = "Параметры",
                         width = 3,
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
 
                         conditionalPanel(
                             condition = "input.variogram_panel == 'Семивариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
@@ -461,8 +561,10 @@ shinyUI(dashboardPage(
                         )
                     )
                 ))
-    ))
-))
+    )
+)
+
+shinyUI(dashboardPage(header, sidebar, body))
 
 #   navbarMenu("О программе",
 #     tabPanel("Введение",

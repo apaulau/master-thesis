@@ -9,7 +9,6 @@ library(sp)
 library(gstat)
 library(reshape2)
 
-
 source("lib/dstats.R")     # descriptive statistics module
 source("lib/draw.R")       # helpers for drawing
 source("lib/plot.R")       # custom plots
@@ -25,29 +24,17 @@ source("lib/getdata.R")
 ## Read the data
 src  <- read()
 kObservationNum <- 0
-kminRange <- min(src$year)
+kMinYear <- min(src$year)
 nrows <- length(src[, 1])
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output, session) {
 
     minRange <- reactive({
-        if (input$nav == "Анализ остатков") {
-            input$residual_range[1]
-        } else if (input$nav == "Вариограммный анализ") {
-            input$variogram_range[1]
-        } else {
-            input$range[1]
-        }
+        input$range[1]
     })
     maxRange <- reactive({
-        if (input$nav == "Анализ остатков") {
-            input$residual_range[2]
-        } else if (input$nav == "Вариограммный анализ") {
-            input$variogram_range[2]
-        } else {
-            input$range[2]
-        }
+        input$range[2]
     })
     series <- reactive({
         src[minRange():maxRange(), ]
@@ -71,7 +58,7 @@ shinyServer(function(input, output, session) {
         (max(data) - min(data)) / nclass.scott(data)
     })
     datebreaks <- reactive({
-        seq(kminRange - 5 + minRange(), kminRange + 5 + maxRange(), by = 2)
+        seq(kMinYear - 5 + minRange(), kMinYear + 5 + maxRange(), by = 2)
     })
     model <- reactive({
         lm(series()$temperature ~ c(minRange():maxRange()))
@@ -332,95 +319,14 @@ shinyServer(function(input, output, session) {
         ))
     })
 
-    observe({
-        inp <- input$range
-        n <- input$range[2] - input$range[1]
-        cutoff <- trunc(2 * n / 3)
-        updateSliderInput(
-            session,
-            "residual_range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateSliderInput(
-            session,
-            "variogram_range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateNumericInput(
-            session,
-            "cutoff",
-            value = cutoff,
-            min = 1,
-            max = n,
-            step = 1
-        )
-    })
+    updateSliderInput(
+        session,
+        "range",
+        min = 1,
+        max = nrows,
+        step = 1
+    )
 
-    observe({
-        inp <- input$residual_range
-        n <- input$residual_range[2] - input$residual_range[1]
-        cutoff <- trunc(2 * n / 3)
-        updateSliderInput(
-            session,
-            "range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateSliderInput(
-            session,
-            "variogram_range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateNumericInput(
-            session,
-            "cutoff",
-            value = cutoff,
-            min = 1,
-            max = n,
-            step = 1
-        )
-    })
-
-    observe({
-        inp <- input$variogram_range
-        n <- input$variogram_range[2] - input$variogram_range[1]
-        cutoff <- trunc(2 * n / 3)
-        updateSliderInput(
-            session,
-            "range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateSliderInput(
-            session,
-            "residual_range",
-            value = inp,
-            min = 1,
-            max = nrows,
-            step = 1
-        )
-        updateNumericInput(
-            session,
-            "cutoff",
-            value = cutoff,
-            min = 1,
-            max = n,
-            step = 1
-        )
-    })
 
     output$residual_source <- renderDataTable({
         df <- residuals()

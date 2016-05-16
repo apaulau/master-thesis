@@ -195,10 +195,12 @@ shinyServer(function(input, output, session) {
         set_options(width = "auto") %>%
         bind_shiny("scatterplot", "scatter_ui")
 
-    output$correlation <- renderText({
-        paste("r(x, t) = ", format(cor(series()$temperature, c(1:(
-            maxRange() - minRange() + 1
-        ))), digits = 5))
+    output$correlation <- renderUI({
+        withMathJax(
+            paste("$$ r(x, t) = ", format(cor(series()$temperature, c(1:(
+                maxRange() - minRange() + 1
+            ))), digits = 5), "$$")
+        )
     })
 
     output$ctest <- renderUI({
@@ -702,7 +704,7 @@ shinyServer(function(input, output, session) {
         k <- kriging()
         data.frame(
             "Прогноз" = sapply(k$var1.pred, signif, digits = 4),
-            "Среднеквадратическое отклонение" = sapply(sapply(k$var1.var, sqrt), signif, digits =
+            "σ" = sapply(sapply(k$var1.var, sqrt), signif, digits =
                                                            4)
         )
     }, options = list(
@@ -923,7 +925,7 @@ shinyServer(function(input, output, session) {
             geom_line() +
             # geom_point(size=2, shape=21, fill="white") +
             scale_x_continuous(breaks = 1:maxRange()) +
-            xlab("Максимальное расстояние") + ylab(measureText()) +
+            xlab("Максимальное лаг") + ylab(measureText()) +
             theme(axis.text.x = element_text(angle = 90, hjust = 1))
     })
 
@@ -933,10 +935,10 @@ shinyServer(function(input, output, session) {
             data.frame(c("Матерона", "Кресси-Хокинса"),
                        c(
                            which.min(cmp$Матерона),
-                           which.min(cmp$Кресси-Хокинса)
+                           which.min(cmp$Кресси)
                        ),
-                       c(min(cmp$Матерона), min(cmp$КрессиХокинса)))
-        colnames(df) <- c("Оценка", "Расстояние", measureText())
+                       c(min(cmp$Матерона), min(cmp$Кресси)))
+        colnames(df) <- c("Оценка", "Лаг", measureText())
         rownames(df) <- c("Матерона", "Кресси-Хокинса")
 
         df
@@ -1039,7 +1041,7 @@ shinyServer(function(input, output, session) {
         params <- seq(fitmin(), fitmax(), fitstep())
         if (isCutoff) {
             params <- 1:observations()
-            caption <- "Максимальное расстояние"
+            caption <- "Максимальное лаг"
         } else if (isNugget) {
             caption <- "Наггет"
         } else if (isSill) {
@@ -1122,7 +1124,7 @@ shinyServer(function(input, output, session) {
         obj <- cv()
         data.frame(
             "Прогноз" = sig(obj$var1.pred),
-            "Среднеквадратическое отклонение" = sig(sapply(obj$var1.var, sqrt)),
+            "σ" = sig(sapply(obj$var1.var, sqrt)),
             "Наблюдение" = sig(obj$observed),
             "Остаток" = sig(obj$residual),
             "Zзначение" = sig(obj$zscore)

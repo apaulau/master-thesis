@@ -82,7 +82,7 @@ sidebar <- dashboardSidebar(
                             "Сплайн" = "Spl"
                         )
                     ),
-                    numericInput("nugget", "Самородок", value = 0, min = 0),
+                    numericInput("nugget", "Наггет", value = 0, min = 0),
                     numericInput(
                         "rangeV",
                         "Ранг",
@@ -123,7 +123,11 @@ sidebar <- dashboardSidebar(
                                          "RMSE" = "RMSE",
                                          "Корреляция" = "cor_obspred"
                                      )
-                                 ))
+                                 )),
+                conditionalPanel(
+                    condition = "input.menu = 'comparison'",
+                    actionButton('computeComparison', 'Сравнить', width="95%")
+                )
 
             )
         )
@@ -247,7 +251,7 @@ body <- dashboardBody(
                             collapsible = TRUE,
                             title = "Коэффициент корреляции",
                             width = 12,
-                            textOutput("correlation")
+                            htmlOutput("correlation")
                         ),
                         box(
                             solidHeader = TRUE,
@@ -587,15 +591,6 @@ body <- dashboardBody(
                     column(
                         width = 3,
                         box(
-                            title = "Параметры",
-                            width = 12,
-                            solidHeader = TRUE,
-                            collapsible = TRUE,
-
-                            actionButton('computeComparison', 'Сравнить')
-
-                        ),
-                        box(
                             solidHeader = TRUE,
                             collapsible = TRUE,
                             title = "Лучшие значения",
@@ -644,7 +639,7 @@ body <- dashboardBody(
                         )
                     ),
                     column(
-                        6,
+                        5,
                         box(
                             title = "Кросс-валидация",
                             solidHeader = TRUE,
@@ -655,7 +650,7 @@ body <- dashboardBody(
                         )
                     ),
                     column(
-                        3,
+                        4,
                         box(
                             solidHeader = TRUE,
                             collapsible = TRUE,

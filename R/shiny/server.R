@@ -92,7 +92,7 @@ shinyServer(function(input, output, session) {
 
     output$datasource <- renderDataTable({
         df <- series()
-        colnames(df) <- c("Год наблюдения", "Температура", "Растворимость О2", "Насыщенность")
+        colnames(df) <- c("Год наблюдения", "Температура", "Растворимость O₂", "Насыщенность")
         df
     })
 

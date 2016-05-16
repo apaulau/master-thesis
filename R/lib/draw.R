@@ -90,12 +90,14 @@ DrawHScatterplot <- function(data) {
 }
 
 DrawCrossPrediction <- function(actual, trend, kriging, future) {
-    ggplot() + geom_line(data = actual, aes(x = year, y = temperature, linetype = "Наблюдение")) + geom_line(data = kriging,
-        aes(x = year, y = temperature, linetype = "Прогноз")) + geom_line(data = trend, aes(x = year, y = temperature,
-        linetype = "Тренд")) + scale_linetype_manual(name = "Lines", values = c(Наблюдение = "solid", Прогноз = "dotdash",
-        Тренд = "dashed"), labels = c(expression(X(t)), expression(X^{"*"} * (t)), expression(y(t)))) +
-        scale_x_continuous(breaks = seq(min(actual$year), max(actual$year) + 5 + future, by = 1)) +
-        xlab("Год наблюдения") + scale_y_continuous(breaks = seq(16, 28, 0.5)) + ylab("Температура, ºС") +
+    ggplot(data = kriging, aes(x = year, y = temperature, linetype = "Прогноз")) +
+        geom_line() +
+        geom_ribbon(data = data.frame(kriging, lci = kriging$temperature - 1.96*kriging$se, uci = kriging$temperature + 1.96*kriging$se), aes(ymin=lci, ymax=uci), alpha=.5) +
+        geom_line(data = actual, aes(x = year, y = temperature, linetype = "Наблюдение")) +
+        geom_line(data = trend, aes(x = year, y = temperature, linetype = "Тренд")) +
+        scale_linetype_manual(name = "Lines", values = c(Наблюдение = "solid", Прогноз = "dotdash", Тренд = "dashed"), labels = c(expression(X(t)), expression(X^{"*"} * (t)), expression(y(t)))) +
+        scale_x_continuous(breaks = seq(min(actual$year), max(actual$year) + 5 + future, by = 1)) + xlab("Год наблюдения") +
+        scale_y_continuous(breaks = seq(16, 28, 0.5)) + ylab("Температура, ºС") +
         theme(legend.title = element_blank()) + labs(color = "")
 }
 

@@ -3,10 +3,10 @@ PredictWithKriging <- function (data, x, observations, variogram_model, nrows, f
   y <- rep(1, observations)
   src_data <- data.frame(cbind("x"=x, "y"=y, data))
   coordinates(src_data) = ~x+y
-  
+
   new_data <- data.frame("X"=c((observations + 1):(nrows + future)), "Y"=rep(1, nrows - observations + future))
   coordinates(new_data) = ~X+Y
-  
+
   krige(data~1, src_data, new_data, model=variogram_model, debug.level=0)
 }
 
@@ -14,13 +14,14 @@ PredictWithKriging <- function (data, x, observations, variogram_model, nrows, f
 CrossPrediction <- function (temperature, years, trend, kriging, observations, nrows, name, future=0) {
   actual <- data.frame("temperature"=temperature[(observations - 1):nrows],
     "year"=GetPredictionYears(years, nrows, 0, observations))
-  
+
   prediction.trend <- data.frame("temperature"=c(temperature[(observations - 1):observations], trend[(observations + 1):nrows]),
     "year"=GetPredictionYears(years, nrows, future, observations))
-  
+
   prediction.kriging <- data.frame("temperature"=c(temperature[(observations - 1):observations], trend[(observations + 1):nrows] + kriging$var1.pred),
-    "year"=GetPredictionYears(years, nrows, future, observations))
-  
+    "year"=GetPredictionYears(years, nrows, future, observations),
+    "se"=c(rep(0, 2),sqrt(kriging$var1.var)))
+
   plot.crossprediction <- DrawCrossPrediction(actual, prediction.trend, prediction.kriging, future)
   filename <- paste0("figures/variogram/", name, "-cross-prediction.png")
   ggsave(plot=plot.crossprediction, file=filename, width=7, height=3.3)
@@ -30,7 +31,7 @@ CrossPrediction <- function (temperature, years, trend, kriging, observations, n
 ComputeKrigingResiduals <- function(temperature, trend, kriging, observations, nrows) {
   actual <- temperature[(observations + 1):nrows]
   prediction <- trend[(observations + 1):nrows] + kriging$var1.pred
-    
+
   actual - prediction
 }
 
@@ -38,7 +39,7 @@ ComputeKrigingResiduals <- function(temperature, trend, kriging, observations, n
 ### Compares two predictions classical and robust in case of iterating through 'cutoff' param based on MSE estimation.
 ComparePredictionParameters <- function(data, trend, x, filename="", observations, nrows, adapt=TRUE) {
   cutoffs <- c(1:observations)
-  
+
   computePredictionEstimation <- function(data, trend, cressie, x, cutoff, observations) {
     variogram <- ComputeVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations)
     if (adapt) {
@@ -51,10 +52,10 @@ ComparePredictionParameters <- function(data, trend, x, filename="", observation
     }
     return(estimation)
   }
-  
+
   classicalResult <- sapply(cutoffs, FUN=function(cutoff) computePredictionEstimation(data=data, trend=trend, x=x, cressie=FALSE, cutoff=cutoff, observations=observations))
   robustResult <- sapply(cutoffs, FUN=function(cutoff) computePredictionEstimation(data=data, trend=trend, x=x, cressie=TRUE, cutoff=cutoff, observations=observations))
-    
+
   if (nchar(filename)) {
     plot.check <- DrawParameterComparison(cutoffs, classicalResult, robustResult, adapt)
     ggsave(plot=plot.check, file=filename, width=7, height=3.3)
@@ -64,11 +65,11 @@ ComparePredictionParameters <- function(data, trend, x, filename="", observation
 }
 
 
-RunThroughParameters <- function(data, trend, x, filename="", observations, nrows, 
+RunThroughParameters <- function(data, trend, x, filename="", observations, nrows,
   fit=FALSE, cutoff, cressie, model, nugget, sill, range, min=.1, max=10, step=.1, adapt=TRUE) {
-  
+
   computePredictionEstimation <- function(data, trend, cressie, x, cutoff, observations, model, nugget, sill, range, adapt) {
-    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
+    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations,
       fit=fit, model=model, nugget=nugget, psill=sill, range=range)
     if (adapt) {
       kriging <- PredictWithKriging(data, x=x, observations=observations, variogram_model=variogram$var_model, nrows=nrows)
@@ -80,7 +81,7 @@ RunThroughParameters <- function(data, trend, x, filename="", observations, nrow
     }
     return(estimation)
   }
-  
+
   params <- seq(min, max, step)
   if (is.na(cutoff)) {
     params <- 1:observations
@@ -89,60 +90,60 @@ RunThroughParameters <- function(data, trend, x, filename="", observations, nrow
     caption <- "Наггет"
   } else if (is.na(sill)) {
     caption <- "Порог"
-  } else if (is.na(range)) {    
+  } else if (is.na(range)) {
     caption <- "Ранг"
   }
 
-  result <- sapply(params, FUN=function(param) 
+  result <- sapply(params, FUN=function(param)
     computePredictionEstimation(data=data, trend=trend, x=x, adapt=adapt,
-      cressie=cressie, observations=observations, model=model, 
-      cutoff=ifelse(is.na(cutoff), param, cutoff), 
-      nugget=ifelse(is.na(nugget), param, nugget), 
-      sill=ifelse(is.na(sill), param, sill), 
+      cressie=cressie, observations=observations, model=model,
+      cutoff=ifelse(is.na(cutoff), param, cutoff),
+      nugget=ifelse(is.na(nugget), param, nugget),
+      sill=ifelse(is.na(sill), param, sill),
       range=ifelse(is.na(range), param, range)))
-  
-  ggplot() + 
-    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) + 
+
+  ggplot() +
+    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) +
     scale_x_continuous(breaks=params[seq(1, length(params), 4)]) +
     xlab(caption) + ylab(ifelse(adapt, "MSE", "Корреляция")) +
     theme(axis.text.x = element_text(angle=90, hjust=1))
 }
 
 
-RunThroughParametersSSerr <- function(data, trend, x, filename="", observations, nrows, 
+RunThroughParametersSSerr <- function(data, trend, x, filename="", observations, nrows,
   fit=FALSE, cutoff, cressie, model, sill, range, min=.1, max=10, step=.1) {
-  
+
   ComputeSSerr <- function(data, cressie, x, cutoff, observations, fit, model, sill, range) {
-    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations, 
+    variogram <- ComputeManualVariogram(data, x=x, cressie=cressie, cutoff=cutoff, observations=observations,
       fit=fit, model=model, psill=sill, range=range)
-    
+
     return(variogram$SSerr)
   }
-  
+
   params <- seq(min, max, step)
   if (is.na(cutoff)) {
     params <- 1:observations
-    result <- sapply(params, FUN=function(param) 
+    result <- sapply(params, FUN=function(param)
       ComputeSSerr(data=data, x=x,
         cressie=cressie, observations=observations,
         fit=fit, model=model, cutoff=param, sill=sill, range=range))
     caption <- "Максимальное расстояние"
   } else if (is.na(sill)) {
-    result <- sapply(params, FUN=function(param) 
+    result <- sapply(params, FUN=function(param)
       ComputeSSerr(data=data, x=x,
         cressie=cressie, observations=observations,
         fit=fit, model=model, cutoff=cutoff, sill=param, range=range))
     caption <- "Порог"
-  } else if (is.na(range)) {    
-    result <- sapply(params, FUN=function(param) 
+  } else if (is.na(range)) {
+    result <- sapply(params, FUN=function(param)
       ComputeSSerr(data=data, x=x,
         cressie=cressie, observations=observations,
         fit=fit, model=model, cutoff=cutoff, sill=sill, range=param))
     caption <- "Ранг"
   }
-  
-  ggplot() + 
-    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) + 
+
+  ggplot() +
+    geom_line(data=data.frame("X"=params, "Y"=result), aes(x=X, y=Y)) +
     scale_x_continuous(breaks=params[seq(1, length(params), 2)]) +
     xlab(caption) + ylab("SSerr") +
     theme(axis.text.x = element_text(angle=90, hjust=1))
@@ -151,22 +152,22 @@ RunThroughParametersSSerr <- function(data, trend, x, filename="", observations,
 # Leave-one-out cross validation
 computeCV <- function (data, var_model, observations, nfold) {
   df <- MakeFakeSpatialData(x=1:observations, data=data, observations=observations)
-  
+
   out <- krige.cv(data~1, df, var_model, nfold=nfold, verbose=FALSE)
-  
+
   return(out)
 }
 
 computeAdapt <- function(data, x, trend, var_model, observations, nrows) {
   out = list()
-  
+
   krig <- PredictWithKriging(data = data, x = x, variogram_model = var_model, observations = observations, nrows = nrows)
-  
+
   observed <- src$temperature[(kObservationNum+1):nrows]
   residual <- observed - (krig$var1.pred + trend[(kObservationNum+1):nrows])
-  
+
   out <- c(RSS(residual), RSS(residual) / sum((observed - mean(observed))^2), MAE(residual), MSE(residual), ifelse(cor(observed, (krig$var1.pred + trend[(kObservationNum+1):nrows])) == -1, -0.04, cor(observed, (krig$var1.pred + trend[(kObservationNum+1):nrows]))))
-  
+
   return(out)
 }
 
@@ -204,7 +205,7 @@ compStat <- function(cv) {
 }
 computeCVStatistics <- function(cv, digits=4){
   out <- compStat(cv)
-  
+
   out = lapply(out, format, digits = digits)
   out = t(t(out))
   out <- data.frame(c("Среднее значение", "Сумма квадратов невязок", "Смещение", "Коэффицинт эффективности", "MAE", "MSE", "MSE(Z-значение)", "Корреляция(наблюдение, прогноз)", "Корреляция(прогноз, остатки)", "RMSE"), out)

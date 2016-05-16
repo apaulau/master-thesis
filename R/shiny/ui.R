@@ -4,40 +4,131 @@ library(shinydashboard)
 library(ggvis)
 require(markdown)
 
-header <- dashboardHeader(title = "Анализ о.Баторино")
-sidebar <- dashboardSidebar(sidebarMenu(
-    sliderInput(
-        "range",
-        label = "Диапазон",
-        min = 1,
-        max = 100,
-        value = c(1, 32)
-    ),
-    menuItem(
-        "Исходные данные",
-        tabName = "source",
-        icon = icon("database")
-    ),
-    menuItem(
-        "Разведочный анализ",
-        icon = icon("line-chart"),
-        menuSubItem("Первичный анализ", tabName = "initialSource"),
-        menuSubItem("Корреляционный анализ", tabName = "corrSource"),
-        menuSubItem("Регрессионный анализ", tabName = "regrSource")
-    ),
-    menuItem("Остатки", tabName = "residuals", icon = icon("table")),
-    menuItem(
-        "Анализ остатков",
-        icon = icon("bar-chart"),
-        menuSubItem("Первичный анализ", tabName = "initialResiduals"),
-        menuSubItem("Автокорреляционная функция", tabName = "acfResiduals")
-    ),
-    menuItem(
-        "Вариограммный анализ",
-        tabName = "variogram_analysis",
-        icon = icon("area-chart")
+header <- dashboardHeader(
+    title = "Анализ о.Баторино",
+    titleWidth = 270)
+sidebar <- dashboardSidebar(
+    width = 270,
+    sidebarMenu(
+        id = "menu",
+        sliderInput(
+            "range",
+            label = "Диапазон",
+            min = 1,
+            max = 100,
+            value = c(1, 32)
+        ),
+        menuItem(
+            "Исходные данные",
+            tabName = "source",
+            icon = icon("database")
+        ),
+        menuItem(
+            "Разведочный анализ",
+            icon = icon("line-chart"),
+            menuSubItem("Первичный анализ", tabName = "initialSource"),
+            menuSubItem("Корреляционный анализ", tabName = "corrSource"),
+            menuSubItem("Регрессионный анализ", tabName = "regrSource")
+        ),
+        menuItem("Остатки", tabName = "residuals", icon = icon("table")),
+        menuItem(
+            "Анализ остатков",
+            icon = icon("bar-chart"),
+            menuSubItem("Первичный анализ", tabName = "initialResiduals"),
+            menuSubItem("Автокорреляционная функция", tabName = "acfResiduals")
+        ),
+        menuItem(
+            "Вариограммный анализ",
+            tabName = "variogram_analysis",
+            icon = icon("area-chart"),
+            menuSubItem("Семивариограмма", tabName = "semivar"),
+            menuSubItem("Подбор параметров", tabName = "paramFit"),
+            menuSubItem("Кригинг", tabName = "kriging"),
+            menuSubItem("Сравнительный анализ", tabName = "comparison"),
+            menuSubItem("Кросс-валидация", tabName = "cv"),
+            conditionalPanel(
+                condition = "input.menu == 'semivar' | input.menu == 'paramFit' | input.menu == 'kriging' | input.menu == 'cv'",
+                numericInput(
+                    "cutoff",
+                    "Максимальный лаг",
+                    value = 1,
+                    min = 0,
+                    max = 100,
+                    step = 1
+                ),
+                checkboxInput("cressie", "Использовать оценку Кресси"),
+                conditionalPanel(
+                    condition = "input.menu == 'semivar' | input.menu == 'kriging' | input.menu == 'cv'",
+                    checkboxInput("afv", "Автоматический подбор модели")
+                ),
+                conditionalPanel(
+                    condition = "input.afv == false",
+                    selectInput(
+                        "modelV",
+                        "Модель семивариограммы",
+                        c(
+                            #"Эффект самородков"="Nug",
+                            "Сферическая" = "Sph",
+                            "Экспоненциальная" = "Exp",
+                            "Гауссовская" = "Gau",
+                            "Круговая" = "Cir",
+                            "Линейная" = "Lin",
+                            "Бесселя" = "Bes",
+                            "Пентасферическая" = "Pen",
+                            "Периодическая" = "Per",
+                            "Волновая" = "Wav",
+                            "С эффектом дыр" = "Hol",
+                            "Логарифмическая" = "Log",
+                            "Сплайн" = "Spl"
+                        )
+                    ),
+                    numericInput("nugget", "Самородок", value = 0, min = 0),
+                    numericInput(
+                        "rangeV",
+                        "Ранг",
+                        value = 1,
+                        min = .1,
+                        step = .1
+                    ),
+                    numericInput(
+                        "psill",
+                        "Порог",
+                        value = 1,
+                        min = .1,
+                        step = .1
+                    ),
+                    checkboxInput("fitVariogram", "Подогнать параметры", value = TRUE)
+                )
+            ),
+            conditionalPanel(
+                condition = "input.menu == 'paramFit' | input.menu == 'comparison'",
+                checkboxInput("cross", "Кросс-валидация"),
+                conditionalPanel(condition = "!input.cross",
+                                 selectInput(
+                                     "measure", label = "Мера",
+                                     c(
+                                         "MAE"  = "MAE",
+                                         "MSE"  = "MSE",
+                                         "RMSE" = "RMSE"
+                                     )
+                                 )),
+                conditionalPanel(condition = "input.cross",
+                                 selectInput(
+                                     "cvm",
+                                     label = "Мера",
+                                     c(
+                                         "MAE"  = "MAE",
+                                         "RSS"  = "RSS",
+                                         "MSE"  = "MSE",
+                                         "RMSE" = "RMSE",
+                                         "Корреляция" = "cor_obspred"
+                                     )
+                                 ))
+
+            )
+        )
     )
-))
+)
 
 body <- dashboardBody(
     tabItems(
@@ -201,14 +292,14 @@ body <- dashboardBody(
                         box(
                             solidHeader = TRUE,
                             collapsible = TRUE,
-                            "Адекватность модели",
+                            title = "Адекватность модели",
                             width = 12,
                             htmlOutput("adequacy")
                         ),
                         box(
                             solidHeader = TRUE,
                             collapsible = TRUE,
-                            "Значимость модели",
+                            title = "Значимость модели",
                             width = 12,
                             htmlOutput("signif")
                         )
@@ -314,175 +405,227 @@ body <- dashboardBody(
 
                 )),
         tabItem(tabName = "acfResiduals",
-                fluidRow(
-
-                    column(8,
-                           box(title = "Автокорреляционная функция",
-                               solidHeader = TRUE,
-                               collapsible = TRUE,
-                               width = 12,
-
-                               plotOutput("acf", height = 600))
-                    ),
-                    column(4,
-                           box(
-                               title = "Тест Льюнга-Бокса",
-                               solidHeader = TRUE,
-                               collapsible = TRUE,
-                               width = 12,
-
-                               htmlOutput("ljung")
-                           ),
-                           box(
-                               title = "Расширенный тест Дики-Фуллера",
-                               solidHeader = TRUE,
-                               collapsible = TRUE,
-                               width = 12,
-                               htmlOutput("adf")
-                           )
-                    )
-                )),
-        tabItem(tabName = "variogram_analysis",
-                fluidRow(
+                fluidRow(column(
+                    8,
                     box(
-                        title = "Параметры",
-                        width = 3,
+                        title = "Автокорреляционная функция",
                         solidHeader = TRUE,
                         collapsible = TRUE,
+                        width = 12,
 
-                        conditionalPanel(
-                            condition = "input.variogram_panel == 'Семивариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Кросс-валидация'",
+                        plotOutput("acf", height = 600)
+                    )
+                ),
+                column(
+                    4,
+                    box(
+                        title = "Тест Льюнга-Бокса",
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 12,
+
+                        htmlOutput("ljung")
+                    ),
+                    box(
+                        title = "Расширенный тест Дики-Фуллера",
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 12,
+                        htmlOutput("adf")
+                    )
+                ))),
+
+        tabItem(tabName = "semivar",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Модель",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
+                            htmlOutput("text_model")
+
+                        ),
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Невязка",
+                            width = 12,
+
+                            htmlOutput("sserr")
+                        )
+                    ),
+                    column(
+                        9,
+                        box(
+                            title = "Семивариограмма",
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            width = 12,
+
+                            ggvisOutput("variogram")
+                        )
+                    )
+                )),
+        tabItem(tabName = "paramFit",
+                fluidRow(column(
+                    width = 3,
+                    box(
+                        title = "Параметр",
+                        width = 12,
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        status = "primary",
+
+                        radioButtons(
+                            "fit_param",
+                            "",
+                            choices = list(
+                                "Максимальный лаг" = 1,
+                                "Наггет" = 2,
+                                "Порог" = 3,
+                                "Ранг" = 4
+                            ),
+                            selected = 1
+                        ),
+                        numericInput(
+                            "fit_min",
+                            "Минимум",
+                            value = .1,
+                            min = 0,
+                            step = .1
+                        ),
+                        numericInput(
+                            "fit_max",
+                            "Максимум",
+                            value = 10,
+                            min = .1,
+                            step = .1
+                        ),
+                        numericInput(
+                            "fit_step",
+                            "Шаг",
+                            value = .1,
+                            min = .1,
+                            step = .1
+                        ),
+                        actionButton('fitParam', 'Подобрать')
+                    )
+                ),
+                column(
+                    9,
+                    box(
+                        title = "Подбор параметров",
+                        solidHeader = TRUE,
+                        collapsible = TRUE,
+                        width = 12,
+
+                        plotOutput("fit_param", height = 900),
+                        htmlOutput("fit_mse")
+                    )
+                ))),
+        tabItem(tabName = "kriging",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Параметры",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
                             numericInput(
-                                "cutoff",
-                                "Максимальный лаг",
-                                value = 1,
+                                "future",
+                                "Будущее",
+                                value = 0,
                                 min = 0,
                                 max = 38,
                                 step = 1
-                            ),
-                            conditionalPanel(
-                                condition = "input.afv == false",
-                                selectInput(
-                                    "modelV",
-                                    "Модель семивариограммы",
-                                    c(
-                                        #"Эффект самородков"="Nug",
-                                        "Сферическая" = "Sph",
-                                        "Экспоненциальная" = "Exp",
-                                        "Гауссовская" = "Gau",
-                                        "Круговая" = "Cir",
-                                        "Линейная" = "Lin",
-                                        "Бесселя" = "Bes",
-                                        "Пентасферическая" = "Pen",
-                                        "Периодическая" = "Per",
-                                        "Волновая" = "Wav",
-                                        "С эффектом дыр" = "Hol",
-                                        "Логарифмическая" = "Log",
-                                        "Сплайн" = "Spl"
-                                    )
-                                ),
-                                numericInput("nugget", "Самородок", value = 0, min = 0),
-                                numericInput(
-                                    "rangeV",
-                                    "Ранг",
-                                    value = 1,
-                                    min = .1,
-                                    step = .1
-                                ),
-                                numericInput(
-                                    "psill",
-                                    "Порог",
-                                    value = 1,
-                                    min = .1,
-                                    step = .1
-                                ),
-                                checkboxInput("fitVariogram", "Подогнать параметры", value =
-                                                  TRUE)
-                            ),
-                            checkboxInput("cressie", "Использовать оценку Кресси"),
-                            conditionalPanel(
-                                condition = "input.variogram_panel == 'Семивариограмма' | input.variogram_panel == 'Кригинг' | input.variogram_panel == 'Кросс-валидация'",
-                                checkboxInput("afv", "Автоматический подбор модели")
-                            ),
-                            conditionalPanel(
-                                condition = "input.variogram_panel == 'Кригинг'",
-                                numericInput(
-                                    "future",
-                                    "Будущее",
-                                    value = 0,
-                                    min = 0,
-                                    max = 38,
-                                    step = 1
-                                )
                             )
                         ),
-                        conditionalPanel(
-                            condition = "input.variogram_panel == 'Подбор параметров' | input.variogram_panel == 'Сравнительный анализ'",
-                            checkboxInput("cross", "Кросс-валидация"),
-                            conditionalPanel(condition = "!input.cross",
-                                             selectInput(
-                                                 "measure", label = "Мера",
-                                                 c(
-                                                     "MAE"  = "MAE",
-                                                     "MSE"  = "MSE",
-                                                     "RMSE" = "RMSE"
-                                                 )
-                                             )),
-                            conditionalPanel(condition = "input.cross",
-                                             selectInput(
-                                                 "cvm",
-                                                 label = "Мера",
-                                                 c(
-                                                     "MAE"  = "MAE",
-                                                     "RSS"  = "RSS",
-                                                     "MSE"  = "MSE",
-                                                     "RMSE" = "RMSE",
-                                                     "Корреляция" = "cor_obspred"
-                                                 )
-                                             ))
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Кросс-валидация",
+                            width = 12,
+
+                            dataTableOutput("cv_stats")
+                        )
+                    ),
+                    column(
+                        9,
+                        box(
+                            title = "Кригинг",
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            width = 12,
+
+                            ggvisOutput("cross_prediction")
+                        ),
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Кригинг",
+                            width = 6,
+
+                            dataTableOutput("predictions")
+                        ),
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Анализ",
+                            width = 6,
+
+                            dataTableOutput("analysis")
+                        )
+                    )
+                )),
+        tabItem(tabName = "comparison",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Параметры",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
+                            actionButton('computeComparison', 'Сравнить')
 
                         ),
-                        conditionalPanel(
-                            condition = "input.variogram_panel == 'Подбор параметров'",
-                            radioButtons(
-                                "fit_param",
-                                "Параметр",
-                                choices = list(
-                                    "Максимальный лаг" = 1,
-                                    "Наггет" = 2,
-                                    "Порог" = 3,
-                                    "Ранг" = 4
-                                ),
-                                selected = 1,
-                                inline = TRUE
-                            ),
-                            numericInput(
-                                "fit_min",
-                                "Минимум",
-                                value = .1,
-                                min = 0,
-                                step = .1
-                            ),
-                            numericInput(
-                                "fit_max",
-                                "Максимум",
-                                value = 10,
-                                min = .1,
-                                step = .1
-                            ),
-                            numericInput(
-                                "fit_step",
-                                "Шаг",
-                                value = .1,
-                                min = .1,
-                                step = .1
-                            ),
-                            actionButton('fitParam', 'Подобрать')
-                        ),
-                        conditionalPanel(condition = "input.variogram_panel == 'Сравнительный анализ'",
-                                         actionButton('computeComparison', 'Сравнить')),
-                        conditionalPanel(
-                            condition = "input.variogram_panel == 'Кросс-валидация'",
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Лучшие значения",
+                            width = 12,
+
+                            dataTableOutput("best_cutoff")
+                        )
+                    ),
+                    column(
+                        9,
+                        box(
+                            title = "Сравнительный анализ",
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            width = 12,
+
+                            plotOutput("param_comparison", height = 800)
+                        )
+                    )
+                )),
+        tabItem(tabName = "cv",
+                fluidRow(
+                    column(
+                        width = 3,
+                        box(
+                            title = "Параметры",
+                            width = 12,
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+
                             numericInput(
                                 "nfold",
                                 "nfold",
@@ -490,74 +633,36 @@ body <- dashboardBody(
                                 min = 2,
                                 max = 38
                             )
+                        ),
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Статистики",
+                            width = 12,
+
+                            dataTableOutput("cv_stats2")
                         )
                     ),
-                    tabBox(
-                        id = "variogram_panel",
-                        width = 9,
+                    column(
+                        6,
+                        box(
+                            title = "Кросс-валидация",
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            width = 12,
 
-                        tabPanel(
-                            "Семивариограмма",
-                            br(),
-                            ggvisOutput("variogram"),
-                            fluidRow(column(
-                                5,
-                                h4("Модель семивариограммы"),
-                                htmlOutput("text_model")
-                            ),
-                            column(2),
-                            column(5,
-                                   htmlOutput("sserr")))
-                        ),
+                            ggvisOutput("cv_plot")
+                        )
+                    ),
+                    column(
+                        3,
+                        box(
+                            solidHeader = TRUE,
+                            collapsible = TRUE,
+                            title = "Значения",
+                            width = 12,
 
-                        tabPanel(
-                            "Подбор параметров",
-                            br(),
-                            plotOutput("fit_param", height = 900),
-                            fluidRow(htmlOutput("fit_mse"))
-                        ),
-
-                        tabPanel(
-                            "Кригинг",
-                            br(),
-                            ggvisOutput("cross_prediction"),
-                            fluidRow(
-                                column(4,
-                                       h4("Кригинг"),
-                                       dataTableOutput("predictions")),
-                                column(1),
-                                column(6,
-                                       h4("Анализ"),
-                                       dataTableOutput("analysis"))
-                            ),
-                            h4("Кросс-валидация"),
-                            dataTableOutput("cv_stats")
-                        ),
-
-                        tabPanel(
-                            "Сравнительный анализ",
-                            br(),
-                            plotOutput("param_comparison", height = 700),
-                            fluidRow(column(5,
-                                            #h4("Лучшие значения"),
-                                            dataTableOutput("best_cutoff")),
-                                     column(2),
-                                     column(5,
-                                            htmlOutput("something2")))
-                        ),
-
-                        tabPanel(
-                            "Кросс-валидация",
-                            br(),
-                            #plotOutput("param_comparison", height=500),
-                            ggvisOutput("cv_plot"),
-                            fluidRow(
-                                column(6,
-                                       dataTableOutput("cv")),
-                                column(1),
-                                column(5,
-                                       dataTableOutput("cv_stats2"))
-                            )
+                            dataTableOutput("cv")
                         )
                     )
                 ))

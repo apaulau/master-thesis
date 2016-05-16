@@ -76,6 +76,20 @@ shinyServer(function(input, output, session) {
                    temperature = model()$residuals)
     })
 
+    observe({
+        n <- input$range[2] - input$range[1]
+        cutoff <- trunc(2 * n / 3)
+
+        updateNumericInput(
+            session,
+            "cutoff",
+            value = cutoff,
+            min = 1,
+            max = n,
+            step = 1
+        )
+    })
+
     output$datasource <- renderDataTable({
         df <- series()
         colnames(df) <- c("Год наблюдения", "Температура", "Растворимость О2", "Насыщенность")

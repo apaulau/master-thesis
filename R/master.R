@@ -36,9 +36,9 @@ WriteCharacteristic(expression = kObservationNum, type = "original", name = "n")
 ## Source data as basic time series plot: points connected with line
 plot.source <- DrawDataRepresentation(data = src, filename = "source.png", datebreaks = kDateBreaks)
 
-tmp <- src
-colnames(tmp) <- c("Год", "Температура, ºС", "Растворимость кислорода, мг/л", "Насыщенность, %")
-print(xtable(tmp, caption = "Исходные данные.", label = "table:source", digits = c(0, 0, 2, 2, 2), align = "r|rccc|"),
+tmp <- src[, 1:2]
+colnames(tmp) <- c("Год", "Температура, С")
+print(xtable(tmp, caption = "Исходные данные.", label = "table:source", digits = c(0, 0, 2), align = "r|rc|"),
     table.placement = "H", caption.placement = "top", file = "out/original/data.tex", include.rownames = FALSE)
 
 ## Form the data for research
@@ -103,7 +103,7 @@ plot.data.ts <- DrawTimeSeries(data = sample, filename = "original/time-series.p
 ## Next step is research residuals computed few lines above
 sample.residuals <- data.frame(year = sample$year, temperature = sample.fit$residuals)
 tmp <- sample.residuals
-colnames(tmp) <- c("Год", "Температура, ºС")
+colnames(tmp) <- c("Год", "Температура, С")
 print(xtable(tmp, caption = "Временной ряд остатков", label = "table:residuals", digits = c(0, 0, 2),
     align = "r|rc|"), table.placement = "H", caption.placement = "top", file = "out/residual/data.tex", include.rownames = FALSE)
 

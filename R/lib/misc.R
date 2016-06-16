@@ -4,9 +4,9 @@ ConvertYearsToNum <- function(years) {
 }
 
 # Returns years for which will be prediction calculated
-GetPredictionYears <- function (years, number, future, observations) {
+GetPredictionYears <- function (years, number, future, start) {
   lastYear <- max(years)
-  c((lastYear - number + observations - 1) : (lastYear + future))
+  c((lastYear - number + start - 1) : (lastYear + future))
 }
 
 MakeFakeSpatialData <- function (x, data, observations) {

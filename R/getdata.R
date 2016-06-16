@@ -2,7 +2,7 @@ library(xlsx)
 library(lubridate)
 
 # ggplot(dataset) + geom_line(aes(date, temperature, col = saturation))
-read <- function() {
+read <- function(approximate = FALSE) {
     filename <- 'data/ndb1955-2012.xls'
 
     df <- read.xlsx2(filename, sheetName = 'Баторино_ред', endRow = 1300, colIndex = 1:8, colClasses = c("Date", "character", rep("numeric", 6)))
@@ -60,22 +60,26 @@ read <- function() {
     mostVoluminousMonth <- whichMonthMostVoluminous(batorino.aggregated)
     dataset <- batorino.aggregated[month(batorino.aggregated$date) == mostVoluminousMonth, ]
 
-    ## I found that there is gap between 73 and 75 years. So it seems we can have mean mean of neighborhood months for this year
-    getApproximateJulyRow <- function(df, year) {
-        ## Get observations in provided year
-        tmp <- df[year(df$date) == year, ]
+    if (approximate) {
+        ## I found that there is gap between 73 and 75 years. So it seems we can have mean mean of neighborhood months for this year
+        getApproximateJulyRow <- function(df, year) {
+            ## Get observations in provided year
+            tmp <- df[year(df$date) == year, ]
 
-        ## Get mean between june and august
-        july <- data.frame(rbind(colMeans(tmp[(month(tmp$date) == 06 | month(tmp$date) == 08), -1])))
-        july$date <- date(paste0(year, '-07-01'))
+            ## Get mean between june and august
+            july <- data.frame(rbind(colMeans(tmp[(month(tmp$date) == 06 | month(tmp$date) == 08), -1])))
+            july$date <- date(paste0(year, '-07-01'))
 
-        return(july)
+            return(july)
+        }
+
+        approximateJuly1974 <- getApproximateJulyRow(batorino.aggregated, 1974)
+
+        ## Add approximate row for July, 1974 to dataset
+        dataset <- data.frame(rbind(dataset, approximateJuly1974))
+    } else {
+        dataset <- dataset[-1, ]
     }
-
-    approximateJuly1974 <- getApproximateJulyRow(batorino.aggregated, 1974)
-
-    ## Add approximate row for July, 1974 to dataset
-    dataset <- data.frame(rbind(dataset, approximateJuly1974))
 
     ## Sort it by date
     dataset <- dataset[order(dataset$date),]

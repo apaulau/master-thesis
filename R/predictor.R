@@ -13,12 +13,12 @@ computePrediction <- function(pred, trend) {
 
 # Computes prediction with passed parameters and saves all needed info and plots
 processPrediction <- function (data, year, variogram, cressie, cutoff, name, caption, place="ht") {
-  
+
   prediction <- PredictWithKriging(data, x=ConvertYearsToNum(year), observations=kObservationNum, variogram_model=variogram$var_model, nrows=nrows)
   CrossPrediction(src$temperature, src$year, trend, prediction, name, observations=kObservationNum, nrows=nrows)
   residual <- ComputeKrigingResiduals(src$temperature, trend, prediction, observations=kObservationNum, nrows=nrows)
   mse <- MSE(residual)
-  
+
   prediction.compare <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
     "Наблюдение"=src$temperature[(kObservationNum + 1):nrows],
     "Прогноз"=prediction$var1.pred+trend[(kObservationNum + 1):nrows],
@@ -27,9 +27,9 @@ processPrediction <- function (data, year, variogram, cressie, cutoff, name, cap
   colnames(prediction.compare) <- c("", "$X(t)$", "$X^{*}(t)$", "$y(t)$", "$ X(t) - X^{*}(t) $")
   print(xtable(prediction.compare, caption=caption, label=paste0("table:", name, "-prediction"), digits=c(0, 0, 3, 3, 3, 3), align="rr|cccc"),
     file=paste0("out/variogram/", name, "-prediction.tex"), sanitize.text.function=function(x){x}, include.rownames=FALSE, table.placement=place, caption.placement = 'top')
-  
+
   WriteCharacteristic(mse, type="variogram", name=paste0(name, "-mse"))
-  
+
   list(variogram=variogram, prediction=prediction, residual=residual, mse=mse)
 }
 
@@ -54,26 +54,29 @@ sph.fit.adapt.prediction <- processPrediction(data=sample.residuals, year=sample
 per.fit.cv <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Per", name="per-fit-cv", psill=4.1, range=0.898, nugget=0.001, fit=FALSE)
 per.fit.cv.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=per.fit.cv, cutoff=cutoff, name="per-fit-cv", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_6(h) $)", place="H")
 
+per.fit.cv1 <-
+per.fit.cv.prediction1 <- processPrediction(data=sample.residuals, year=sample$year, variogram=per.fit.cv, cutoff=cutoff, name="per-fit-cv", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_6(h) $)", place="H")
+
 for.robust.only <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=TRUE, cutoff=20, model="Lin", name="robust", psill=0, range=0, nugget=0, fit=FALSE)
 
-auto.class20 <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-20", cressie=FALSE, cutoff=20)
+auto.class20 <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Wav", name="auto-class-20", psill=1.011, range=1.14, nugget=3.03, fit=FALSE)
 auto.class20.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class20, cutoff=20, name="auto-class-20", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_7(h) $)")
-auto.class26 <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-26", cressie=FALSE, cutoff=26)
+auto.class26 <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=20, model="Per", name="auto-class-26", psill=0.5, range=2.67, nugget=3.46, fit=FALSE)
 auto.class26.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class26, cutoff=26, name="auto-class-26", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_8(h) $)")
 
 cv.cutoff <- ComparePredictionParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/auto-corr-cutoff.png", observations=kObservationNum, nrows=nrows, adapt=FALSE)
 adapt.cutoff <- ComparePredictionParameters(sample.residuals, trend, ConvertYearsToNum(sample$year), filename="figures/variogram/auto-mse-cutoff.png", observations=kObservationNum, nrows=nrows)
 
-auto.rob.adapt <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-rob-5", cressie=TRUE, cutoff=5)
+auto.rob.adapt <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=TRUE, cutoff=5, model="Wav", name="auto-rob-5", psill=1.65, range=3.59, nugget=4.11, fit=FALSE)
 auto.rob.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.rob.adapt, cutoff=5, name="auto-rob-5", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_9(h) $)", place="H")
-auto.class.adapt <- ComputeVariogram(data=sample.residuals, x=sample$year, name="auto-class-18", cressie=FALSE, cutoff=18)
+auto.class.adapt <- ComputeManualVariogram(data=sample.residuals, x=sample$year, cressie=FALSE, cutoff=18, model="Per", name="auto-class-18", psill=0.32, range=1.3, nugget=3.8, fit=FALSE)
 auto.class.adapt.prediction <- processPrediction(data=sample.residuals, year=sample$year, variogram=auto.class.adapt, cutoff=18, name="auto-class-18", caption="Прогнозные значения (модель $ \\widehat{\\gamma}_{10}(h) $)")
 
 comp <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
   "actual"=src$temperature[(kObservationNum + 1):nrows],
-  "lin"=computePrediction(lin.prediction$prediction, trend), 
-  "lin-fit"=computePrediction(lin.fit.prediction$prediction, trend), 
-  "lin-fit-cv"=computePrediction(lin.fit.cv.prediction$prediction, trend), 
+  "lin"=computePrediction(lin.prediction$prediction, trend),
+  "lin-fit"=computePrediction(lin.fit.prediction$prediction, trend),
+  "lin-fit-cv"=computePrediction(lin.fit.cv.prediction$prediction, trend),
   "lin-fit-adapt"=computePrediction(lin.fit.adapt.prediction$prediction, trend),
   "sph-fit-adapt"=computePrediction(sph.fit.adapt.prediction$prediction, trend),
   "per-fit-cv"=computePrediction(per.fit.cv.prediction$prediction, trend),
@@ -81,7 +84,7 @@ comp <- data.frame("Год"=src$year[(kObservationNum + 1):nrows],
   "auto-class-26"=computePrediction(auto.class26.prediction$prediction, trend),
   "auto-rob-5"=computePrediction(auto.rob.prediction$prediction, trend),
   "auto-class-18"=computePrediction(auto.class.adapt.prediction$prediction, trend))
-colnames(comp) <- c("Год", "X(t)", 
+colnames(comp) <- c("Год", "X(t)",
   "$ X^{*}_1(t) $",
   "$ X^{*}_2(t) $",
   "$ X^{*}_3(t) $",
@@ -92,13 +95,13 @@ colnames(comp) <- c("Год", "X(t)",
   "$ X^{*}_8(t) $",
   "$ X^{*}_9(t) $",
   "$ X^{*}_{10}(t) $")
-print(xtable(comp, caption="Сводная таблица реальных $ X(t)$ и прогнозных $ X_i^{*}()t, i = \overline{1,10} $ значений", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
+print(xtable(comp, caption="Сводная таблица реальных $ X(t)$ и прогнозных $ X_i^{*}()t, i = \\overline{1,10} $ значений", label="table:summary-prediction", digits=c(0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2), align="rr|rcccccccccc"),
   file="out/variogram/summary-prediction1.tex", sanitize.text.function=function(x){x}, include.rownames=FALSE, size="footnotesize", caption.placement = 'top')
 
 comp.st <- data.frame(
   "lin"=computePlainStatistics(computeCV(sample.residuals, lin$var_model, kObservationNum, nfold=kObservationNum)),
   "lin-fit"=computePlainStatistics(computeCV(sample.residuals, lin.fit$var_model, kObservationNum, nfold=kObservationNum)),
-  "lin-fit-cv"=computePlainStatistics(computeCV(sample.residuals, lin.fit.cv$var_model, kObservationNum, nfold=kObservationNum)), 
+  "lin-fit-cv"=computePlainStatistics(computeCV(sample.residuals, lin.fit.cv$var_model, kObservationNum, nfold=kObservationNum)),
   "lin-fit-adapt"=computePlainStatistics(computeCV(sample.residuals, lin.fit.adapt$var_model, kObservationNum, nfold=kObservationNum)),
   "sph-fit-adapt"=computePlainStatistics(computeCV(sample.residuals, sph.fit.adapt$var_model, kObservationNum, nfold=kObservationNum)),
   "per-fit-cv"=computePlainStatistics(computeCV(sample.residuals, per.fit.cv$var_model, kObservationNum, nfold=kObservationNum)),
@@ -106,7 +109,7 @@ comp.st <- data.frame(
   "auto-class-26"=computePlainStatistics(computeCV(sample.residuals, auto.class26$var_model, kObservationNum, nfold=kObservationNum)),
   "auto-rob-5"=computePlainStatistics(computeCV(sample.residuals, auto.rob.adapt$var_model, kObservationNum, nfold=kObservationNum)),
   "auto-class-18"=computePlainStatistics(computeCV(sample.residuals, auto.class.adapt.prediction$var_model, kObservationNum, nfold=kObservationNum)))
-colnames(comp.st) <- c( 
+colnames(comp.st) <- c(
   "$ \\widehat{\\gamma}_1(h) $",
   "$ \\widehat{\\gamma}_2(h) $",
   "$ \\widehat{\\gamma}_3(h) $",
@@ -126,7 +129,7 @@ print(xtable(comp.st, caption="Сводная таблица показател�
 comp.st.ad <- data.frame(
   "lin"=computeAdapt(sample.residuals, lin$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "lin-fit"=computeAdapt(sample.residuals, lin.fit$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
-  "lin-fit-cv"=computeAdapt(sample.residuals, lin.fit.cv$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend), 
+  "lin-fit-cv"=computeAdapt(sample.residuals, lin.fit.cv$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "lin-fit-adapt"=computeAdapt(sample.residuals, lin.fit.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "sph-fit-adapt"=computeAdapt(sample.residuals, sph.fit.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "per-fit-cv"=computeAdapt(sample.residuals, per.fit.cv$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
@@ -134,7 +137,7 @@ comp.st.ad <- data.frame(
   "auto-class-26"=computeAdapt(sample.residuals, auto.class26$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "auto-rob-5"=computeAdapt(sample.residuals, auto.rob.adapt$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend),
   "auto-class-18"=computeAdapt(sample.residuals, auto.class.adapt.prediction$var_model, kObservationNum, x=ConvertYearsToNum(sample$year), nrows = nrows, trend = trend))
-colnames(comp.st.ad) <- c( 
+colnames(comp.st.ad) <- c(
   "$ \\widehat{\\gamma}_1(h) $",
   "$ \\widehat{\\gamma}_2(h) $",
   "$ \\widehat{\\gamma}_3(h) $",

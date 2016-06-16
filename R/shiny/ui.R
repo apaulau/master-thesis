@@ -18,6 +18,15 @@ sidebar <- dashboardSidebar(
             max = 100,
             value = c(1, 32)
         ),
+        selectInput(
+            "variable",
+            "Переменная",
+            c(
+                "Температура" = "temperature",
+                "Растворимость O₂" = "o2solubility",
+                "Насыщенность" = "saturation"
+            )
+        ),
         menuItem(
             "Исходные данные",
             tabName = "source",
@@ -41,11 +50,11 @@ sidebar <- dashboardSidebar(
             "Вариограммный анализ",
             tabName = "variogram_analysis",
             icon = icon("area-chart"),
-            menuSubItem("Семивариограмма", tabName = "semivar"),
-            menuSubItem("Подбор параметров", tabName = "paramFit"),
-            menuSubItem("Кригинг", tabName = "kriging"),
-            menuSubItem("Сравнительный анализ", tabName = "comparison"),
-            menuSubItem("Кросс-валидация", tabName = "cv"),
+            menuSubItem("Подбор модели семивариограммы", tabName = "semivar"),
+            menuSubItem("Подбор параметров модели", tabName = "paramFit"),
+            menuSubItem("Прогнозные значения", tabName = "kriging"),
+            menuSubItem("Анализ оценок семивариограмм", tabName = "comparison"),
+            menuSubItem("Кросс-валидация результатов", tabName = "cv"),
             conditionalPanel(
                 condition = "input.menu == 'semivar' | input.menu == 'paramFit' | input.menu == 'kriging' | input.menu == 'cv'",
                 numericInput(
@@ -61,6 +70,7 @@ sidebar <- dashboardSidebar(
                     condition = "input.menu == 'semivar' | input.menu == 'kriging' | input.menu == 'cv'",
                     checkboxInput("afv", "Автоматический подбор модели")
                 ),
+                checkboxInput("fitVariogram", "Подогнать параметры"),
                 conditionalPanel(
                     condition = "input.afv == false",
                     selectInput(
@@ -96,8 +106,7 @@ sidebar <- dashboardSidebar(
                         value = 1,
                         min = .1,
                         step = .1
-                    ),
-                    checkboxInput("fitVariogram", "Подогнать параметры", value = TRUE)
+                    )
                 )
             ),
             conditionalPanel(
@@ -125,7 +134,7 @@ sidebar <- dashboardSidebar(
                                      )
                                  )),
                 conditionalPanel(
-                    condition = "input.menu = 'comparison'",
+                    condition = "input.menu == 'comparison'",
                     actionButton('computeComparison', 'Сравнить', width="95%")
                 )
 
@@ -524,6 +533,7 @@ body <- dashboardBody(
                         title = "Подбор параметров",
                         solidHeader = TRUE,
                         collapsible = TRUE,
+                        status = "success",
                         width = 12,
 
                         plotOutput("fit_param", height = 900),

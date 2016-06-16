@@ -25,6 +25,7 @@ source("lib/getdata.R")
 src  <- read()
 kObservationNum <- 0
 kMinYear <- min(src$year)
+
 nrows <- length(src[, 1])
 
 # Define server logic required to draw a histogram
@@ -45,7 +46,10 @@ shinyServer(function(input, output, session) {
         input$range[2]
     })
     series <- reactive({
-        src[minRange():maxRange(), ]
+        tmp <- src[minRange():maxRange(), ]
+        tmp[, 2] <- tmp[input$variable]
+
+        tmp
     })
     breaks <- reactive({
         src[minRange():maxRange(), 1]
@@ -695,7 +699,7 @@ shinyServer(function(input, output, session) {
             x = c(1:observations()),
             observations = observations(),
             variogram_model = basicVariogram()$var_model,
-            nrows = nrows,
+            nrows = nrows - minRange() + 1,
             future = future()
         )
     })
@@ -704,8 +708,7 @@ shinyServer(function(input, output, session) {
         k <- kriging()
         data.frame(
             "Прогноз" = sapply(k$var1.pred, signif, digits = 4),
-            "σ" = sapply(sapply(k$var1.var, sqrt), signif, digits =
-                                                           4)
+            "σ" = sapply(sapply(k$var1.var, sqrt), signif, digits = 4)
         )
     }, options = list(
         paging = FALSE,
@@ -715,19 +718,16 @@ shinyServer(function(input, output, session) {
 
     output$analysis <- renderDataTable({
         obs <- observations()
+        maxr <- maxRange()
         k <- kriging()
+        f <- future()
+        year = GetPredictionYears(src$year, nrows, f, maxr+2)
         data.frame(
-            "Год" = src$year[(obs + 1):nrows],
-            "Наблюдение" = src$temperature[(obs + 1):nrows],
-            "Тренд" = sapply(trend()[(obs + 1):nrows], signif, digits =
-                                 4),
-            "Прогноз" = sapply(k$var1.pred + trend()[(obs + 1):nrows], signif, digits =
-                                   4),
-            "Остаток" = sapply(
-                src$temperature[(obs + 1):nrows] - (k$var1.pred + trend()[(obs + 1):nrows]),
-                signif,
-                digits = 4
-            )
+            "Год" = year,
+            "Наблюдение" = c(src$temperature[(maxr + 1):nrows], rep(src$temperature[nrows], f)),
+            "Тренд" = sapply(trend()[(maxr + 1):(nrows + f)], signif, digits = 4),
+            "Прогноз" = sapply(k$var1.pred + trend()[(maxr + 1):(nrows + f)], signif, digits = 4),
+            "Остаток" = sapply(src$temperature[(maxr + 1):nrows] - (k$var1.pred + trend()[(maxr + 1):nrows]), signif, digits = 4)
         )
     }, options = list(
         paging = FALSE,
@@ -735,7 +735,7 @@ shinyServer(function(input, output, session) {
         info = FALSE
     ))
 
-    computeTrend <- function (fit, future = 0) {
+    computeTrend <- function(fit, future = 0) {
         c(sapply(
             c(1:(nrows + future)),
             FUN = function(x)
@@ -749,15 +749,20 @@ shinyServer(function(input, output, session) {
 
     cp <- reactive({
         future <- future()
-        obs <- observations()
-        year = GetPredictionYears(src$year, nrows, future, obs)
+        maxr <- maxRange()
+        year = GetPredictionYears(src$year, nrows, future, maxr)
 
         actual <-
-            c(src$temperature[(obs - 1):nrows], rep(src$temperature[nrows], future))
+            c(src$temperature[(maxr - 1):nrows], rep(src$temperature[nrows], future))
         prediction.trend <-
-            c(src$temperature[(obs - 1):obs], trend()[(obs + 1):(nrows + future)])
+            c(src$temperature[(maxr - 1):maxr], trend()[(maxr + 1):(nrows + future)])
         prediction.kriging <-
-            c(src$temperature[(obs - 1):obs], trend()[(obs + 1):(nrows + future)] + kriging()$var1.pred)
+            c(src$temperature[(maxr - 1):maxr], trend()[(maxr + 1):(nrows + future)] + kriging()$var1.pred)
+
+        se <- sqrt(kriging()$var1.var)
+        ci <- 1.96 * c(rep(0, 2), se)
+        prediction.lowerBound <- prediction.kriging - ci
+        prediction.upperBound <- prediction.kriging + ci
 
         a <-
             melt(
@@ -765,7 +770,9 @@ shinyServer(function(input, output, session) {
                     year,
                     "Наблюдение" = actual,
                     "Тренд" = prediction.trend,
-                    "Кригинг" = prediction.kriging
+                    "Кригинг" = prediction.kriging,
+                    "1" = prediction.lowerBound,
+                    "2" = prediction.upperBound
                 ),
                 id = c("year")
             )
@@ -779,6 +786,7 @@ shinyServer(function(input, output, session) {
         add_axis("x", title = "Год наблюдения", format = "d") %>%
         add_axis("y", title = "Температура, ºС") %>%
         scale_numeric("x", nice = FALSE) %>%
+        scale_numeric("y", domain = c(0, 30), nice = FALSE) %>%
         set_options(width = "auto") %>%
         bind_shiny("cross_prediction", "cross_prediction_ui")
 

@@ -66,7 +66,7 @@
 \usepackage[font=small,skip=0pt]{caption}
 
 \captionsetup[table]{font=small,skip=1pt}
-\setlength\abovecaptionskip{-5pt}
+\setlength\abovecaptionskip{5pt}
 \setlength\belowcaptionskip{0pt}
 
 \let\Tiny=\tiny
@@ -82,9 +82,9 @@
 \newcommand{\normaldistr}{$\mathcal{N}(\descriptive{original}{mean}, \descriptive{original}{variance})$}
 \newcommand{\resnormaldistr}{$\mathcal{N}(\descriptive{residual}{mean}, \descriptive{residual}{variance})$}
 
-\title[Анализ и прогнозирование гидрологических данных]{Анализ и прогнозирование гидрологических данных}
-\subtitle{Дипломная работа}
-\author[Павлов А.С.]{Александр Сергеевич Павлов \\ \smallskip Научный руководитель: Цеховая Татьяна Вячеславовна}
+\title[Последовательный геостатистический анализ данных в гидрологии]{Последовательный геостатистический анализ данных в гидрологии}
+\subtitle{Магистерская диссертация}
+\author[Павлов А.С.]{Александр Сергеевич Павлов \\ \smallskip \footnotesize{Научный руководитель: Цеховая Татьяна Вячеславовна}}
 \institute[БГУ, ФПМИ]{Факультет прикладной математики и информатики \\ \smallskip Кафедра теории вероятностей и математической статистики}
 \date{Минск, \the\year}
 
@@ -111,7 +111,7 @@
   \begin{enumerate}
     \item Обзор реализованного программного обеспечения:
       \begin{itemize}
-        \item Модуль предварительного анализа;
+        \item Модуль разведочного анализа;
         \item Модуль анализа остатков;
         \item Модуль вариограммного анализа;
       \end{itemize}
@@ -155,7 +155,7 @@
   \frametitle{\large\secname}
   \framesubtitle{Особенности}
   \begin{itemize}
-    \item Доступно с любого устройства, имеющего доступ в интернет, по адресу \href{https://apaulau.shinyapps.io/batorino}{apaulau.shinyapps.io/batorino};
+    \item Доступно с любого устройства, имеющего доступ в интернет, по адресу \href{https://apaulau.shinyapps.io/obatorino}{apaulau.shinyapps.io/obatorino};
     \item Реализовано на языке программирования \textbf{R};
     \item Логически разделено на три модуля;
     \item Имеет простой, быстро расширяемый гибкий интерфейс;
@@ -165,7 +165,7 @@
   \end{itemize}
 \end{frame}
 
-\subsection{Модуль предварительного анализа}
+\subsection{Модуль разведочного анализа}
 
 \begin{frame}
   \frametitle{\large\secname}
@@ -216,7 +216,7 @@
 
 \begin{frame}
   \frametitle{Регрессионная модель}
-  Исследуемый временной ряд является аддитивным:
+  Модель исследуемого временного ряда является аддитивной:
   \begin{equation}
     X(t) = y(t) + \varepsilon(t),
   \end{equation}
@@ -266,6 +266,37 @@
 \subsection{Модуль вариограммного анализа}
 
 \begin{frame}
+\begin{footnotesize}
+  \frametitle{Оценка вариограммы}
+  \begin{Definition}
+    \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{Z} $, называется функция вида
+    \begin{equation}
+    \label{eq:matheron}
+        2 \gamma (h) = V \{ X(t + h) - X(t) \},~ t, h \in \mathbb{Z}.
+    \end{equation}
+
+    При этом функция $ \gamma (h), h \in \mathbb{Z} $, $ \gamma(h) = \gamma(-h)$, называется \textit{семивариограммой}.
+  \end{Definition}
+  
+  \vspace{0.5em}
+  
+  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
+\end{footnotesize}
+  
+  \vspace{0.5em}
+  
+  В качестве оценки вариограммы рассматривается статистика, предложенная Матероном:
+  \begin{equation}
+    2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1},
+  \end{equation}
+
+  \vspace{-0.4em}
+  \begin{footnotesize}
+  где $ \tilde{\gamma}(-h) = \tilde{\gamma}(h), h = \overline{0, n - 1}; \tilde{\gamma}(h) = 0, |h| \ge n $.
+  \end{footnotesize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Вариограммный анализ}
   \begin{columns}[c]
   \column{0.5\linewidth}
@@ -309,7 +340,7 @@
   \frametitle{\large\secname}
   \framesubtitle{\subsecname}
     \begin{figure}[h]
-    \includegraphics[width=0.8\textwidth]{../../figures/static/5_fit.png}
+    \includegraphics[width=1\textwidth]{../../figures/static/5_fit.png}
     \caption{Подбор параметров модели семивариограммы}
   \end{figure}
 \end{frame}
@@ -318,7 +349,7 @@
   \frametitle{\large\secname}
   \framesubtitle{\subsecname}
     \begin{figure}[h]
-    \includegraphics[width=0.8\textwidth]{../../figures/static/6_krige.png}
+    \includegraphics[width=1\textwidth]{../../figures/static/6_krige.png}
     \caption{Сравнение прогнозных значений}
   \end{figure}
 \end{frame}
@@ -337,7 +368,7 @@
     = \left\{
    \begin{array}{l l}
      c_0 + b \cdot h, & h > 0, \\
-     c_0, & h \leq 0,
+     c_0, & h = 0,
    \end{array} \right.
   \end{gathered}\end{equation}
   где $ b $ -- параметр, отвечающий за угол наклона, $ c_0 $ --- эффект самородков.
@@ -571,7 +602,7 @@
 
   Показатели качества
   \begin{equation*}
-    r_{\varepsilon\varepsilon^{*}} = -0.15, \quad MSE = 5.22
+    r_{\varepsilon\varepsilon^{*}} = 0.11, \quad MSE = 5.22
   \end{equation*}
   }
 
@@ -625,32 +656,6 @@
 \end{frame}
 
 \begin{frame}
-\begin{footnotesize}
-  \frametitle{Оценка вариограммы}
-  \begin{Definition}
-    \textit{Вариограммой} случайного процесса $ X(t), t \in \mathbb{Z} $, называется функция вида
-    \begin{equation}
-    \label{eq:matheron}
-        2 \gamma (h) = V \{ X(t + h) - X(t) \},~ t, h \in \mathbb{Z}.
-    \end{equation}
-
-    При этом функция $ \gamma (h), h \in \mathbb{Z} $, называется \textit{семивариограммой}.
-  \end{Definition}
-  
-  \vspace{0.5em}
-  
-  Рассматривается стационарный в широком смысле гауссовский случайный процесс с дискретным временем $ X(t),~ t \in \mathbb{Z} $, нулевым математическим ожиданием, постоянной дисперсией и неизвестной вариограммой $ 2 \gamma(h), h \in \mathbb{Z} $.
-\end{footnotesize}
-  
-  \vspace{0.5em}
-  
-  В качестве оценки вариограммы рассматривается статистика, предложенная Матероном:
-  \begin{equation}
-    2 \tilde{\gamma}(h) = \frac{1}{n - h} \sum_{t = 1}^{n - h}(X(t + h) - X(t))^2, \quad h = \overline{0, n - 1}.
-  \end{equation}
-\end{frame}
-
-\begin{frame}
   \frametitle{Первые два момента оценки вариограммы}
 \begin{Theorem}
 \begin{footnotesize}
@@ -694,7 +699,7 @@
 \begin{frame}
   \frametitle{Асимптотическое поведение оценки вариограммы}
   \begin{Corollary}
-    Из теоремы 2 следует соотношение
+    Из теоремы 2 вытекает соотношение
     \begin{equation*}
       \lim_{n \to \infty} V\{ 2 \tilde{\gamma}(h) \} = 0, \quad h = \overline{0, n - 1}
     \end{equation*}

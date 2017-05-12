@@ -46,7 +46,7 @@
 	E \{ 2 \tilde{\gamma}(h) \} = E \{ \frac{1}{n - h} \sum_{t = 1}^{n - h} {(X(t + h) - X(t))}^2 \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} E \{ { (X(t + h) - X(t)) }^2 \}.
 \end{equation*}
 
-Из равенства~\eqref{eq:E_diff_inc} получаем, что
+Получаем, что
 \begin{equation*}
 	E \{ 2 \tilde{\gamma}(h) \} = \frac{1}{n - h} \sum_{t = 1}^{n - h} 2 \gamma(h) = 2 \gamma(h).
 \end{equation*}
@@ -70,7 +70,7 @@
 	\times \sqrt{V\{ (X( t + h_1) - X(t))^2 \} V\{ (X(s + h_2) - X(s))^2 \}}
 \end{gathered}\end{equation*}
 
-Принимая во внимание~\eqref{eq:V_diff_inc} и предыдущее соотношение, из~\eqref{eq:cov_support} получаем:
+Принимая во внимание предыдущее соотношение, из~\eqref{eq:cov_support} получаем:
 \begin{equation*}\begin{gathered}
 	cov\{ (X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \} = \frac{2 (2\gamma(h_1))(2\gamma(h_2))}{(n - h_1)(n - h_2)} \times \\
 	\times \sum_{t = 1}^{n - h_1}\sum_{s = 1}^{n - h_2} corr\{(X(t + h_1) - X(t))^2, (X(s + h_2) - X(s))^2 \}

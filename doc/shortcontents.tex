@@ -1,0 +1,68 @@
+%!TEX root = ../thesis.tex
+
+\newpage
+
+\chapter*{Общая характеристика работы}
+\addcontentsline{toc}{chapter}{Общая характеристика работы}
+
+\textbf{Перечень ключевых слов}: ВРЕМЕННОЙ РЯД, СТАЦИОНАРНОСТЬ, ПРОГНОЗИРОВАНИЕ, R, ОПИСАТЕЛЬНЫЕ СТАТИСТИКИ, СТАТИСТИЧЕСКАЯ ОЦЕНКА, КОРРЕЛЯЦИОННЫЙ АНАЛИЗ, РЕГРЕССИОННЫЙ АНАЛИЗ, ВАРИОГРАММА, КРИГИНГ, КРОСС-ВАЛИДАЦИЯ, ПРИКЛАДНОЙ ПРОГРАММНЫЙ ПАКЕТ\@.
+
+\textit{Цель работы} --- с помошью современного языка программирования R осуществить анализ, обработку и прогнозирование реального временного ряда. Необходимость подобного исследования обусловлена тем, что в настоящее время объем накопленных наблюдений за природными системами резко увеличился. Однако статистических методов, достаточно широко разработанных и доступных для использования специалистами в виде прикладных программ, не так много. В то же время, математический аппарат и его конкретные прикладные части могут позволить не только проанализировать сложившуюся ситуацию,но и постараться дать некоторый прогноз по состоянию объекта в будущем.
+
+\textit{Объектом исследования} в работе являются наблюдения за температурой воды в озере Баторино в период с 1975 по 2012 гг.
+
+В процессе работы реализовано веб-приложение, позволяющее вычислять и анализировать описательные статистики по имеющимся числовым данным, подобирать закон распределения, проводить корреляционный и регрессионный анализы, исследование остатков, использовать различные модели семивариограмм для вычисления прогнозных значений временного ряда.
+
+Полученные результаты могут быть использованы для дальнейших исследований в различных прикладных областях науки: биологии, химии, гидрологии --- для анализа экологической ситуации в Нарочанском парке и других регионах.
+
+Реализованное программное обеспечение и предложенные алгоритмы могут использоваться для решения задач, аналогичных рассматриваемой в работе. Кроме того, интерфейс приложения прост и понятен в использовании, что позволяет использовать приложение специалистам в области природоведения, а не математикам или программистам.
+
+\textbf{Структура магистерской диссертации}:
+
+В главе \ref{c:definitions} вводится понятие случайного процесса, устанавливаются некоторые важнейшие его характеристики. Дается понятие вариограммы. Приводятся виды стационарности и связи между ними. В главе \ref{c:variogram_estimation} вводится оценка вариограммы гауссовского случайного процесса. Исследуются её свойства. В главе \ref{c:implementation} дается подробный обзор реализованного в рамках диссертации программного обеспечения. В главе \ref{c:analysis} приведён последовательный анализ данных с помощью рассмотренного в главе \ref{c:implementation} программного обеспечения.
+
+Магистерская диссертация имеет 60 страниц, 20 рисунков, 8 таблиц, 35 источников, 4 приложения.
+
+\newpage
+
+\chapter*{Агульная характарыстыка работы}
+
+\textbf{Спіс ключавых слоў}: ЧАСАВЫ ШЭРАГ, СТАЦЫЯНАРНАСЦЬ, ПРАГНАЗАВАННЕ, R, АПІСАЛЬНЫЯ СТАТЫСТЫКІ, СТАТЫСТЫЧНАЯ АЦЭНКА, КАРЭЛЯЦЫЙНЫ АНАЛIЗ, РЭГРЭСIЙНЫ АНАЛIЗ, ВАРЫЯГРАММА, КРЫГIНГ, КРОСС-ВАЛIДАЦЫЯ, ПРИКЛАДНЫ ПРОГРАМНЫ ПАКЕТ\@.
+
+\textit{Мэта дысертацыі} --- з дапамогай сучаснай мовы праграмавання R ажыццявіць аналіз, апрацоўку і прагназаванне рэальнага часовага шэрага. Неабходнасць такога даследавання абумоўлена тым, што ў апошнія часы аб'ём даступных вынікаў назіранняў за прыроднымі сістэмамі рэзка павялічыўся. Але статыстычных метадаў, дасканала распрацаваных і даступных для выкарыстання спецыялістамі ў выглядзе прыкладных праграм, недастаткова. У той жа час, матэматычны апарат і яго канкрэтныя прыкладныя часткі могуць дазволіць не толькі прааналізаваць бягучую сітуацыю, але і паспрабаваць даць некаторы прагноз па стане аб'екта ў будучыні.
+
+\textit{Аб'ектам даследавання} з'яўляюцца назіранні за тэмпературай вады ў возеры Баторына ў перыяд з 1975 па 2012 гг.
+
+У працэсе работы рэалізаваны вэб-дадатак, якi дазваляе вылічаць і аналізаваць апісальныя статыстыкі, падбіраць закон размеркавання, праводзіць карэляцыйны і рэгрэсійны аналіз, даследаванне рэшткаў, выкарыстоўваць розныя мадэлі семіварыяграм для вылічэння прагнозных значэнняў часовага шэрагу.
+
+Атрыманыя вынікі могуць быць выкарыстаны для далейшых даследаванняў у некалькіх прыкладных галінах навукі: біялогіі, хіміі, гідралогіі --- для аналізу экалагічнай сітуацыі ў Нарачанскім парку і іншых рэгіёнах.
+
+Рэалізаванае праграмнае забеспячэнне і прапанаваныя алгарытмы могуць быць выкарыстаны для вырашэння задач, аналагічных задачы, якая разглядаецца ў рабоце. Акрамя таго, інтэрфейс прыкладання просты ў выкарыстанні, што спрашчае выкарыстанне прыкладання спецыялістамі ў галіне прыродазнаўства, а не толькі матэматыкамі або праграмістамі.
+
+\textbf{Структура магістарскай дысертацыі}:
+
+У радзеле \ref{c:definitions} ўводзіцца паняцце случайнага працэсу, устанаўліваюцца некаторыя найважнейшыя яго характарыстыкі. Даецца паняцце варыяграмы. Разглядаюцца віды стацыянарнасці і сувязі паміж імі. У раздзеле \ref {c:variogram_estimation} ўводзіцца ацэнка варыяграмы гаусаўскага случайнага працэсу. Даследуюцца яе ўласцівасці. У раздзеле \ref{c:implementation} даецца падрабязны агляд рэалізаванага ў рамках дысертацыі праграмнага забеспячэння. У раздзеле \ref{c:analysis} прыведзены паслядоўны аналіз дадзеных з дапамогай разгледжанага у главе \ref{c:implementation} праграмнага забеспячэння.
+
+Магістарская дысертацыя ўключае 60 старонак, 20 малюнкаў, 8 табліц, 35 крыніц, 4 прыкладанні.
+
+\newpage
+
+\chapter*{Brief description of the thesis}
+
+\textbf{Keywords}: TIME SERIES, STATIONARITY, FORECASTING, R, DESCRIPTIVE STATISTICS, STATISTICAL ESTIMATOR, CORRELATIONAL ANALYSIS, REGRESSION ANALYSIS, VARIOGRAMM, KRIGING, CROSS-VALIDATION, APPLIED PROGRAM PACKAGE\@.
+
+\textit{The purpose of the work} is to analyze, process and forecast real-valued time series using the R programming language. Such a study is of current interest due to the fact that at present the volume of accumulated observations over the natural systems has increased dramatically. Accurately composed and easy to use statistical methods are in great demand though there are only a little number of them. At the same time, mathematical apparatus and its specific applied parts allow not only to analyze the situation but to produce some forecast concerning future state of the object.
+ 
+\textit{Object of research} is water temperature observations of Batorino lake in the period from 1975 till 2012.
+ 
+During the research, a web application that allows you to calculate and analyze the descriptive statistics of the available numerical data, to fit the distribution, to carry out the correlation and regression analysis, to study the series of residuals and to use different semivariogram models to calculate the forecasts.
+ 
+The results of this research can be used for further researches in various applied areas of science: biology, chemistry, hydrology, --- and also for analysis of ecology situation at the Narochansky park and other regions.
+ 
+The software and the algorithms developed can be used to solve problems similar to those considered in the work. The application interface is simple and easy to use, making it possible to use the application by non-mathematicians and non-programmers.
+
+\textbf{The structure of the master's thesis}:
+ 
+Chapter \ref{c:definitions} introduces the concept of a random process and gives some important characteristics for it. The concept of variogram is given. In this chapter we also give types of stationarity and relationship between them. Estimator for variogram of a Gaussian random process is introduced in chapter \ref{c:variogram_estimation}. Its properties are then studied. Chapter \ref{c:implementation} provides a detailed overview of the software developed during the research. In chapter \ref{c:analysis} sequential analysis is applied to the data using the algorithms and software from chapter \ref{c:implementation}.
+ 
+Master's thesis has 60 pages, 20 figures, 8 tables, 35 sources, 4 appendices.

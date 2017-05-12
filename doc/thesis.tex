@@ -4,7 +4,7 @@
 \usepackage[utf8]{inputenc}
 
 \usepackage{bsu/style/bsumain}
-\usepackage{bsu/style/bsudiplomatitle14}
+\usepackage{bsu/style/bsumastertitle}
 
 \renewcommand{\theenumii}{\asbuk{enumii}}
 
@@ -12,9 +12,8 @@
 \pgfplotsset{compat=1.9}
 
 \subfaculty{Кафедра теории вероятностей и математической статистики}
-\title{АНАЛИЗ И ПРОГНОЗИРОВАНИЕ ГИДРОЛОГИЧЕСКИХ ДАННЫХ}
-\author{ПАВЛОВ \\
- Александр Сергеевич}
+\title{ПОСЛЕДОВАТЕЛЬНЫЙ ГЕОСТАТИСТИЧЕСКИЙ АНАЛИЗ ДАННЫХ В ГИДРОЛОГИИ}
+\author{ПАВЛОВ Александр Сергеевич}
 \mentor{канд. физ.-мат. наук, \\
         доцент Т.В. Цеховая
 }
@@ -23,29 +22,28 @@
 
 \begin{document}
 
-  % \maketitle
+  \maketitle
 
   % \include{misc/annotation}
   % \input{0-tasks}
 
-  % \clearpage
-  % \setcounter{page}{2}
+  \clearpage
+  \setcounter{page}{2}
 
-  % \include{chapters/0-abstract}
-
-  % \include{misc/tableofcontent}
+  \include{misc/tableofcontent}
+  \include{chapters/0-abstract}
   \include{chapters/0-introduction}
   \include{chapters/1-definitions}
-  % \include{chapters/2-proofs}
-  % \include{chapters/2-5-implementation}
-  % \include{chapters/3-analysis}
-  % \include{chapters/4-conclusion}
+  \include{chapters/2-proofs}
+  \include{chapters/3-implementation}
+  \include{chapters/4-analysis}
+  \include{chapters/5-conclusion}
 
   \include{misc/bibliography}
 
 
-  % \include{appendices/0-source}
-  % \include{appendices/1-graph}
-  % \include{appendices/2-computations}
-  % \include{appendices/3-code}
+  \include{appendices/0-source}
+  \include{appendices/1-graph}
+  \include{appendices/2-computations}
+  \include{appendices/3-code}
 \end{document}

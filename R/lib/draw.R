@@ -92,7 +92,6 @@ DrawHScatterplot <- function(data) {
 DrawCrossPrediction <- function(actual, trend, kriging, future) {
     ggplot(data = kriging, aes(x = year, y = temperature, linetype = "Прогноз")) +
         geom_line() +
-        geom_ribbon(data = data.frame(kriging, lci = kriging$temperature - 1.96*kriging$se, uci = kriging$temperature + 1.96*kriging$se), aes(ymin=lci, ymax=uci), alpha=.2) +
         geom_line(data = actual, aes(x = year, y = temperature, linetype = "Наблюдение")) +
         geom_line(data = trend, aes(x = year, y = temperature, linetype = "Тренд")) +
         scale_linetype_manual(name = "Lines", values = c(Наблюдение = "solid", Прогноз = "dotdash", Тренд = "dashed"), labels = c(expression(X(t)), expression(X^{"*"} * (t)), expression(y(t)))) +
